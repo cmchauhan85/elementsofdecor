@@ -1,0 +1,120 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement-bar-0": {
+          "type": "announcement",
+          "settings": {
+            "text": "Join our Community for exclusive styling tips and early access to new collctions",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement-bar-0"
+      ],
+      "settings": {
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "color_scheme": "scheme-luxury-premium",
+        "show_line_separator": true,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_position": "middle-left",
+        "mobile_logo_position": "center",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "enable_customer_avatar": true,
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "17718218957c086679": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_8cddce1_RzpWwb": {
+          "type": "ai_gen_block_8cddce1",
+          "disabled": true,
+          "settings": {
+            "desktop_width_percent": 100,
+            "section_padding": 40,
+            "grid_gap": 20,
+            "background_color": "#ffffff",
+            "featured_image": "shopify://shop_images/IMG_5979.jpg",
+            "featured_category": "Featured",
+            "featured_title": "The Art of Modern Design",
+            "featured_excerpt": "Exploring the intersection of form and function in contemporary aesthetics.",
+            "featured_author": "",
+            "featured_date": "",
+            "content_padding": 40,
+            "overlay_opacity": 0.7,
+            "featured_text_color": "#ffffff",
+            "article_1_image": "shopify://shop_images/Gemini_Generated_Image_zbn97lzbn97lzbn9.png",
+            "article_1_category": "Style",
+            "article_1_title": "Minimalist Living Spaces",
+            "article_1_excerpt": "Creating calm through simplicity and intentional design choices.",
+            "article_1_author": "",
+            "article_1_date": "",
+            "article_2_category": "Culture",
+            "article_2_title": "Elobrate Outdoor Spaces",
+            "article_2_excerpt": "How conscious choices are reshaping the industry landscape.",
+            "article_2_author": "",
+            "article_2_date": "",
+            "article_3_category": "Lifestyle",
+            "article_3_title": "Urban Exploration Guide",
+            "article_3_excerpt": "Discovering hidden gems in the heart of the city.",
+            "article_3_author": "",
+            "article_3_date": "",
+            "featured_title_size": 48,
+            "category_font_size": 16,
+            "excerpt_font_size": 16,
+            "meta_font_size": 14,
+            "article_title_size": 20,
+            "article_category_size": 11,
+            "article_excerpt_size": 14,
+            "article_meta_size": 12,
+            "article_bg_color": "#ffffff",
+            "text_color": "#121212",
+            "category_color": "#121212",
+            "article_padding": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_8cddce1_RzpWwb"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "17718218957c086679"
+  ]
+}
