@@ -1,0 +1,41 @@
+{{ 'section-atelier-pdp-blocks.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign pairs = product.metafields.atelier.pairs_with.value
+  assign limit = section.settings.products_to_show
+
+  if pairs == blank and section.settings.fallback_collection != blank
+    assign pairs = section.settings.fallback_collection.products
+  endif
+-%}
+
+{%- if pairs != blank -%}
+  <div class="atelier-pairs color-{{ section.settings.color_scheme }} a-section">
+    <div class="page-width">
+      <h2 class="atelier-pairs__title">{{ section.settings.title }}</h2>
+      <div class="atelier-pairs__grid">
+        {%- assign shown = 0 -%}
+        {%- for p in pairs -%}
+          {%- if p.id != product.id and shown < limit -%}
+            {%- assign shown = shown | plus: 1 -%}
+            {% render 'atelier-product-card', product: p %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Atelier pairs with",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "For the same surface." },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 8, "step": 1, "default": 4, "label": "Products to show" },
+    { "type": "collection", "id": "fallback_collection", "label": "Fallback collection", "info": "Used when the product has no 'pairs_with' metafield." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "Atelier pairs with" }]
+}
+{% endschema %}

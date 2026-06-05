@@ -1,0 +1,108 @@
+.atelier-article__hero {
+  position: relative;
+  height: min(70vh, 640px);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--a-stone);
+}
+.atelier-article__hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.atelier-article__hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(27,25,22,0) 30%, rgba(27,25,22,0.7) 100%);
+}
+.atelier-article__hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 6rem 2.2rem;
+  color: #faf7f1;
+}
+.atelier-article__kicker { color: var(--a-ochre-light); margin-bottom: 1.6rem; }
+.atelier-article__title {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  letter-spacing: var(--a-display-tracking);
+  font-size: clamp(3.2rem, 6vw, 7rem);
+  line-height: 1.02;
+  max-width: 18ch;
+}
+.atelier-article__title em { font-style: italic; color: var(--a-ochre-light); }
+.atelier-article__standfirst {
+  margin: 1.6rem 0 0;
+  max-width: 52ch;
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.6rem, 2vw, 2.2rem);
+  line-height: 1.5;
+  color: rgba(250, 247, 241, 0.85);
+}
+
+/* Meta row */
+.atelier-article__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4rem 4rem;
+  border-bottom: 1px solid var(--a-hairline);
+  padding-bottom: 2.4rem;
+  margin-bottom: 4rem;
+}
+.atelier-article__meta dt {
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  margin-bottom: 0.4rem;
+}
+.atelier-article__meta dd { margin: 0; font-family: var(--font-heading-family); font-size: 1.6rem; }
+
+/* Body — narrow editorial measure */
+.atelier-article__body {
+  max-width: 68rem;
+  margin: 0 auto;
+  font-family: var(--font-body-family);
+  font-size: 1.7rem;
+  line-height: 1.85;
+  color: rgb(var(--color-foreground, 27, 25, 22) / 0.85);
+}
+.atelier-article__body > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  font-size: 8.4rem;
+  line-height: 0.8;
+  padding: 0.6rem 1.2rem 0 0;
+  color: var(--a-ochre);
+}
+.atelier-article__body h2,
+.atelier-article__body h3 {
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--a-ochre);
+  margin: 3.6rem 0 1.2rem;
+}
+.atelier-article__body blockquote {
+  margin: 4rem 0;
+  padding: 2.8rem 0;
+  border-top: 1px solid var(--a-hairline);
+  border-bottom: 1px solid var(--a-hairline);
+  text-align: center;
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 3vw, 3.2rem);
+  line-height: 1.3;
+}
+.atelier-article__body img { width: 100%; height: auto; margin: 2.4rem 0; }

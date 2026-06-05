@@ -1,0 +1,182 @@
+/*
+  Atelier design system — foundation tokens.
+  Loaded after base.css in layout/theme.liquid so it overrides Dawn's defaults.
+
+  Scope (Phase 0): typography families, the single ochre accent, the eyebrow
+  ("aCaps") utility, the square aesthetic, the mandala motif, and the section
+  spacing rhythm. Layout/component styling lives with each Atelier section.
+
+  Palette reference (also seeded as color schemes in settings_data.json):
+    Paper #faf7f1 · Dust #ebe5d9 · Stone #d4ccbe · Ink #1b1916
+    Ochre #b88a3a · Ochre light #e8c89a · Muted #7a766e
+*/
+
+:root {
+  /* --- Typography ----------------------------------------------------- */
+  /* Newsreader (serif) for all display/headings, weight 300, tight tracking.
+     Manrope (sans) for all UI/body. Devanagari fallback for Hindi glyphs. */
+  --font-heading-family: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-heading-style: normal;
+  --font-heading-weight: 300;
+
+  --font-body-family: "Manrope", "Noto Sans Devanagari", system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-body-style: normal;
+  --font-body-weight: 400;
+  --font-body-weight-bold: 600;
+
+  --a-display-tracking: -0.015em;
+
+  /* --- Accent (the only accent; tunable via theme settings) ----------- */
+  /* settings_schema.json "Atelier accent" group writes these via theme.liquid;
+     the values below are fallbacks matching the handoff. */
+  --a-ochre: #b88a3a;
+  --a-ochre-light: #e8c89a;
+  --a-muted: #7a766e;
+  --a-stone: #d4ccbe;
+
+  /* Hairline borders: ink/ochre at low opacity (the spec's #1b191610 rule). */
+  --a-hairline: rgba(27, 25, 22, 0.1);
+  --a-hairline-strong: rgba(27, 25, 22, 0.25);
+
+  /* --- Section spacing rhythm ----------------------------------------- */
+  --a-section-y: 6rem;   /* desktop vertical padding (≈96px), see utility */
+  --a-section-x: 6rem;   /* desktop horizontal padding (60px) */
+}
+
+/* Display type: serif, light, tight. Dawn heading vars already drive h1–h5;
+   this enforces the tracking the brand voice depends on. */
+h1, h2, h3, h4, h5,
+.h0, .h1, .h2, .h3, .h4, .h5 {
+  letter-spacing: var(--a-display-tracking);
+}
+
+/* The brand uses italics heavily for emphasis at the same light weight. */
+.a-italic {
+  font-style: italic;
+  font-weight: var(--font-heading-weight);
+}
+
+/* --- Eyebrow / label ("aCaps") --------------------------------------- */
+.a-eyebrow {
+  font-family: var(--font-body-family);
+  font-size: 1rem; /* 10px */
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--a-muted);
+  margin: 0;
+}
+.a-eyebrow--ochre {
+  color: var(--a-ochre);
+}
+
+/* --- Square aesthetic ------------------------------------------------- */
+/* Cards, images and product tiles are square. Radius is reserved for pills,
+   round number-pins and steppers, which opt in explicitly. */
+.card-wrapper,
+.card,
+.card__inner,
+.media,
+.global-media-settings {
+  --border-radius: 0;
+}
+
+.a-pill {
+  border-radius: 999px;
+}
+.a-round {
+  border-radius: 50%;
+}
+
+/* --- Mandala motif ---------------------------------------------------- */
+/* Thin concentric arcs, ochre, low opacity, no fill. Used in dark sections
+   and summary/bundle cards. The SVG itself lives in snippets/atelier-mandala. */
+.a-mandala {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--a-ochre);
+  opacity: 0.18;
+}
+.a-mandala svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Section spacing utilities --------------------------------------- */
+/* Desktop 96–120 / 60 sides; mobile 48–54 / 22 sides. */
+.a-section {
+  padding-block: 4.8rem;   /* mobile ≈48px */
+  padding-inline: 2.2rem;  /* mobile 22px */
+}
+@media screen and (min-width: 990px) {
+  .a-section {
+    padding-block: var(--a-section-y);
+    padding-inline: var(--a-section-x);
+  }
+}
+.a-section--tall {
+  padding-block: 5.4rem;
+}
+@media screen and (min-width: 990px) {
+  .a-section--tall {
+    padding-block: 7.5rem; /* ≈120px */
+  }
+}
+
+/* Hidden scrollbars for the horizontal scroll-snap rails (This Season etc.). */
+.a-rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.a-rail::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Shop By switch (shared IA control) ------------------------------ */
+.a-shopby {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+.a-shopby__lead {
+  color: var(--a-muted);
+}
+.a-shopby__track {
+  display: inline-flex;
+  padding: 0.3rem;
+  background: rgba(27, 25, 22, 0.05);
+  border: 1px solid var(--a-hairline);
+}
+.a-shopby__opt {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7rem 1.8rem;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--a-muted);
+  font-style: italic;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.a-shopby__opt.is-active {
+  background: rgb(var(--color-foreground, 27, 25, 22));
+  color: rgb(var(--color-background, 250, 247, 241));
+  font-style: normal;
+}
+.a-shopby--sm .a-shopby__opt {
+  padding: 0.6rem 1.4rem;
+  font-size: 1.2rem;
+}
+
+/* Honour reduced motion globally for Atelier transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .a-anim,
+  .a-anim * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

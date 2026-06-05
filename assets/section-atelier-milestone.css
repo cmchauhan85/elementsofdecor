@@ -1,0 +1,80 @@
+.atelier-milestone__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.atelier-milestone__status {
+  font-family: var(--font-heading-family);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.8rem;
+}
+.atelier-milestone__rail {
+  position: relative;
+  height: 2px;
+  background: var(--a-hairline-strong);
+  margin: 3.2rem 0 1.2rem;
+}
+.atelier-milestone__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--a-ochre);
+  transition: width 0.4s ease;
+}
+.atelier-milestone__dots {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.atelier-milestone__dot {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: rgb(var(--color-background, 250, 247, 241));
+  border: 1px solid var(--a-hairline-strong);
+  display: grid;
+  place-items: center;
+  font-size: 0.9rem;
+  transform: translateX(0);
+}
+.atelier-milestone__dot.is-earned {
+  background: var(--a-ochre);
+  border-color: var(--a-ochre);
+  color: #1b1916;
+}
+.atelier-milestone__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+  margin-top: 2.4rem;
+}
+@media screen and (max-width: 749px) {
+  .atelier-milestone__cards {
+    grid-template-columns: 1fr;
+  }
+}
+.atelier-milestone__card {
+  padding: 1.8rem;
+  border: 1px solid var(--a-hairline);
+}
+.atelier-milestone__card.is-next {
+  border-color: var(--a-ochre);
+}
+.atelier-milestone__card.is-locked {
+  opacity: 0.55;
+}
+.atelier-milestone__card-label {
+  font-family: var(--font-heading-family);
+  font-size: 1.8rem;
+  margin: 0.6rem 0 0.4rem;
+}
+.atelier-milestone__card-hint {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: var(--a-muted);
+  margin: 0;
+}

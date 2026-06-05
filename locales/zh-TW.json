@@ -64,6 +64,9 @@
       "next_slide": "投影片右側",
       "previous_slide": "投影片左側",
       "name": "投影播放器"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }} (已選取 {{ count }} 個篩選條件)",
       "show_more": "顯示更多內容",
       "show_less": "顯示較少內容",
-      "filter_and_operator_subtitle": "完全符合"
+      "filter_and_operator_subtitle": "完全符合",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "此品項下限為 {{ min }}",
       "max_error": "此品項上限為 {{ max }}",
       "step_error": "只能以 {{ step }} 為增量新增此品項"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

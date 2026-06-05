@@ -1,0 +1,61 @@
+{% comment %}
+  Atelier facet group — renders one Shopify storefront filter (collection.filters
+  entry) in the Atelier style. Uses native filter URLs (full-reload filtering),
+  so it works with no JS.
+
+  Accepts:
+    filter {filter} - a collection.filters / search.filters entry (required)
+{% endcomment %}
+
+<fieldset class="atelier-facets__group">
+  {% render 'atelier-eyebrow', text: filter.label, tag: 'legend', class: 'atelier-facets__legend' %}
+
+  {%- if filter.type == 'price_range' -%}
+    <form class="atelier-facets__price" method="get">
+      {%- for h in filter.values -%}{% comment %}preserve other params{% endcomment %}{%- endfor -%}
+      <div class="atelier-facets__price-row">
+        <label>
+          <span class="visually-hidden">{{ 'products.facets.from' | t }}</span>
+          <input
+            type="number"
+            name="{{ filter.min_value.param_name }}"
+            value="{{ filter.min_value.value }}"
+            min="0"
+            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+            placeholder="{{ 0 | money }}"
+            inputmode="decimal"
+          >
+        </label>
+        <span aria-hidden="true">—</span>
+        <label>
+          <span class="visually-hidden">{{ 'products.facets.to' | t }}</span>
+          <input
+            type="number"
+            name="{{ filter.max_value.param_name }}"
+            value="{{ filter.max_value.value }}"
+            min="0"
+            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+            placeholder="{{ filter.range_max | money }}"
+            inputmode="decimal"
+          >
+        </label>
+        <button type="submit" class="atelier-chip">{{ 'products.facets.apply' | t }}</button>
+      </div>
+    </form>
+  {%- else -%}
+    <ul class="atelier-facets__list">
+      {%- for value in filter.values -%}
+        <li>
+          <a
+            href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+            {% if value.active %}aria-current="true"{% endif %}
+            {% if value.count == 0 and value.active == false %}class="is-soon" aria-disabled="true"{% endif %}
+          >
+            <span>{{ value.label }}</span>
+            <span class="atelier-facets__count">{{ value.count }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</fieldset>

@@ -1,0 +1,64 @@
+.atelier-notes__head {
+  margin-bottom: 3.6rem;
+}
+.atelier-notes__title {
+  margin: 0.8rem 0 0;
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  letter-spacing: var(--a-display-tracking);
+  font-size: clamp(2.8rem, 4vw, 4.4rem);
+}
+.atelier-notes__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.4rem;
+}
+@media screen and (max-width: 749px) {
+  .atelier-notes__grid {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 78vw;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  .atelier-notes__grid > * {
+    scroll-snap-align: start;
+  }
+}
+.atelier-note {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+.atelier-note__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--a-stone);
+}
+.atelier-note__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.atelier-note:hover .atelier-note__media img {
+  transform: scale(1.03);
+}
+.atelier-note__tag {
+  margin: 1.6rem 0 0.6rem;
+}
+.atelier-note__title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  font-size: 2.2rem;
+  line-height: 1.15;
+  letter-spacing: var(--a-display-tracking);
+}
+.atelier-note__meta {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  color: var(--a-muted);
+}

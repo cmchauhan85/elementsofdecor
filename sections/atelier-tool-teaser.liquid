@@ -1,0 +1,78 @@
+{{ 'section-atelier-tool-teaser.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-teaser color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-teaser__grid">
+      <div class="atelier-teaser__copy">
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true %}
+        {%- endif -%}
+        <h2 class="atelier-teaser__title">{{ section.settings.title }}</h2>
+
+        {%- if section.settings.chips != blank -%}
+          <ul class="atelier-teaser__chips">
+            {%- assign chips = section.settings.chips | split: ',' -%}
+            {%- for chip in chips -%}
+              <li class="atelier-teaser__chip">{{ chip | strip }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank -%}
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="button">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+      </div>
+
+      <div class="atelier-teaser__mock" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier tool teaser",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Phase Two · Spring 2026"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Design your space, <em>element by element.</em>"
+    },
+    {
+      "type": "text",
+      "id": "chips",
+      "label": "Surface chips (comma-separated)",
+      "default": "Console, Side table, Corner, Sofa side, Dehleez"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Notify me"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier tool teaser"
+    }
+  ]
+}
+{% endschema %}

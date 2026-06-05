@@ -1,0 +1,64 @@
+{% comment %}
+  Atelier collection card — used in the Home "Shop By" band and elsewhere.
+
+  Reads merchant data from collection metafields (namespace `atelier`):
+    descriptor   (single line text) — the italic descriptor
+    coming_soon  (boolean)          — grayscale + "Coming soon" pill, inert link
+    element      (single line text) — shown bottom-right in Object mode
+
+  Accepts:
+    collection    {collection} - the collection to render (required)
+    number        {string}     - the "01" index label
+    show_element  {boolean}     - show the element tag bottom-right (object mode)
+    coming_label  {string}     - text for the coming-soon pill (already translated)
+{% endcomment %}
+
+{%- liquid
+  assign col = collection
+  assign descriptor = col.metafields.atelier.descriptor.value
+  assign is_soon = col.metafields.atelier.coming_soon.value
+  assign element_tag = col.metafields.atelier.element.value
+  assign card_image = col.featured_image
+  if card_image == blank and col.products.first != blank
+    assign card_image = col.products.first.featured_image
+  endif
+  assign coming = coming_label | default: 'Coming soon'
+-%}
+
+<a
+  href="{% if is_soon %}#{% else %}{{ col.url }}{% endif %}"
+  class="atelier-card a-anim{% if is_soon %} is-soon{% endif %}"
+  {% if is_soon %}aria-disabled="true" tabindex="-1"{% endif %}
+>
+  <div class="atelier-card__media">
+    {%- if card_image != blank -%}
+      {{
+        card_image
+        | image_url: width: 800
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 990px) 18vw, 45vw',
+          widths: '275, 400, 550, 800',
+          alt: col.title | escape
+      }}
+    {%- endif -%}
+    {%- if number != blank -%}<span class="atelier-card__n">{{ number }}</span>{%- endif -%}
+    {%- if is_soon -%}
+      <span class="atelier-card__soon">{{ coming }}</span>
+    {%- elsif show_element and element_tag != blank -%}
+      {% render 'atelier-eyebrow', text: element_tag, tag: 'span', class: 'atelier-card__el' %}
+    {%- endif -%}
+  </div>
+
+  {% render 'atelier-eyebrow', text: col.title, tag: 'span', class: 'atelier-card__name' %}
+  {%- if descriptor != blank -%}
+    <p class="atelier-card__desc">{{ descriptor }}</p>
+  {%- endif -%}
+  <p class="atelier-card__count">
+    {%- if is_soon -%}
+      {{ coming }}
+    {%- else -%}
+      {{ 'products.atelier.pieces_count' | t: count: col.products_count }} →
+    {%- endif -%}
+  </p>
+</a>

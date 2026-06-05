@@ -64,6 +64,9 @@
       "next_slide": "Következő dia",
       "previous_slide": "Előző dia",
       "name": "Csúszka"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} szűrő kiválasztva)",
       "show_more": "Több részlet",
       "show_less": "Kevesebb részlet",
-      "filter_and_operator_subtitle": "Az összesnek megfelelő"
+      "filter_and_operator_subtitle": "Az összesnek megfelelő",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "A termék minimális mennyisége {{ min }}",
       "max_error": "A termék maximális mennyisége {{ max }}",
       "step_error": "A termék mennyisége csak {{ step }} darabos lépésekben növelhető"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

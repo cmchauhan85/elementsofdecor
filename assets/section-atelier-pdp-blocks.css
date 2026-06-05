@@ -1,0 +1,117 @@
+/* PDP editorial blocks: The Story, Specifications, Pairs with */
+
+/* The Story — Dust full-bleed editorial */
+.atelier-story__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+}
+@media screen and (max-width: 749px) {
+  .atelier-story__grid {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+}
+.atelier-story__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--a-stone);
+}
+.atelier-story__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.atelier-story__title {
+  margin: 1.2rem 0 1.6rem;
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  letter-spacing: var(--a-display-tracking);
+  font-size: clamp(2.8rem, 4vw, 4.4rem);
+  line-height: 1.05;
+}
+.atelier-story__title em {
+  font-style: italic;
+}
+.atelier-story__body {
+  font-family: var(--font-body-family);
+  font-size: 1.5rem;
+  line-height: 1.8;
+  color: var(--a-muted);
+  margin: 0 0 2.4rem;
+}
+.atelier-story__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+.atelier-story__stat dt {
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--a-ochre);
+  margin-bottom: 0.4rem;
+}
+.atelier-story__stat dd {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-size: 1.8rem;
+}
+
+/* Specifications — 4-col table */
+.atelier-specs__title {
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  letter-spacing: var(--a-display-tracking);
+  font-size: clamp(2.4rem, 3.5vw, 3.6rem);
+  margin: 0 0 2.8rem;
+}
+.atelier-specs__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.4rem;
+  border-top: 1px solid var(--a-hairline);
+  padding-top: 2.4rem;
+}
+@media screen and (max-width: 749px) {
+  .atelier-specs__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.atelier-specs__label {
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  margin-bottom: 0.6rem;
+}
+.atelier-specs__value {
+  font-family: var(--font-heading-family);
+  font-size: 1.8rem;
+}
+
+/* Pairs with */
+.atelier-pairs__title {
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: var(--a-display-tracking);
+  font-size: clamp(2.4rem, 3.5vw, 3.6rem);
+  margin: 0 0 2.8rem;
+}
+.atelier-pairs__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.4rem 1.4rem;
+}
+@media screen and (max-width: 749px) {
+  .atelier-pairs__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

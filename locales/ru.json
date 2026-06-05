@@ -64,6 +64,9 @@
       "next_slide": "Листать вперед",
       "previous_slide": "Листать назад",
       "name": "Ползунок"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -230,7 +233,14 @@
       "filter_selected_accessibility": "{{ type }} (установлены фильтры: {{ count }})",
       "show_more": "Показать больше",
       "show_less": "Показать меньше",
-      "filter_and_operator_subtitle": "Выбрать все"
+      "filter_and_operator_subtitle": "Выбрать все",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -406,6 +416,17 @@
       "min_error": "Минимальное количество этого товара — {{ min }}",
       "max_error": "Максимальное количество этого товара — {{ max }}",
       "step_error": "Вы можете добавить этот товар только в количестве, кратном {{ step }}"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

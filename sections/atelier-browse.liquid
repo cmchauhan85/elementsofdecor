@@ -1,0 +1,156 @@
+{{ 'section-atelier-browse.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'atelier-shop-by.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign req_mode = 'element'
+  if request.get.shop_by == 'object'
+    assign req_mode = 'object'
+  endif
+-%}
+
+<div class="atelier-browse color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-browse__head">
+      <div class="atelier-browse__lead">
+        {% render 'atelier-shop-by-switch',
+          mode: req_mode,
+          base_url: request.path,
+          lead: section.settings.lead,
+          element_label: section.settings.element_label,
+          object_label: section.settings.object_label
+        %}
+        <span class="atelier-browse__caption" data-mode-when="element" {% if req_mode != 'element' %}hidden{% endif %}>
+          {{ section.settings.element_caption }}
+        </span>
+        <span class="atelier-browse__caption" data-mode-when="object" {% if req_mode != 'object' %}hidden{% endif %}>
+          {{ section.settings.object_caption }}
+        </span>
+      </div>
+
+      {%- if section.settings.status_text != blank -%}
+        <div class="atelier-browse__status">
+          <span class="atelier-browse__rule" aria-hidden="true"></span>
+          <span class="atelier-browse__caption">{{ section.settings.status_text }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- assign browse_modes = 'element,object' | split: ',' -%}
+    {%- for mode in browse_modes -%}
+      <div class="atelier-browse__grid" data-mode-grid="{{ mode }}" {% if req_mode != mode %}hidden{% endif %}>
+        {%- assign n = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.mode == mode and block.settings.collection != blank -%}
+            {%- assign n = n | plus: 1 -%}
+            {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
+            <div {{ block.shopify_attributes }}>
+              {% render 'atelier-collection-card',
+                collection: block.settings.collection,
+                number: num,
+                show_element: block.settings.show_element
+              %}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier Shop By band",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "lead",
+      "label": "Lead label",
+      "default": "Shop by"
+    },
+    {
+      "type": "text",
+      "id": "element_label",
+      "label": "Element option label",
+      "default": "Element"
+    },
+    {
+      "type": "text",
+      "id": "object_label",
+      "label": "Object option label",
+      "default": "Object"
+    },
+    {
+      "type": "text",
+      "id": "element_caption",
+      "label": "Caption — Element mode",
+      "default": "Five materials, each with its own voice."
+    },
+    {
+      "type": "text",
+      "id": "object_caption",
+      "label": "Caption — Object mode",
+      "default": "What it is, and what it holds."
+    },
+    {
+      "type": "text",
+      "id": "status_text",
+      "label": "Status text",
+      "default": "Two of five live · three coming soon"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "select",
+          "id": "mode",
+          "label": "Show in mode",
+          "options": [
+            { "value": "element", "label": "Element" },
+            { "value": "object", "label": "Object" }
+          ],
+          "default": "element"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_element",
+          "label": "Show element tag (Object cards)",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier Shop By band",
+      "blocks": [
+        { "type": "card", "settings": { "mode": "element" } },
+        { "type": "card", "settings": { "mode": "element" } },
+        { "type": "card", "settings": { "mode": "element" } },
+        { "type": "card", "settings": { "mode": "element" } },
+        { "type": "card", "settings": { "mode": "element" } },
+        { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        { "type": "card", "settings": { "mode": "object", "show_element": true } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -9,86 +9,74 @@
  */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "<strong>Artistry in Every Element</strong>",
-            "heading_size": "hxl"
-          }
-        },
-        "text_ezBrwT": {
-          "type": "text",
-          "settings": {
-            "text": "Elevating everyday spaces with handcrafted, timeless decor",
-            "text_style": "subtitle"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "disabled": true,
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "text_ezBrwT",
-        "button"
-      ],
+    "hero": {
+      "type": "atelier-hero",
       "settings": {
-        "image": "shopify://shop_images/Gemini_Generated_Image_zbn97lzbn97lzbn9.png",
-        "image_overlay_opacity": 0,
-        "image_height": "large",
-        "image_behavior": "none",
-        "desktop_content_position": "middle-left",
-        "desktop_content_alignment": "left",
-        "show_text_box": false,
-        "color_scheme": "scheme-3",
-        "stack_images_on_mobile": false,
-        "mobile_content_alignment": "center",
-        "show_text_below": false
+        "height": "medium",
+        "eyebrow": "Manifesto · No. 01",
+        "heading_line_1": "Home is not styled.",
+        "heading_line_2": "It is felt.",
+        "cta_label": "Read the manifesto",
+        "color_scheme": "scheme-1"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "browse": {
+      "type": "atelier-browse",
+      "blocks": {
+        "el_1": { "type": "card", "settings": { "mode": "element" } },
+        "el_2": { "type": "card", "settings": { "mode": "element" } },
+        "el_3": { "type": "card", "settings": { "mode": "element" } },
+        "el_4": { "type": "card", "settings": { "mode": "element" } },
+        "el_5": { "type": "card", "settings": { "mode": "element" } },
+        "ob_1": { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        "ob_2": { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        "ob_3": { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        "ob_4": { "type": "card", "settings": { "mode": "object", "show_element": true } },
+        "ob_5": { "type": "card", "settings": { "mode": "object", "show_element": true } }
+      },
+      "block_order": ["el_1", "el_2", "el_3", "el_4", "el_5", "ob_1", "ob_2", "ob_3", "ob_4", "ob_5"],
       "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 44,
-        "padding_bottom": 36
+        "color_scheme": "scheme-2"
+      }
+    },
+    "philosophy": {
+      "type": "atelier-philosophy",
+      "settings": {
+        "color_scheme": "scheme-3"
+      }
+    },
+    "this_season": {
+      "type": "atelier-this-season",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "tool_teaser": {
+      "type": "atelier-tool-teaser",
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
+    },
+    "notes": {
+      "type": "atelier-notes",
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
+    "gratitude": {
+      "type": "atelier-gratitude",
+      "settings": {
+        "color_scheme": "scheme-2"
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "hero",
+    "browse",
+    "philosophy",
+    "this_season",
+    "tool_teaser",
+    "notes",
+    "gratitude"
   ]
 }

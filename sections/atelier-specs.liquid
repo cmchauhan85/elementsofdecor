@@ -1,0 +1,60 @@
+{{ 'section-atelier-pdp-blocks.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-specs color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <h2 class="atelier-specs__title">{{ section.settings.title }}</h2>
+    <dl class="atelier-specs__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign val = block.settings.value
+          if block.settings.metafield_key != blank
+            assign mf = product.metafields.atelier[block.settings.metafield_key]
+            if mf != blank
+              assign val = mf.value
+            endif
+          endif
+        -%}
+        {%- if block.settings.label != blank and val != blank -%}
+          <div {{ block.shopify_attributes }}>
+            <dt class="atelier-specs__label">{{ block.settings.label }}</dt>
+            <dd class="atelier-specs__value">{{ val }}</dd>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </dl>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier specifications",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "The numbers, openly." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "spec",
+      "name": "Specification",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "value", "label": "Value (or use metafield)" },
+        { "type": "text", "id": "metafield_key", "label": "Product metafield key (namespace atelier)", "info": "e.g. spec_material — overrides Value when set." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier specifications",
+      "blocks": [
+        { "type": "spec", "settings": { "label": "Material" } },
+        { "type": "spec", "settings": { "label": "Dimensions" } },
+        { "type": "spec", "settings": { "label": "Weight" } },
+        { "type": "spec", "settings": { "label": "Finish" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

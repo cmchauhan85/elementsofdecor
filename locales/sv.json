@@ -64,6 +64,9 @@
       "next_slide": "Bild till höger",
       "previous_slide": "Bild till vänster",
       "name": "Bild"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }}) filter valda",
       "show_more": "Visa mer",
       "show_less": "Visa mindre",
-      "filter_and_operator_subtitle": "Matcha alla"
+      "filter_and_operator_subtitle": "Matcha alla",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "Den här artikeln har minst {{ min }}",
       "max_error": "Den här artikeln har max {{ max }}",
       "step_error": "Du kan endast lägga till den här artikeln med ökningar om {{ step }}"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

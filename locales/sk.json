@@ -64,6 +64,9 @@
       "next_slide": "Posunúť doprava",
       "previous_slide": "Posunúť doľava",
       "name": "Jazdec"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -230,7 +233,14 @@
       "filter_selected_accessibility": "{{ type }} (vybrané filtre: {{ count }})",
       "show_more": "Zobraziť viac",
       "show_less": "Zobraziť menej",
-      "filter_and_operator_subtitle": "Spĺňať všetko"
+      "filter_and_operator_subtitle": "Spĺňať všetko",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -406,6 +416,17 @@
       "min_error": "Minimálne množstvo tejto položky je {{ min }}",
       "max_error": "Maximálne množstvo tejto položky je {{ max }}",
       "step_error": "Túto položku môžete pridať iba v prírastkoch po {{ step }}"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

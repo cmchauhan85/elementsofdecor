@@ -1,0 +1,149 @@
+{{ 'section-atelier-tool.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'atelier-tool.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign looks = shop.metaobjects.look.values
+  assign has_surface = false
+  assign has_room = false
+  for l in looks
+    if l.kind.value == 'surface'
+      assign has_surface = true
+    elsif l.kind.value == 'room'
+      assign has_room = true
+    endif
+  endfor
+-%}
+
+<div class="atelier-tool color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-tool__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}{% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true %}{%- endif -%}
+        <h1 class="atelier-tool__title">{{ section.settings.title }}</h1>
+      </div>
+      {%- if has_surface and has_room -%}
+        <div class="atelier-tool__browse" role="group" aria-label="{{ section.settings.browse_label }}">
+          <button type="button" data-action="kind" data-kind="surface" class="is-active">{{ section.settings.surface_label }}</button>
+          <button type="button" data-action="kind" data-kind="room">{{ section.settings.room_label }}</button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if looks.size > 0 -%}
+      <atelier-tool
+        data-bundle-pct="{{ section.settings.bundle_pct | divided_by: 100.0 }}"
+        data-money-format="{{ shop.money_format | escape }}"
+      >
+        <div class="atelier-tool__scenes" data-scene-picker></div>
+        <div class="atelier-tool__split">
+          <div class="atelier-tool__scene-stage" data-scene></div>
+          <div class="atelier-tool__look">
+            <div data-panel></div>
+            <div class="atelier-tool__bundle" data-bundle>
+              {% render 'atelier-mandala', align: 'right' %}
+            </div>
+          </div>
+        </div>
+
+        {%- comment %} Data emitted from the `look` + `reward_tier` metaobjects {% endcomment -%}
+        <script type="application/json" data-looks>
+          [
+          {%- for look in looks -%}
+            {%- unless forloop.first %},{% endunless -%}
+            {
+              "id": {{ look.system.handle | json }},
+              "kind": {{ look.kind.value | json }},
+              "surface": {{ look.surface.value | json }},
+              "mood": {{ look.mood.value | json }},
+              "hero": {{ look.hero.value | image_url: width: 1400 | json }},
+              "blurb": {{ look.blurb.value | json }},
+              "slots": [
+                {%- for slot in look.slots.value -%}
+                  {%- unless forloop.first %},{% endunless -%}
+                  {
+                    "label": {{ slot.label.value | json }},
+                    "options": [
+                      {%- for product in slot.products.value -%}
+                        {%- unless forloop.first %},{% endunless -%}
+                        {%- assign v = product.selected_or_first_available_variant -%}
+                        {
+                          "id": {{ v.id | json }},
+                          "title": {{ product.title | json }},
+                          "sub": {{ product.metafields.atelier.descriptor.value | json }},
+                          "price": {{ v.price | json }},
+                          "img": {{ product.featured_image | image_url: width: 400 | json }}
+                        }
+                      {%- endfor -%}
+                    ]
+                  }
+                {%- endfor -%}
+              ]
+            }
+          {%- endfor -%}
+          ]
+        </script>
+        <script type="application/json" data-tiers>
+          [
+          {%- for t in shop.metaobjects.reward_tier.values -%}
+            {%- unless forloop.first %},{% endunless -%}
+            { "threshold": {{ t.threshold.value | json }}, "label": {{ t.label.value | json }}, "hint": {{ t.hint.value | json }} }
+          {%- endfor -%}
+          ]
+        </script>
+      </atelier-tool>
+    {%- else -%}
+      <p class="atelier-tool__empty">{{ section.settings.empty_text }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="atelier-tool__how">
+        {%- for block in section.blocks -%}
+          <div {{ block.shopify_attributes }}>
+            {% render 'atelier-eyebrow', text: block.settings.numeral, ochre: true %}
+            <h3 class="atelier-step__t">{{ block.settings.title }}</h3>
+            <p class="atelier-step__b">{{ block.settings.body }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier tool",
+  "tag": "section",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete the Look" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Buy the whole look, <em>not just the object.</em>" },
+    { "type": "text", "id": "browse_label", "label": "Browse-by group label", "default": "Browse by" },
+    { "type": "text", "id": "surface_label", "label": "Surface label", "default": "Surface" },
+    { "type": "text", "id": "room_label", "label": "Room label", "default": "Room" },
+    { "type": "range", "id": "bundle_pct", "min": 0, "max": 30, "step": 1, "default": 10, "unit": "%", "label": "Bundle saving" },
+    { "type": "textarea", "id": "empty_text", "label": "Empty state text", "default": "Looks are configured with the 'look' metaobject. Add one to bring this tool to life." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "How-it-works step",
+      "settings": [
+        { "type": "text", "id": "numeral", "label": "Numeral", "default": "01" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier tool",
+      "blocks": [
+        { "type": "step", "settings": { "numeral": "01", "title": "Pick a scene", "body": "Start from a styled surface or room." } },
+        { "type": "step", "settings": { "numeral": "02", "title": "Make it yours", "body": "Swap pieces, drop what you have." } },
+        { "type": "step", "settings": { "numeral": "03", "title": "Buy the look", "body": "Add everything in one tap, set saving applied." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

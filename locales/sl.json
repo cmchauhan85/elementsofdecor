@@ -64,6 +64,9 @@
       "next_slide": "Podrsajte desno",
       "previous_slide": "Podrsajte levo",
       "name": "Drsnik"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -230,7 +233,14 @@
       "filter_selected_accessibility": "{{ type }} (št. izbranih filtrov: {{ count }})",
       "show_more": "Prikaži več",
       "show_less": "Prikaži manj",
-      "filter_and_operator_subtitle": "Ustreza vsem"
+      "filter_and_operator_subtitle": "Ustreza vsem",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -406,6 +416,17 @@
       "min_error": "Ta artikel ima najmanj {{ min }}",
       "max_error": "Ta artikel ima največ {{ max }}",
       "step_error": "Ta artikel lahko dodate samo v korakih po {{ step }}."
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

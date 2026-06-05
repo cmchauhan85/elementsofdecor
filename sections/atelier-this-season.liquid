@@ -1,0 +1,123 @@
+{{ 'section-atelier-this-season.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign coll = section.settings.collection
+  assign limit = section.settings.products_to_show
+-%}
+
+<div class="atelier-season color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-season__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+        {%- endif -%}
+        <h2 class="atelier-season__title">{{ section.settings.title }}</h2>
+      </div>
+      <div class="atelier-season__nav" data-atelier-rail-nav>
+        <button class="atelier-season__btn" type="button" data-dir="prev" aria-label="{{ 'general.slider.previous_slide' | t }}">←</button>
+        <button class="atelier-season__btn" type="button" data-dir="next" aria-label="{{ 'general.slider.next_slide' | t }}">→</button>
+      </div>
+    </div>
+
+    <div class="atelier-season__rail a-rail" data-atelier-rail>
+      {%- for product in coll.products limit: limit -%}
+        {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
+        {% render 'atelier-product-card', product: product, number: num %}
+      {%- else -%}
+        {%- for i in (1..6) -%}
+          <div class="atelier-pcard">
+            <div class="atelier-pcard__media">{{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}</div>
+          </div>
+        {%- endfor -%}
+      {%- endfor -%}
+
+      {%- if section.settings.show_all_tile -%}
+        <a href="{{ coll.url | default: routes.all_products_collection_url }}" class="atelier-season__all a-anim">
+          {% render 'atelier-eyebrow', text: section.settings.all_eyebrow %}
+          <h3 class="atelier-season__all-title">{{ section.settings.all_title }}</h3>
+          <span class="atelier-season__all-arrow" aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.currentScript.previousElementSibling;
+    const rail = root.querySelector('[data-atelier-rail]');
+    const nav = root.querySelector('[data-atelier-rail-nav]');
+    if (!rail || !nav) return;
+    nav.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-dir]');
+      if (!btn) return;
+      const amount = rail.clientWidth * 0.8 * (btn.dataset.dir === 'next' ? 1 : -1);
+      rail.scrollBy({ left: amount, behavior: 'smooth' });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Atelier This Season",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "This Season"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Considered, <em>not collected.</em>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "default": 10,
+      "label": "Products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_tile",
+      "label": "Show \"full shop\" tile",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "all_eyebrow",
+      "label": "Tile eyebrow",
+      "default": "Everything"
+    },
+    {
+      "type": "text",
+      "id": "all_title",
+      "label": "Tile title",
+      "default": "The full shop →"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier This Season"
+    }
+  ]
+}
+{% endschema %}

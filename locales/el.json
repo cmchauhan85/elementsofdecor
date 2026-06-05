@@ -64,6 +64,9 @@
       "next_slide": "Σύρετε δεξιά",
       "previous_slide": "Σύρετε αριστερά",
       "name": "Ρυθμιστικό"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }} (επιλέχθηκαν {{ count }} φίλτρα)",
       "show_more": "Εμφάνιση περισσότερων",
       "show_less": "Εμφάνιση λιγότερων",
-      "filter_and_operator_subtitle": "Αντιστοιχεί με όλα"
+      "filter_and_operator_subtitle": "Αντιστοιχεί με όλα",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "Αυτό το προϊόν έχει ελάχιστο όριο {{ min }}",
       "max_error": "Αυτό το προϊόν έχει μέγιστο όριο {{ max }}",
       "step_error": "Μπορείτε να προσθέσετε αυτό το προϊόν μόνο κατά βήματα των {{ step }}"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

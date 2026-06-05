@@ -64,6 +64,9 @@
       "next_slide": "Плъзгане надясно",
       "previous_slide": "Плъзгане наляво",
       "name": "Плъзгач"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} избрани филтъра)",
       "show_more": "Покажи повече",
       "show_less": "Покажи по-малко",
-      "filter_and_operator_subtitle": "Изрявняване за всички"
+      "filter_and_operator_subtitle": "Изрявняване за всички",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "За този артикул има минимум от {{ min }}",
       "max_error": "За този артикул има максимум от {{ max }}",
       "step_error": "Можете да добавяте този артикул само на групи от {{ step }}"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

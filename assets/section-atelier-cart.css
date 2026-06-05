@@ -1,0 +1,50 @@
+/*
+  Atelier cart overlay — restyles Dawn's main-cart-items / main-cart-footer to
+  the Atelier look (typography, square edges, ink checkout) without changing the
+  cart's AJAX/JS plumbing. Loaded from both cart sections.
+*/
+.cart__items .title,
+.cart__warnings .title,
+.main-cart-items .title {
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  letter-spacing: var(--a-display-tracking);
+}
+.cart-item__name {
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  font-size: 1.8rem;
+}
+.cart-item__details .product-option,
+.cart-item__price-wrapper .price {
+  font-family: var(--font-body-family);
+}
+
+/* Square quantity stepper + remove */
+.cart .quantity,
+.cart .quantity__input,
+.cart .quantity__button {
+  border-radius: 0;
+}
+
+/* Totals / summary block */
+.cart__footer {
+  border-top: 1px solid var(--a-hairline);
+}
+.totals__total,
+.totals__total-value {
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+}
+
+/* Checkout button — ink, square */
+.cart__ctas .cart__checkout-button,
+.cart__dynamic-checkout-buttons {
+  border-radius: 0;
+}
+.cart__ctas .cart__checkout-button {
+  background: rgb(var(--color-foreground, 27, 25, 22));
+  color: rgb(var(--color-background, 250, 247, 241));
+  font-family: var(--font-body-family);
+  letter-spacing: 0.04em;
+}

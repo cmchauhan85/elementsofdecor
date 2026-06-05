@@ -1,0 +1,154 @@
+{{ 'section-atelier-milestone.css' | asset_url | stylesheet_tag }}
+
+{%- comment %}
+  Milestone rewards ribbon — the cart conversion centrepiece. Reads tiers from
+  the shared `reward_tier` metaobject (single source of truth with the Phase-3
+  tool). Falls back to section blocks when the metaobject doesn't exist yet.
+
+  Thresholds are in the store's MAJOR currency unit (e.g. rupees). cart.total_price
+  is in minor units (paise/cents), so we compare in major units.
+{% endcomment -%}
+
+{%- liquid
+  assign subtotal = cart.total_price | divided_by: 100.0
+
+  assign meta_tiers = shop.metaobjects.reward_tier.values
+  assign use_meta = false
+  if meta_tiers.size > 0
+    assign use_meta = true
+  endif
+-%}
+
+{%- capture tier_rows -%}
+  {%- if use_meta -%}
+    {%- assign sorted = meta_tiers | sort: 'threshold' -%}
+    {%- for t in sorted -%}
+      {{ t.threshold.value }}|{{ t.label.value }}|{{ t.hint.value }};;
+    {%- endfor -%}
+  {%- else -%}
+    {%- for block in section.blocks -%}
+      {{ block.settings.threshold }}|{{ block.settings.label }}|{{ block.settings.hint }};;
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- liquid
+  assign rows = tier_rows | strip | split: ';;'
+  assign max_tier = 0
+  for row in rows
+    assign parts = row | strip | split: '|'
+    assign th = parts[0] | plus: 0
+    if th > max_tier
+      assign max_tier = th
+    endif
+  endfor
+
+  assign progress = 0
+  if max_tier > 0
+    assign progress = subtotal | times: 100.0 | divided_by: max_tier
+    if progress > 100
+      assign progress = 100
+    endif
+  endif
+
+  assign next_threshold = 0
+  assign next_label = ''
+  for row in rows
+    assign parts = row | strip | split: '|'
+    assign th = parts[0] | plus: 0
+    if subtotal < th and next_threshold == 0
+      assign next_threshold = th
+      assign next_label = parts[1]
+    endif
+  endfor
+  assign remaining = next_threshold | minus: subtotal
+  assign remaining_money = remaining | times: 100 | money
+-%}
+
+<div class="atelier-milestone color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-milestone__head">
+      {% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true %}
+      <p class="atelier-milestone__status">
+        {%- if next_threshold > 0 -%}
+          {{ 'sections.atelier_cart.milestone_next_html' | t: amount: remaining_money, label: next_label }}
+        {%- else -%}
+          {{ 'sections.atelier_cart.milestone_all' | t }}
+        {%- endif -%}
+      </p>
+    </div>
+
+    <div class="atelier-milestone__rail" aria-hidden="true">
+      <div class="atelier-milestone__fill" style="width: {{ progress }}%;"></div>
+      <div class="atelier-milestone__dots">
+        {%- for row in rows -%}
+          {%- assign parts = row | strip | split: '|' -%}
+          {%- assign th = parts[0] | plus: 0 -%}
+          <span class="atelier-milestone__dot{% if subtotal >= th %} is-earned{% endif %}">{% if subtotal >= th %}✓{% endif %}</span>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="atelier-milestone__cards">
+      {%- for row in rows -%}
+        {%- liquid
+          assign parts = row | strip | split: '|'
+          assign th = parts[0] | plus: 0
+          assign th_money = th | times: 100 | money
+          assign earned = false
+          if subtotal >= th
+            assign earned = true
+          endif
+          assign is_next = false
+          if th == next_threshold
+            assign is_next = true
+          endif
+        -%}
+        <div class="atelier-milestone__card{% if earned %} is-earned{% elsif is_next %} is-next{% else %} is-locked{% endif %}">
+          {% render 'atelier-eyebrow', text: th_money %}
+          <p class="atelier-milestone__card-label">{{ parts[1] }}</p>
+          <p class="atelier-milestone__card-hint">
+            {%- if earned -%}{{ 'sections.atelier_cart.milestone_earned' | t }} · {% endif -%}{{ parts[2] }}
+          </p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier milestone ribbon",
+  "tag": "section",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Thank-yous, not discounts" },
+    {
+      "type": "paragraph",
+      "content": "Tiers are read from the 'reward_tier' metaobject when it exists (shared with the Complete-the-Look tool). The blocks below are a fallback."
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-2" }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Reward tier (fallback)",
+      "settings": [
+        { "type": "number", "id": "threshold", "label": "Threshold (major units, e.g. 10000)" },
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "hint", "label": "Hint" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier milestone ribbon",
+      "blocks": [
+        { "type": "tier", "settings": { "threshold": 10000, "label": "Hand-tied muslin wrap", "hint": "On the box, tied with twine." } },
+        { "type": "tier", "settings": { "threshold": 15000, "label": "A ceramic dish, our gift", "hint": "Cream stoneware, 4″ — a small thank-you." } },
+        { "type": "tier", "settings": { "threshold": 25000, "label": "White-glove installation", "hint": "In Bombay. We come, we place, we leave." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

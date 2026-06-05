@@ -1,0 +1,241 @@
+{{ 'section-atelier-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'atelier-shop-by.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign mode = 'element'
+  if request.get.shop_by == 'object'
+    assign mode = 'object'
+  endif
+
+  assign el_key = section.settings.element_filter_key
+  assign cat_key = section.settings.category_filter_key
+
+  assign element_filter = null
+  assign category_filter = null
+  assign other_filters = ''
+
+  for f in collection.filters
+    if f.param_name == el_key
+      assign element_filter = f
+    elsif f.param_name == cat_key
+      assign category_filter = f
+    else
+      assign other_filters = other_filters | append: f.param_name | append: ','
+    endif
+  endfor
+
+  assign per_page = section.settings.products_per_page
+-%}
+
+<div class="atelier-plp color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    {%- if section.settings.show_breadcrumb -%}
+      <nav class="atelier-plp__crumb" aria-label="breadcrumb">
+        <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t | default: 'Home' }}</a>
+        <span aria-hidden="true"> / </span>
+        <span>{{ collection.title }}</span>
+      </nav>
+    {%- endif -%}
+
+    <h1 class="atelier-plp__head">
+      {%- if section.settings.heading != blank -%}{{ section.settings.heading }}{%- else -%}{{ collection.title }}{%- endif -%}
+    </h1>
+
+    {%- comment %} Shop By band (mode toggle) {% endcomment -%}
+    <div class="atelier-plp__band">
+      {% render 'atelier-shop-by-switch', mode: mode, base_url: collection.url %}
+      <span class="atelier-browse__caption" data-mode-when="element" {% if mode != 'element' %}hidden{% endif %}>{{ section.settings.element_caption }}</span>
+      <span class="atelier-browse__caption" data-mode-when="object" {% if mode != 'object' %}hidden{% endif %}>{{ section.settings.object_caption }}</span>
+    </div>
+
+    {%- comment %} Chip rails — element values or object/category values per mode {% endcomment -%}
+    {%- assign chip_modes = 'element,object' | split: ',' -%}
+    {%- for m in chip_modes -%}
+      {%- if m == 'element' -%}{%- assign chip_filter = element_filter -%}{%- else -%}{%- assign chip_filter = category_filter -%}{%- endif -%}
+      <div class="atelier-plp__chips a-rail" data-mode-grid="{{ m }}" {% if mode != m %}hidden{% endif %}>
+        <a href="{{ collection.url }}{% if mode %}?shop_by={{ m }}{% endif %}" class="atelier-chip{% unless chip_filter.active_values.size > 0 %} is-active{% endunless %}">{{ 'products.facets.all' | t | default: 'All' }}</a>
+        {%- if chip_filter -%}
+          {%- for value in chip_filter.values -%}
+            <a
+              href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+              class="atelier-chip{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-soon{% endif %}"
+            >{{ value.label }}<span class="atelier-chip__count">{{ value.count }}</span></a>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+
+    {%- comment %} Body: sidebar + grid {% endcomment -%}
+    <div class="atelier-plp__body">
+      <aside class="atelier-plp__sidebar">
+        {%- comment %} Secondary axis flips with mode {% endcomment -%}
+        {%- if category_filter -%}
+          <div data-mode-grid="element" {% if mode != 'element' %}hidden{% endif %}>
+            {% render 'atelier-facet-group', filter: category_filter %}
+          </div>
+        {%- endif -%}
+        {%- if element_filter -%}
+          <div data-mode-grid="object" {% if mode != 'object' %}hidden{% endif %}>
+            {% render 'atelier-facet-group', filter: element_filter %}
+          </div>
+        {%- endif -%}
+        {%- for f in collection.filters -%}
+          {%- assign pn = f.param_name -%}
+          {%- unless pn == el_key or pn == cat_key -%}
+            {% render 'atelier-facet-group', filter: f %}
+          {%- endunless -%}
+        {%- endfor -%}
+      </aside>
+
+      <div class="atelier-plp__main">
+        {%- paginate collection.products by per_page -%}
+          <div class="atelier-plp__grid">
+            {%- for product in collection.products -%}
+              {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
+              {% render 'atelier-product-card', product: product, number: num %}
+
+              {%- if forloop.index == section.settings.editorial_after and section.settings.editorial_title != blank -%}
+                <div class="atelier-plp__editorial">
+                  {% render 'atelier-eyebrow', text: section.settings.editorial_eyebrow, ochre: true %}
+                  <p class="atelier-plp__editorial-title">{{ section.settings.editorial_title }}</p>
+                  {%- if section.settings.editorial_link != blank -%}
+                    <a href="{{ section.settings.editorial_link }}" class="atelier-chip" style="align-self:flex-start">{{ section.settings.editorial_cta }}</a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- else -%}
+              <p>{{ 'sections.collection_template.empty' | t }}</p>
+            {%- endfor -%}
+          </div>
+
+          <div class="atelier-plp__more">
+            {%- if paginate.next.is_link -%}
+              <a href="{{ paginate.next.url }}" class="button">{{ section.settings.more_label }}</a>
+            {%- else -%}
+              <p>{{ section.settings.end_label }}</p>
+            {%- endif -%}
+          </div>
+        {%- endpaginate -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier collection",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading (blank = collection title)",
+      "default": "Stone and Metal. <em>Eleven pieces, in the room now.</em>"
+    },
+    {
+      "type": "header",
+      "content": "Shop By"
+    },
+    {
+      "type": "text",
+      "id": "element_caption",
+      "label": "Caption — Element mode",
+      "default": "Browse by material."
+    },
+    {
+      "type": "text",
+      "id": "object_caption",
+      "label": "Caption — Object mode",
+      "default": "Browse by what it is."
+    },
+    {
+      "type": "text",
+      "id": "element_filter_key",
+      "label": "Element filter param",
+      "info": "The storefront filter param for the material axis.",
+      "default": "filter.p.m.atelier.element"
+    },
+    {
+      "type": "text",
+      "id": "category_filter_key",
+      "label": "Category filter param",
+      "info": "The storefront filter param for the object/category axis.",
+      "default": "filter.p.m.atelier.category"
+    },
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 6,
+      "max": 24,
+      "step": 2,
+      "default": 12,
+      "label": "Products per page"
+    },
+    {
+      "type": "text",
+      "id": "more_label",
+      "label": "Load-more label",
+      "default": "Show the next twelve"
+    },
+    {
+      "type": "text",
+      "id": "end_label",
+      "label": "End-of-shop label",
+      "default": "That's the full shop — for now."
+    },
+    {
+      "type": "header",
+      "content": "Inline editorial slot"
+    },
+    {
+      "type": "range",
+      "id": "editorial_after",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Insert after product #",
+      "info": "0 disables the slot."
+    },
+    {
+      "type": "text",
+      "id": "editorial_eyebrow",
+      "label": "Editorial eyebrow",
+      "default": "Field note"
+    },
+    {
+      "type": "text",
+      "id": "editorial_title",
+      "label": "Editorial title",
+      "default": "Where the stone is folded by hand."
+    },
+    {
+      "type": "text",
+      "id": "editorial_cta",
+      "label": "Editorial link label",
+      "default": "Read →"
+    },
+    {
+      "type": "url",
+      "id": "editorial_link",
+      "label": "Editorial link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

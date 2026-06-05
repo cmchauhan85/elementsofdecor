@@ -1,0 +1,65 @@
+{{ 'section-atelier-philosophy.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-philosophy color-{{ section.settings.color_scheme }} a-section a-section--tall">
+  {%- if section.settings.show_mandala -%}
+    {% render 'atelier-mandala', align: 'right' %}
+  {%- endif -%}
+  <div class="page-width">
+    <div class="atelier-philosophy__inner">
+      {%- if section.settings.eyebrow != blank -%}
+        {% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true, class: 'atelier-philosophy__eyebrow' %}
+      {%- endif -%}
+      <blockquote class="atelier-philosophy__quote">
+        <span class="a-mark" aria-hidden="true">“</span>{{ section.settings.quote }}<span class="a-mark" aria-hidden="true">”</span>
+      </blockquote>
+      {%- if section.settings.attribution != blank -%}
+        <div class="atelier-philosophy__rule" aria-hidden="true"></div>
+        <p class="atelier-philosophy__attr">{{ section.settings.attribution }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier philosophy",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Our Philosophy"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "quote",
+      "label": "Quote",
+      "default": "Every material we choose — from the strength of stone to the warmth of wood, the elegance of clay to the softness of cloth — is thoughtfully curated to bring balance and natural beauty into your space."
+    },
+    {
+      "type": "text",
+      "id": "attribution",
+      "label": "Attribution",
+      "default": "— The Elements of Decor family"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mandala",
+      "label": "Show mandala motif",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier philosophy"
+    }
+  ]
+}
+{% endschema %}

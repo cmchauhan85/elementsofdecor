@@ -1,0 +1,104 @@
+{{ 'section-atelier-notes.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign blog = blogs[section.settings.blog]
+  assign limit = section.settings.posts_to_show
+-%}
+
+<div class="atelier-notes color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-notes__head">
+      {%- if section.settings.eyebrow != blank -%}
+        {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+      {%- endif -%}
+      <h2 class="atelier-notes__title">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="atelier-notes__grid">
+      {%- for article in blog.articles limit: limit -%}
+        {%- liquid
+          assign tag = article.metafields.atelier.element.value
+          if tag == blank
+            assign tag = article.tags.first
+          endif
+        -%}
+        <a href="{{ article.url }}" class="atelier-note a-anim">
+          <div class="atelier-note__media">
+            {%- if article.image != blank -%}
+              {{
+                article.image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  sizes: '(min-width: 990px) 30vw, 78vw',
+                  widths: '400, 550, 800',
+                  alt: article.title | escape
+              }}
+            {%- endif -%}
+          </div>
+          {%- if tag != blank -%}
+            {% render 'atelier-eyebrow', text: tag, ochre: true, tag: 'span', class: 'atelier-note__tag' %}
+          {%- endif -%}
+          <h3 class="atelier-note__title">{{ article.title }}</h3>
+          <p class="atelier-note__meta">
+            {{ article.published_at | date: format: 'month_day_year' }}
+            {%- if article.author != blank %} · {{ article.author }}{% endif -%}
+          </p>
+        </a>
+      {%- else -%}
+        {%- for i in (1..3) -%}
+          <div class="atelier-note">
+            <div class="atelier-note__media"></div>
+            <h3 class="atelier-note__title">{{ 'sections.featured_blog.onboarding_title' | t }}</h3>
+          </div>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier notes",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Stories"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Notes from the Atelier"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "posts_to_show",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "label": "Posts to show"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier notes"
+    }
+  ]
+}
+{% endschema %}
