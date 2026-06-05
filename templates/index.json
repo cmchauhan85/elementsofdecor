@@ -142,8 +142,15 @@
     "this_season": {
       "type": "atelier-this-season",
       "settings": {
-        "eyebrow": "This Season",
+        "eyebrow": "Best Sellers",
         "title": "Considered, <em>not collected.</em>",
+        "best_sellers": [
+          "elements-of-decor-aurum-hand-etched-brass-vase",
+          "elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes",
+          "flower-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "lotus-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "oria-hammered-silver-globe-vase"
+        ],
         "collection": "candle-holders",
         "products_to_show": 10,
         "show_all_tile": false,
