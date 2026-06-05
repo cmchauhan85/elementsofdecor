@@ -17,9 +17,7 @@
   font-style: italic;
 }
 .atelier-season__nav {
-  display: flex;
-  gap: 1rem;
-  flex-shrink: 0;
+  display: none;
 }
 .atelier-season__btn {
   width: 4.4rem;
