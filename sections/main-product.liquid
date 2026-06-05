@@ -41,6 +41,7 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'buy-now.js' | asset_url }}" defer="defer"></script>
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -479,23 +480,72 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
-               <form method="post" action="/cart/add" class="product__form">
+                {%- liquid
+                  assign variant_unavailable = false
+                  if product.selected_or_first_available_variant.available == false or product.selected_or_first_available_variant == null
+                    assign variant_unavailable = true
+                  endif
+                -%}
+                <product-form
+                  class="product-form product-form--custom"
+                  data-section-id="{{ section.id }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div class="product-form__error-message-wrapper" role="alert" hidden>
+                    <span class="svg-wrapper">
+                      {{- 'icon-error.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="product-form__error-message"></span>
+                  </div>
 
-  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  {%- form 'product',
+                    product,
+                    id: product_form_id,
+                    class: 'form',
+                    novalidate: 'novalidate',
+                    data-type: 'add-to-cart-form'
+                  -%}
+                    <input
+                      type="hidden"
+                      name="id"
+                      value="{{ product.selected_or_first_available_variant.id }}"
+                      class="product-variant-id"
+                      {% if variant_unavailable %}disabled{% endif %}
+                    >
 
-  <button type="submit" class="btn-primary">
-    Add to Cart
-  </button>
+                    <div class="product__buy-buttons">
+                      <button
+                        id="ProductSubmitButton-{{ section.id }}"
+                        type="submit"
+                        name="add"
+                        class="btn-primary"
+                        {% if variant_unavailable %}disabled{% endif %}
+                      >
+                        <span>
+                          {%- if variant_unavailable -%}
+                            {{ 'products.product.sold_out' | t }}
+                          {%- else -%}
+                            {{ 'products.product.add_to_cart' | t }}
+                          {%- endif -%}
+                        </span>
+                        {%- render 'loading-spinner' -%}
+                      </button>
 
-  <button type="button" class="btn-secondary">
-    Buy Now
-  </button>
+                      <button
+                        type="button"
+                        class="btn-secondary"
+                        data-buy-now
+                        {% if variant_unavailable %}disabled{% endif %}
+                      >
+                        {{ 'products.product.buy_now' | t }}
+                      </button>
+                    </div>
+                  {%- endform -%}
+                </product-form>
 
-</form>
-
-<p class="product__microcopy">
-  Hand-finished. Each piece is uniquely textured.
-</p>
+                <p class="product__microcopy">
+                  Hand-finished. Each piece is uniquely textured.
+                </p>
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -2277,36 +2327,3 @@
   ]
 }
 {% endschema %}
-<div class="sticky-cart">
-
-  <div class="sticky-cart__content">
-    
-    <div class="sticky-cart__info">
-     <span class="sticky-cart__title" id="sticky-title">
-  {{ product.title }}
-</span>
-
-<span class="sticky-cart__price" id="sticky-price">
-  {{ product.selected_or_first_available_variant.price | money }}
-</span>
-<span class="sticky-cart__urgency">
-  Only a few pieces left
-</span>
-
-<span class="sticky-cart__trust">
-  Free Shipping • Easy Returns
-</span>
-    </div>
-    {% form 'product', product %}
-<div class="sticky-cart__actions">
-
-  <button type="submit" class="sticky-cart__btn">
-    Add to Cart
-  </button>
-
-  {{ form | payment_button }}
-
-</div>
-{% endform %}
-
-</div>

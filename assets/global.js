@@ -1330,24 +1330,4 @@ class CartPerformance {
     );
   }
 }
-document.addEventListener("DOMContentLoaded", function () {
-  const stickyCart = document.querySelector(".sticky-cart");
-  const buySection = document.querySelector("form[action='/cart/add']");
-
-  if (!stickyCart || !buySection) return;
-
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry.isIntersecting) {
-        stickyCart.classList.add("show");
-      } else {
-        stickyCart.classList.remove("show");
-      }
-    },
-    {
-      threshold: 0.2
-    }
-  );
-
-  observer.observe(buySection);
-}); 
+ 
