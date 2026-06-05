@@ -27,10 +27,17 @@
         </span>
       </div>
 
-      {%- if section.settings.status_text != blank -%}
+      {%- liquid
+        if req_mode == 'object'
+          assign active_status = section.settings.object_status_text
+        else
+          assign active_status = section.settings.element_status_text
+        endif
+      -%}
+      {%- if active_status != blank -%}
         <div class="atelier-browse__status">
           <span class="atelier-browse__rule" aria-hidden="true"></span>
-          <span class="atelier-browse__caption">{{ section.settings.status_text }}</span>
+          <span class="atelier-browse__caption">{{ active_status }}</span>
         </div>
       {%- endif -%}
     </div>
@@ -95,9 +102,15 @@
     },
     {
       "type": "text",
-      "id": "status_text",
-      "label": "Status text",
-      "default": "Two of five live · three coming soon"
+      "id": "element_status_text",
+      "label": "Status text — Element mode",
+      "default": "TWO OF FIVE LIVE · THREE COMING SOON"
+    },
+    {
+      "type": "text",
+      "id": "object_status_text",
+      "label": "Status text — Object mode",
+      "default": "THREE OF FIVE LIVE · TWO COMING SOON"
     },
     {
       "type": "color_scheme",

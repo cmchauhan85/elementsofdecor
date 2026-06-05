@@ -25,7 +25,47 @@
     "browse": {
       "type": "atelier-browse",
       "blocks": {
-        "card_i7PnmE": {
+        "el_stone": {
+          "type": "card",
+          "settings": {
+            "collection": "stone",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "el_metal": {
+          "type": "card",
+          "settings": {
+            "collection": "metal",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "el_ceramic": {
+          "type": "card",
+          "settings": {
+            "collection": "ceramic",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "el_wood": {
+          "type": "card",
+          "settings": {
+            "collection": "wood",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "el_fabric": {
+          "type": "card",
+          "settings": {
+            "collection": "fabric",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "ob_urlis": {
           "type": "card",
           "settings": {
             "collection": "urlis",
@@ -33,35 +73,59 @@
             "show_element": false
           }
         },
-        "el_1": {
+        "ob_vases": {
           "type": "card",
           "settings": {
-            "collection": "candle-holders",
-            "mode": "element",
+            "collection": "decorative-vases",
+            "mode": "object",
             "show_element": true
           }
         },
-        "card_egwdz6": {
+        "ob_lighting": {
           "type": "card",
           "settings": {
-            "collection": "marble-decor",
+            "collection": "candle-holders",
+            "mode": "object",
+            "show_element": true
+          }
+        },
+        "ob_trays": {
+          "type": "card",
+          "settings": {
+            "collection": "trays-stands",
+            "mode": "object",
+            "show_element": true
+          }
+        },
+        "ob_wall": {
+          "type": "card",
+          "settings": {
+            "collection": "wall-tabletop",
             "mode": "object",
             "show_element": false
           }
         }
       },
       "block_order": [
-        "card_i7PnmE",
-        "el_1",
-        "card_egwdz6"
+        "el_stone",
+        "el_metal",
+        "el_ceramic",
+        "el_wood",
+        "el_fabric",
+        "ob_urlis",
+        "ob_vases",
+        "ob_lighting",
+        "ob_trays",
+        "ob_wall"
       ],
       "settings": {
         "lead": "Shop by",
         "element_label": "Element",
         "object_label": "Object",
-        "element_caption": "Five materials, each with its own voice.",
-        "object_caption": "What it is, and what it holds.",
-        "status_text": "Two of five live · three coming soon",
+        "element_caption": "By material – the way we make them.",
+        "object_caption": "By what it is – the familiar way to shop.",
+        "element_status_text": "TWO OF FIVE LIVE · THREE COMING SOON",
+        "object_status_text": "THREE OF FIVE LIVE · TWO COMING SOON",
         "color_scheme": "scheme-2"
       }
     },

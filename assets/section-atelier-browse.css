@@ -98,6 +98,7 @@
 }
 .atelier-card__name {
   margin: 1.4rem 0 0.4rem;
+  color: currentColor;
 }
 .atelier-card__desc {
   font-family: var(--font-heading-family);
