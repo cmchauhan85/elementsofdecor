@@ -7,28 +7,44 @@
     assign mode = 'object'
   endif
 
-  assign el_key = section.settings.element_filter_key
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+
+  assign el_key  = section.settings.element_filter_key
   assign cat_key = section.settings.category_filter_key
 
-  assign element_filter = null
+  assign element_filter  = null
   assign category_filter = null
-  assign other_filters = ''
 
   for f in collection.filters
     if f.param_name == el_key
       assign element_filter = f
     elsif f.param_name == cat_key
       assign category_filter = f
-    else
-      assign other_filters = other_filters | append: f.param_name | append: ','
     endif
   endfor
 
   assign per_page = section.settings.products_per_page
+
+  assign active_label = null
+  if mode == 'element' and element_filter
+    for v in element_filter.active_values
+      assign active_label = v.label
+    endfor
+  elsif mode == 'object' and category_filter
+    for v in category_filter.active_values
+      assign active_label = v.label
+    endfor
+  endif
+
+  assign active_count = 0
+  for f in collection.filters
+    assign active_count = active_count | plus: f.active_values.size
+  endfor
 -%}
 
 <div class="atelier-plp color-{{ section.settings.color_scheme }} a-section">
   <div class="page-width">
+
     {%- if section.settings.show_breadcrumb -%}
       <nav class="atelier-plp__crumb" aria-label="breadcrumb">
         <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t | default: 'Home' }}</a>
@@ -41,34 +57,88 @@
       {%- if section.settings.heading != blank -%}{{ section.settings.heading }}{%- else -%}{{ collection.title }}{%- endif -%}
     </h1>
 
-    {%- comment %} Shop By band (mode toggle) {% endcomment -%}
+    {%- comment %} Shop By band {% endcomment -%}
     <div class="atelier-plp__band">
-      {% render 'atelier-shop-by-switch', mode: mode, base_url: collection.url %}
-      <span class="atelier-browse__caption" data-mode-when="element" {% if mode != 'element' %}hidden{% endif %}>{{ section.settings.element_caption }}</span>
-      <span class="atelier-browse__caption" data-mode-when="object" {% if mode != 'object' %}hidden{% endif %}>{{ section.settings.object_caption }}</span>
+      <div class="atelier-plp__band-left">
+        {% render 'atelier-shop-by-switch', mode: mode, base_url: collection.url %}
+        <span class="atelier-browse__caption" data-mode-when="element" {% if mode != 'element' %}hidden{% endif %}>{{ section.settings.element_caption }}</span>
+        <span class="atelier-browse__caption" data-mode-when="object" {% if mode != 'object' %}hidden{% endif %}>{{ section.settings.object_caption }}</span>
+      </div>
+      {%- liquid
+        if mode == 'object'
+          assign band_status = section.settings.object_status_text
+        else
+          assign band_status = section.settings.element_status_text
+        endif
+      -%}
+      {%- if band_status != blank -%}
+        <div class="atelier-browse__status">
+          <span class="atelier-browse__rule" aria-hidden="true"></span>
+          <span class="atelier-browse__caption">{{ band_status }}</span>
+        </div>
+      {%- endif -%}
     </div>
 
-    {%- comment %} Chip rails — element values or object/category values per mode {% endcomment -%}
-    {%- assign chip_modes = 'element,object' | split: ',' -%}
-    {%- for m in chip_modes -%}
-      {%- if m == 'element' -%}{%- assign chip_filter = element_filter -%}{%- else -%}{%- assign chip_filter = category_filter -%}{%- endif -%}
-      <div class="atelier-plp__chips a-rail" data-mode-grid="{{ m }}" {% if mode != m %}hidden{% endif %}>
-        <a href="{{ collection.url }}{% if mode %}?shop_by={{ m }}{% endif %}" class="atelier-chip{% unless chip_filter.active_values.size > 0 %} is-active{% endunless %}">{{ 'products.facets.all' | t | default: 'All' }}</a>
-        {%- if chip_filter -%}
-          {%- for value in chip_filter.values -%}
-            <a
-              href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
-              class="atelier-chip{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-soon{% endif %}"
-            >{{ value.label }}<span class="atelier-chip__count">{{ value.count }}</span></a>
-          {%- endfor -%}
-        {%- endif -%}
-      </div>
-    {%- endfor -%}
+    {%- comment %} Filter bar: scrollable chip rail + sort {% endcomment -%}
+    <div class="atelier-plp__filter-bar">
+      {%- assign chip_modes = 'element,object' | split: ',' -%}
+      {%- for m in chip_modes -%}
+        {%- if m == 'element' -%}{%- assign chip_filter = element_filter -%}{%- else -%}{%- assign chip_filter = category_filter -%}{%- endif -%}
+        <div class="atelier-plp__chips a-rail" data-mode-grid="{{ m }}" {% if mode != m %}hidden{% endif %}>
+          <a href="{{ collection.url }}?shop_by={{ m }}" class="atelier-chip{% unless chip_filter.active_values.size > 0 %} is-active{% endunless %}">
+            {{ 'products.facets.all' | t | default: 'All' }}<span class="atelier-chip__count">{{ collection.all_products_count }}</span>
+          </a>
+          {%- if chip_filter -%}
+            {%- for value in chip_filter.values -%}
+              <a
+                href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                class="atelier-chip{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-soon{% endif %}"
+              >{{ value.label }}<span class="atelier-chip__count">{{ value.count }}</span></a>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
 
-    {%- comment %} Body: sidebar + grid {% endcomment -%}
+      <form class="atelier-plp__sort" method="get" action="{{ collection.url }}">
+        {%- if request.get.shop_by != blank -%}
+          <input type="hidden" name="shop_by" value="{{ request.get.shop_by }}">
+        {%- endif -%}
+        {%- for f in collection.filters -%}
+          {%- for v in f.active_values -%}
+            <input type="hidden" name="{{ f.param_name }}" value="{{ v.value }}">
+          {%- endfor -%}
+        {%- endfor -%}
+        <label class="atelier-plp__sort-label">
+          <span class="atelier-plp__sort-prefix">Sort:</span>
+          <select class="atelier-plp__sort-select" name="sort_by" onchange="this.form.submit()">
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+        </label>
+      </form>
+    </div>
+
+    {%- comment %} Mobile REFINE button — shown only below 990 px {% endcomment -%}
+    <div class="atelier-plp__mobilebar">
+      <button class="atelier-plp__refine-btn" id="atelier-refine-btn" aria-controls="atelier-sidebar" aria-expanded="false">
+        <span aria-hidden="true">≡</span>
+        {{ section.settings.refine_label | default: 'Refine' }}
+        {%- if active_count > 0 -%}
+          <span class="atelier-plp__refine-count">{{ active_count }}</span>
+        {%- endif -%}
+      </button>
+    </div>
+
+    {%- comment %} Body: sidebar column + product grid {% endcomment -%}
     <div class="atelier-plp__body">
-      <aside class="atelier-plp__sidebar">
-        {%- comment %} Secondary axis flips with mode {% endcomment -%}
+
+      <aside class="atelier-plp__sidebar" id="atelier-sidebar">
+        <div class="atelier-plp__sidebar-head">
+          {% render 'atelier-eyebrow', text: 'Filter' %}
+          <button class="atelier-plp__sidebar-close" id="atelier-sidebar-close" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}">✕</button>
+        </div>
+
         {%- if category_filter -%}
           <div data-mode-grid="element" {% if mode != 'element' %}hidden{% endif %}>
             {% render 'atelier-facet-group', filter: category_filter %}
@@ -89,17 +159,42 @@
 
       <div class="atelier-plp__main">
         {%- paginate collection.products by per_page -%}
+
+          {%- assign showing = paginate.current_offset | plus: collection.products.size -%}
+          <div class="atelier-plp__grid-head">
+            {%- if active_label != blank -%}
+              <span class="atelier-plp__active-label">{{ active_label }}.</span>
+            {%- else -%}
+              <span></span>
+            {%- endif -%}
+            <span class="atelier-plp__count">Showing {{ showing }} of {{ paginate.items }}</span>
+          </div>
+
           <div class="atelier-plp__grid">
             {%- for product in collection.products -%}
               {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
               {% render 'atelier-product-card', product: product, number: num %}
 
-              {%- if forloop.index == section.settings.editorial_after and section.settings.editorial_title != blank -%}
+              {%- if section.settings.editorial_after > 0 and forloop.index == section.settings.editorial_after and section.settings.editorial_title != blank -%}
                 <div class="atelier-plp__editorial">
-                  {% render 'atelier-eyebrow', text: section.settings.editorial_eyebrow, ochre: true %}
-                  <p class="atelier-plp__editorial-title">{{ section.settings.editorial_title }}</p>
-                  {%- if section.settings.editorial_link != blank -%}
-                    <a href="{{ section.settings.editorial_link }}" class="atelier-chip" style="align-self:flex-start">{{ section.settings.editorial_cta }}</a>
+                  <div class="atelier-plp__editorial-body">
+                    {% render 'atelier-eyebrow', text: section.settings.editorial_eyebrow, ochre: true %}
+                    <p class="atelier-plp__editorial-title">{{ section.settings.editorial_title }}</p>
+                    {%- if section.settings.editorial_link != blank -%}
+                      <a href="{{ section.settings.editorial_link }}" class="atelier-plp__editorial-cta">{{ section.settings.editorial_cta }}</a>
+                    {%- endif -%}
+                  </div>
+                  {%- if section.settings.editorial_image != blank -%}
+                    <div class="atelier-plp__editorial-media">
+                      {{
+                        section.settings.editorial_image
+                        | image_url: width: 800
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '400, 600, 800',
+                          alt: section.settings.editorial_title | escape
+                      }}
+                    </div>
                   {%- endif -%}
                 </div>
               {%- endif -%}
@@ -115,11 +210,40 @@
               <p>{{ section.settings.end_label }}</p>
             {%- endif -%}
           </div>
+
         {%- endpaginate -%}
       </div>
+
     </div>
   </div>
 </div>
+
+<div class="atelier-plp__overlay" id="atelier-overlay" aria-hidden="true"></div>
+
+<script>
+  (() => {
+    const sidebar = document.getElementById('atelier-sidebar');
+    const overlay = document.getElementById('atelier-overlay');
+    const openBtn = document.getElementById('atelier-refine-btn');
+    const closeBtn = document.getElementById('atelier-sidebar-close');
+    if (!sidebar || !openBtn) return;
+    function openSidebar() {
+      sidebar.classList.add('is-open');
+      overlay.classList.add('is-open');
+      openBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+      sidebar.classList.remove('is-open');
+      overlay.classList.remove('is-open');
+      openBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    openBtn.addEventListener('click', openSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+  })();
+</script>
 
 {% schema %}
 {
@@ -140,19 +264,36 @@
     },
     {
       "type": "header",
-      "content": "Shop By"
+      "content": "Shop By band"
     },
     {
       "type": "text",
       "id": "element_caption",
       "label": "Caption — Element mode",
-      "default": "Browse by material."
+      "default": "By material – the way we make them."
     },
     {
       "type": "text",
       "id": "object_caption",
       "label": "Caption — Object mode",
-      "default": "Browse by what it is."
+      "default": "By what it is – the familiar way to shop."
+    },
+    {
+      "type": "text",
+      "id": "element_status_text",
+      "label": "Status text — Element mode",
+      "info": "Right-side label in the band, e.g. \"FIVE MATERIALS\"",
+      "default": "FIVE MATERIALS"
+    },
+    {
+      "type": "text",
+      "id": "object_status_text",
+      "label": "Status text — Object mode",
+      "default": "FIVE OBJECTS"
+    },
+    {
+      "type": "header",
+      "content": "Filters"
     },
     {
       "type": "text",
@@ -167,6 +308,12 @@
       "label": "Category filter param",
       "info": "The storefront filter param for the object/category axis.",
       "default": "filter.p.m.atelier.category"
+    },
+    {
+      "type": "text",
+      "id": "refine_label",
+      "label": "Mobile Refine button label",
+      "default": "Refine"
     },
     {
       "type": "header",
@@ -217,18 +364,24 @@
       "type": "text",
       "id": "editorial_title",
       "label": "Editorial title",
-      "default": "Where the stone is folded by hand."
+      "default": "Where the brass is folded by hand."
     },
     {
       "type": "text",
       "id": "editorial_cta",
       "label": "Editorial link label",
-      "default": "Read →"
+      "default": "Read the note →"
     },
     {
       "type": "url",
       "id": "editorial_link",
       "label": "Editorial link"
+    },
+    {
+      "type": "image_picker",
+      "id": "editorial_image",
+      "label": "Editorial image",
+      "info": "Appears on the right half of the editorial card."
     },
     {
       "type": "color_scheme",
