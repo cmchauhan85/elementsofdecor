@@ -72,6 +72,13 @@ h1, h2, h3, h4, h5,
   color: var(--a-ochre);
 }
 
+/* The hidden attribute must always win over component display rules
+   (grid/flex). Drives the Shop By Element⇄Object swap, PLP chip rails,
+   sidebar axis swap, and the mode captions. */
+[hidden] {
+  display: none !important;
+}
+
 /* --- Square aesthetic ------------------------------------------------- */
 /* Cards, images and product tiles are square. Radius is reserved for pills,
    round number-pins and steppers, which opt in explicitly. */
