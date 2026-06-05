@@ -80,9 +80,9 @@
       "settings": {
         "eyebrow": "This Season",
         "title": "Considered, <em>not collected.</em>",
-        "collection": "",
+        "collection": "candle-holders",
         "products_to_show": 10,
-        "show_all_tile": true,
+        "show_all_tile": false,
         "all_eyebrow": "Everything",
         "all_title": "The full shop →",
         "color_scheme": "scheme-1"
@@ -104,13 +104,14 @@
       "settings": {
         "eyebrow": "Stories",
         "title": "Notes from the Atelier",
-        "blog": "",
+        "blog": "news",
         "posts_to_show": 3,
         "color_scheme": "scheme-1"
       }
     },
     "gratitude": {
       "type": "atelier-gratitude",
+      "disabled": true,
       "settings": {
         "mark": "EoD",
         "elements": "Stone, Metal, Wood, Ceramic, Fabric",
