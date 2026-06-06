@@ -8,8 +8,31 @@
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
+      {%- liquid
+        assign override_links = nil
+        if link.handle == 'shop-by-elements' and section.settings.elements_menu != blank
+          assign override_links = linklists[section.settings.elements_menu].links
+        elsif link.handle == 'shop-by-object' and section.settings.objects_menu != blank
+          assign override_links = linklists[section.settings.objects_menu].links
+        endif
+        if override_links != nil
+          assign effective_links = override_links
+          if override_links.size > 0
+            assign has_children = true
+          else
+            assign has_children = false
+          endif
+        else
+          assign effective_links = link.links
+          if link.links != blank
+            assign has_children = true
+          else
+            assign has_children = false
+          endif
+        endif
+      -%}
       <li>
-        {%- if link.links != blank -%}
+        {%- if has_children -%}
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}">
               <summary
@@ -31,7 +54,7 @@
                 role="list"
                 tabindex="-1"
               >
-                {%- for childlink in link.links -%}
+                {%- for childlink in effective_links -%}
                   <li>
                     {%- if childlink.links == blank -%}
                       <a

@@ -45,20 +45,53 @@
     {%- assign browse_modes = 'element,object' | split: ',' -%}
     {%- for mode in browse_modes -%}
       <div class="atelier-browse__grid" data-mode-grid="{{ mode }}" {% if req_mode != mode %}hidden{% endif %}>
-        {%- assign n = 0 -%}
-        {%- for block in section.blocks -%}
-          {%- if block.settings.mode == mode and block.settings.collection != blank -%}
-            {%- assign n = n | plus: 1 -%}
-            {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
-            <div {{ block.shopify_attributes }}>
-              {% render 'atelier-collection-card',
-                collection: block.settings.collection,
-                number: num,
-                show_element: block.settings.show_element
-              %}
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
+        {%- liquid
+          assign use_menu = false
+          if mode == 'element' and section.settings.elements_menu != blank
+            assign nav_links = linklists[section.settings.elements_menu].links
+            if nav_links.size > 0
+              assign use_menu = true
+            endif
+          elsif mode == 'object' and section.settings.objects_menu != blank
+            assign nav_links = linklists[section.settings.objects_menu].links
+            if nav_links.size > 0
+              assign use_menu = true
+            endif
+          endif
+        -%}
+        {%- if use_menu -%}
+          {%- assign n = 0 -%}
+          {%- for nav_link in nav_links -%}
+            {%- assign col_handle = nav_link.url | split: '/collections/' | last -%}
+            {%- assign col = collections[col_handle] -%}
+            {%- if col != blank -%}
+              {%- assign n = n | plus: 1 -%}
+              {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
+              <div>
+                {% render 'atelier-collection-card',
+                  collection: col,
+                  number: num,
+                  show_element: mode == 'object'
+                %}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign n = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.settings.mode == mode and block.settings.collection != blank -%}
+              {%- assign n = n | plus: 1 -%}
+              {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
+              <div {{ block.shopify_attributes }}>
+                {% render 'atelier-collection-card',
+                  collection: block.settings.collection,
+                  number: num,
+                  show_element: block.settings.show_element
+                %}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
     {%- endfor -%}
   </div>
@@ -111,6 +144,20 @@
       "id": "object_status_text",
       "label": "Status text — Object mode",
       "default": "THREE OF FIVE LIVE · TWO COMING SOON"
+    },
+    {
+      "type": "link_list",
+      "id": "elements_menu",
+      "default": "elements-menu",
+      "label": "Elements menu (syncs with header)",
+      "info": "When set, cards are driven by this navigation menu — the same menu the header dropdown reads from. Leave blank to use the blocks below instead."
+    },
+    {
+      "type": "link_list",
+      "id": "objects_menu",
+      "default": "objects-menu",
+      "label": "Objects menu (syncs with header)",
+      "info": "When set, cards are driven by this navigation menu — the same menu the header dropdown reads from. Leave blank to use the blocks below instead."
     },
     {
       "type": "color_scheme",
