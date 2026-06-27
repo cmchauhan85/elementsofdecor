@@ -1026,6 +1026,15 @@
               "default": "<p>Share contact information, store details, and brand content with your customers.</p>"
             }
           }
+        },
+        "social": {
+          "name": "Social",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "default": "Social"
+            }
+          }
         }
       },
       "settings": {
