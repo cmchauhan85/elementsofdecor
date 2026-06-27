@@ -175,6 +175,17 @@
   justify-content: center;
 }
 
+.footer__list-social--column {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.footer__list-social--column .list-social__link {
+  padding: 0.4rem 0;
+}
+
 .footer-block__newsletter {
   text-align: center;
   flex-grow: 1;

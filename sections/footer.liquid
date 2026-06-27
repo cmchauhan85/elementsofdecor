@@ -132,6 +132,8 @@
                         {%- render 'social-icons', class: 'footer__list-social' -%}
                       {%- endif -%}
                     </div>
+                  {%- when 'social' -%}
+                    {%- render 'social-icons', class: 'footer__list-social footer__list-social--column' -%}
                   {%- when 'image' -%}
                     <div class="footer-block__details-content footer-block-image {{ block.settings.alignment }}">
                       {%- if block.settings.image != blank -%}
@@ -378,6 +380,18 @@
           "id": "subtext",
           "default": "t:sections.footer.blocks.text.settings.subtext.default",
           "label": "t:sections.footer.blocks.text.settings.subtext.label"
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "t:sections.footer.blocks.social.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "t:sections.footer.blocks.social.settings.heading.default",
+          "label": "t:sections.footer.blocks.social.settings.heading.label"
         }
       ]
     },
