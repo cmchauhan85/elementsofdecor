@@ -1,0 +1,41 @@
+{% comment %}
+  Atelier mandala motif.
+
+  Thin concentric-circle / radial SVG (ochre, low opacity, no fill). Decorative
+  only — used in dark (Ink) sections and summary/bundle cards. Renders an
+  absolutely-positioned overlay via the .a-mandala helper in atelier-tokens.css.
+
+  Accepts:
+    rings    {number}  - number of concentric circles (default 6)
+    align    {string}  - 'right' (default), 'left' or 'center' anchor for the radial
+    class    {string}  - extra classes appended to the wrapper
+
+  Usage (inside a position:relative parent):
+    {% render 'atelier-mandala', align: 'right' %}
+{% endcomment %}
+
+{%- liquid
+  assign a_rings = rings | default: 6
+  assign a_align = align | default: 'right'
+  assign a_class = 'a-mandala'
+  if class != blank
+    assign a_class = a_class | append: ' ' | append: class
+  endif
+
+  case a_align
+    when 'left'
+      assign cx = 8
+    when 'center'
+      assign cx = 50
+    else
+      assign cx = 92
+  endcase
+-%}
+<div class="{{ a_class }}" aria-hidden="true">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" fill="none">
+    {%- for i in (1..a_rings) -%}
+      {%- assign r = i | times: 9 -%}
+      <circle cx="{{ cx }}" cy="50" r="{{ r }}" stroke="currentColor" stroke-width="0.25" vector-effect="non-scaling-stroke" />
+    {%- endfor -%}
+  </svg>
+</div>

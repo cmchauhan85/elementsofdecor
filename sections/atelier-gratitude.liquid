@@ -1,0 +1,67 @@
+{{ 'section-atelier-gratitude.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-gratitude color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-gratitude__card">
+      <div class="atelier-gratitude__panel">
+        <p class="atelier-gratitude__mark">{{ section.settings.mark }}</p>
+        {%- if section.settings.elements != blank -%}
+          <ul class="atelier-gratitude__elements">
+            {%- assign els = section.settings.elements | split: ',' -%}
+            {%- for el in els -%}
+              <li>{{ el | strip }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+      <div class="atelier-gratitude__body">
+        <h2 class="atelier-gratitude__title">{{ section.settings.title }}</h2>
+        <p class="atelier-gratitude__note">{{ section.settings.note }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier gratitude",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "mark",
+      "label": "Wordmark",
+      "default": "EoD"
+    },
+    {
+      "type": "text",
+      "id": "elements",
+      "label": "Element names (comma-separated)",
+      "default": "Stone, Metal, Wood, Ceramic, Fabric"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Thank you."
+    },
+    {
+      "type": "richtext",
+      "id": "note",
+      "label": "Note",
+      "default": "<p>A beautiful space is never accidental. Thank you for letting our work into your home.</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier gratitude"
+    }
+  ]
+}
+{% endschema %}

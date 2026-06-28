@@ -1,0 +1,57 @@
+{{ 'section-atelier-about.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-beliefs color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-block__head">
+      {%- if section.settings.eyebrow != blank -%}
+        {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+      {%- endif -%}
+      <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="atelier-beliefs__grid">
+      {%- for block in section.blocks -%}
+        {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
+        <div {{ block.shopify_attributes }}>
+          <p class="atelier-belief__n">{{ num }}</p>
+          <h3 class="atelier-belief__t">{{ block.settings.title }}</h3>
+          <p class="atelier-belief__b">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier beliefs",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "What we believe" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "The rules of the room." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "belief",
+      "name": "Belief",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier beliefs",
+      "blocks": [
+        { "type": "belief", "settings": { "title": "Material before metaphor.", "body": "We start with what something is made of." } },
+        { "type": "belief", "settings": { "title": "Small batches, openly told.", "body": "We list quantities. Eight in stock, four to make." } },
+        { "type": "belief", "settings": { "title": "One hand per piece.", "body": "Every object is finished by one artisan." } },
+        { "type": "belief", "settings": { "title": "The room comes first.", "body": "If a piece doesn't earn its corner, we don't make it." } },
+        { "type": "belief", "settings": { "title": "Quiet over clever.", "body": "No tricks. No trends. Just things we wanted to live with." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

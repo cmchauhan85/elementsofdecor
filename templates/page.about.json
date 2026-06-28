@@ -1,0 +1,85 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "atelier-hero",
+      "settings": {
+        "height": "small",
+        "eyebrow": "The Studio",
+        "heading_line_1": "A small studio,",
+        "heading_line_2": "doing one thing well.",
+        "cta_label": "",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "manifesto": {
+      "type": "atelier-philosophy",
+      "settings": {
+        "eyebrow": "Our manifesto",
+        "quote": "Home is not styled. It is felt. We make a small number of things, by hand, from one material at a time — and we tell you exactly how, and how many.",
+        "attribution": "— The Elements of Decor family",
+        "show_mandala": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "beliefs": {
+      "type": "atelier-beliefs",
+      "blocks": {
+        "b1": { "type": "belief", "settings": { "title": "Material before metaphor.", "body": "We start with what something is made of." } },
+        "b2": { "type": "belief", "settings": { "title": "Small batches, openly told.", "body": "We list quantities. Eight in stock, four to make." } },
+        "b3": { "type": "belief", "settings": { "title": "One hand per piece.", "body": "Every object is finished by one artisan." } },
+        "b4": { "type": "belief", "settings": { "title": "The room comes first.", "body": "If a piece doesn't earn its corner, we don't make it." } },
+        "b5": { "type": "belief", "settings": { "title": "Quiet over clever.", "body": "No tricks. No trends. Just things we wanted to live with." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5"],
+      "settings": { "color_scheme": "scheme-1" }
+    },
+    "steps": {
+      "type": "atelier-steps",
+      "blocks": {
+        "s1": { "type": "step", "settings": { "numeral": "I", "title": "Sourced", "body": "We visit the quarry, the foundry, the kiln." } },
+        "s2": { "type": "step", "settings": { "numeral": "II", "title": "Made", "body": "One artisan per piece. No assembly line." } },
+        "s3": { "type": "step", "settings": { "numeral": "III", "title": "Sent", "body": "Wrapped in cotton, packed in pine." } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": { "color_scheme": "scheme-2" }
+    },
+    "studios": {
+      "type": "atelier-studios",
+      "blocks": {
+        "st1": { "type": "studio", "settings": { "element": "Stone", "city": "Jaipur", "meta": "Marble carvers · 12 craftsmen" } },
+        "st2": { "type": "studio", "settings": { "element": "Metal", "city": "Moradabad", "meta": "Brass & iron · 18 craftsmen" } },
+        "st3": { "type": "studio", "settings": { "element": "Wood", "city": "Saharanpur", "meta": "Joiners · Coming spring" } },
+        "st4": { "type": "studio", "settings": { "element": "Ceramic", "city": "Khurja", "meta": "Wheel & mould · 9 craftsmen" } },
+        "st5": { "type": "studio", "settings": { "element": "Fabric", "city": "Kutch", "meta": "Hand-block · Coming spring" } }
+      },
+      "block_order": ["st1", "st2", "st3", "st4", "st5"],
+      "settings": { "color_scheme": "scheme-3" }
+    },
+    "visit": {
+      "type": "atelier-visit",
+      "settings": { "color_scheme": "scheme-1" }
+    },
+    "gratitude": {
+      "type": "atelier-gratitude",
+      "settings": { "color_scheme": "scheme-2" }
+    }
+  },
+  "order": [
+    "hero",
+    "manifesto",
+    "beliefs",
+    "steps",
+    "studios",
+    "visit",
+    "gratitude"
+  ]
+}

@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Do not push anything on remote, always take new branch while working on a new feature.
+
 ## Repository overview
 
 This is a Shopify theme for the **elementsofdecor** store, based on **Shopify Dawn v15.4.1** (see `config/settings_schema.json` → `theme_info`). It is a pure Liquid/JS/CSS theme — there is no `package.json`, build pipeline, or test runner. All work happens against Shopify's CLI / Theme Editor.

@@ -1,0 +1,54 @@
+/*
+  Atelier chrome overlay — restyles Dawn's header + footer to the Atelier look
+  (typography, hairline borders, square edges) without changing their markup or
+  JS (menu drawer, mega-menu, search, cart, localization all preserved).
+  Loaded globally from layout/theme.liquid.
+*/
+
+/* --- Header --- */
+.header {
+  border-bottom: 1px solid var(--a-hairline);
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+}
+.header__heading-logo-wrapper,
+.header__heading-link .h2,
+.header__heading-logo {
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+.header__menu-item,
+.header__menu-item span,
+.list-menu__item,
+.header__active-menu-item {
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.header__menu-item:hover .header__active-menu-item,
+.list-menu__item--active {
+  text-decoration-color: var(--a-ochre);
+}
+
+/* --- Footer (pairs with Ink color scheme) --- */
+.footer .footer__content-top,
+.footer .footer-block__heading {
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+}
+.footer .footer-block__heading {
+  font-size: 1.1rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--a-ochre-light);
+}
+.footer__content-bottom,
+.footer .list-menu__item,
+.footer .copyright__content {
+  font-family: var(--font-body-family);
+}
+.footer {
+  border-top: none;
+}

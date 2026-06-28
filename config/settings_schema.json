@@ -102,6 +102,33 @@
     ]
   },
   {
+    "name": "Atelier accent",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The Atelier design uses exactly one accent colour (ochre). These tokens drive eyebrows, rules, active states and prices-on-dark across the theme."
+      },
+      {
+        "type": "color",
+        "id": "atelier_ochre",
+        "label": "Ochre accent",
+        "default": "#b88a3a"
+      },
+      {
+        "type": "color",
+        "id": "atelier_ochre_light",
+        "label": "Ochre light (on dark)",
+        "default": "#e8c89a"
+      },
+      {
+        "type": "color",
+        "id": "atelier_muted",
+        "label": "Muted text",
+        "default": "#7a766e"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.typography.name",
     "settings": [
       {

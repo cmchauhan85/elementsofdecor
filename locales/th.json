@@ -64,6 +64,9 @@
       "next_slide": "ไปสไลด์ขวา",
       "previous_slide": "ไปสไลด์ซ้าย",
       "name": "แถบเลื่อน"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }} (เลือกตัวกรองแล้ว {{ count }} รายการ)",
       "show_more": "แสดงมากขึ้น",
       "show_less": "แสดงน้อยลง",
-      "filter_and_operator_subtitle": "ที่ตรงกันทั้งหมด"
+      "filter_and_operator_subtitle": "ที่ตรงกันทั้งหมด",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "สินค้านี้มีจำนวนขั้นต่ำที่ {{ min }} รายการ",
       "max_error": "สินค้านี้มีจำนวนสูงสุดที่ {{ max }} รายการ",
       "step_error": "คุณสามารถเพิ่มสินค้านี้ได้ทีละ {{ step }} รายการในแต่ละครั้งเท่านั้น"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

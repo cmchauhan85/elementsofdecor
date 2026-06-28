@@ -1,0 +1,73 @@
+{% comment %}
+  Atelier product card — the single shared product tile (the JSX `ProductCard`).
+
+  Used by Home "This Season", PLP grid, PDP "Pairs with", Cart "Continue
+  collecting" and editorial "Shop the story". Reads merchant data from product
+  metafields (namespace `atelier`): `element`, `category`, `descriptor`, `tag`
+  (e.g. "New"/"Limited"). Falls back to native product fields.
+
+  Accepts:
+    product       {product} - required
+    number        {string}  - "01" index label (optional)
+    show_element  {boolean} - show element tag top-right (default true)
+    badge_override {string} - replaces the metafield tag pill, styled as a
+                              sale badge (e.g. "Open Box" or "30% Off")
+{% endcomment %}
+
+{%- liquid
+  assign p = product
+  assign el = p.metafields.atelier.element.value
+  assign cat = p.metafields.atelier.category.value | default: p.type
+  assign descriptor = p.metafields.atelier.descriptor.value
+  assign tag = p.metafields.atelier.tag.value
+  assign show_el = show_element
+  if show_element == nil
+    assign show_el = true
+  endif
+  assign on_sale = false
+  if p.compare_at_price > p.price
+    assign on_sale = true
+  endif
+-%}
+
+<a href="{{ p.url }}" class="atelier-pcard a-anim">
+  <div class="atelier-pcard__media">
+    {%- if p.featured_media != blank -%}
+      {{
+        p.featured_media
+        | image_url: width: 800
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 990px) 30vw, 50vw',
+          widths: '275, 400, 550, 800',
+          alt: p.featured_media.alt | default: p.title | escape
+      }}
+    {%- else -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}
+    {%- endif -%}
+
+    {%- if number != blank -%}<span class="atelier-pcard__n">{{ number }}</span>{%- endif -%}
+    {%- if show_el and el != blank -%}
+      <span class="atelier-pcard__el">{{ el }}</span>
+    {%- endif -%}
+    {%- if badge_override != blank -%}
+      <span class="atelier-pcard__tag a-pill atelier-pcard__tag--sale">{{ badge_override }}</span>
+    {%- elsif tag != blank -%}
+      <span class="atelier-pcard__tag a-pill">{{ tag }}</span>
+    {%- endif -%}
+  </div>
+
+  <h3 class="atelier-pcard__title">{{ p.title }}</h3>
+  <p class="atelier-pcard__meta">
+    {%- if cat != blank -%}{{ cat }}{%- endif -%}
+    {%- if descriptor != blank -%} · {{ descriptor }}{%- endif -%}
+  </p>
+  <p class="atelier-pcard__price">
+    {%- if on_sale -%}
+      <s class="atelier-pcard__price-compare">{{ p.compare_at_price | money }}</s>
+      <span class="atelier-pcard__price-sale">{{ p.price | money }}</span>
+    {%- else -%}
+      {{ p.price | money }}
+    {%- endif -%}
+  </p>
+</a>

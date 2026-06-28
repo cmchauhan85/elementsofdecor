@@ -1,0 +1,61 @@
+{{ 'section-atelier-about.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-steps color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-block__head">
+      {%- if section.settings.eyebrow != blank -%}
+        {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+      {%- endif -%}
+      <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="atelier-steps__grid">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <div class="atelier-step__media">
+              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 30vw, 100vw', widths: '400, 600, 900', alt: block.settings.title | escape }}
+            </div>
+          {%- endif -%}
+          <span class="atelier-step__n">{{ block.settings.numeral }}</span>
+          <h3 class="atelier-step__t">{{ block.settings.title }}</h3>
+          <p class="atelier-step__b">{{ block.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier steps",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How we make" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "From a block of stone, <em>to a bowl on your table.</em>" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-2" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "numeral", "label": "Numeral", "default": "I" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier steps",
+      "blocks": [
+        { "type": "step", "settings": { "numeral": "I", "title": "Sourced", "body": "We visit the quarry, the foundry, the kiln." } },
+        { "type": "step", "settings": { "numeral": "II", "title": "Made", "body": "One artisan per piece. No assembly line." } },
+        { "type": "step", "settings": { "numeral": "III", "title": "Sent", "body": "Wrapped in cotton, packed in pine." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

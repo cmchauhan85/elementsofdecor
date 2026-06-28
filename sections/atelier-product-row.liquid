@@ -1,0 +1,35 @@
+{{ 'section-atelier-pdp-blocks.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign coll = section.settings.collection
+  assign limit = section.settings.products_to_show
+-%}
+
+{%- if coll != blank and coll.products.size > 0 -%}
+  <div class="atelier-pairs color-{{ section.settings.color_scheme }} a-section">
+    <div class="page-width">
+      {%- if section.settings.title != blank -%}
+        <h2 class="atelier-pairs__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      <div class="atelier-pairs__grid">
+        {%- for product in coll.products limit: limit -%}
+          {% render 'atelier-product-card', product: product %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Atelier product row",
+  "tag": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Continue collecting." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 8, "step": 1, "default": 4, "label": "Products to show" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "Atelier product row" }]
+}
+{% endschema %}

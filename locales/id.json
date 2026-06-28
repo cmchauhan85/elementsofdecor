@@ -64,6 +64,9 @@
       "next_slide": "Geser kanan",
       "previous_slide": "Geser kiri",
       "name": "Slider"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} filter dipilih)",
       "show_more": "Selengkapnya",
       "show_less": "Sembunyikan lainnya",
-      "filter_and_operator_subtitle": "Cocokkan semua"
+      "filter_and_operator_subtitle": "Cocokkan semua",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "Item ini memiliki minimal {{ min }}",
       "max_error": "Item ini memiliki maksimum {{ max }}",
       "step_error": "Anda hanya dapat menambahkan item ini secara inkremental sebesar {{ step }}"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

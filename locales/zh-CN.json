@@ -64,6 +64,9 @@
       "next_slide": "向右滑动",
       "previous_slide": "向左滑动",
       "name": "滑块"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     }
   },
   "newsletter": {
@@ -222,7 +225,14 @@
       "filter_selected_accessibility": "{{ type }}（已选择 {{ count }} 个筛选条件）",
       "show_more": "显示更多内容",
       "show_less": "隐藏部分内容",
-      "filter_and_operator_subtitle": "匹配全部"
+      "filter_and_operator_subtitle": "匹配全部",
+      "all": "All"
+    },
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
     }
   },
   "templates": {
@@ -382,6 +392,17 @@
       "min_error": "此商品的最小值为 {{ min }}",
       "max_error": "此商品的最大值为 {{ max }}",
       "step_error": "您只能以 {{ step }} 为增量来添加此商品"
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
     }
   },
   "localization": {

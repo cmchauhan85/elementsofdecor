@@ -1,0 +1,54 @@
+{{ 'section-atelier-article.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign words = article.metafields.atelier.words.value
+  assign photographs = article.metafields.atelier.photographs.value
+  assign read_time = article.metafields.atelier.read_time.value
+  assign element = article.metafields.atelier.element.value
+  assign kicker = article.metafields.atelier.kicker.value | default: section.settings.default_kicker
+  assign standfirst = article.excerpt_or_content | strip_html | truncatewords: 40
+  if article.metafields.atelier.standfirst.value != blank
+    assign standfirst = article.metafields.atelier.standfirst.value
+  endif
+-%}
+
+<article class="atelier-article color-{{ section.settings.color_scheme }}">
+  <header class="atelier-article__hero">
+    {%- if article.image != blank -%}
+      {{ article.image | image_url: width: 3000 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '750, 1100, 1500, 2000, 3000', alt: article.title | escape }}
+    {%- endif -%}
+    <div class="atelier-article__hero-scrim"></div>
+    <div class="atelier-article__hero-inner page-width">
+      {%- if kicker != blank -%}{% render 'atelier-eyebrow', text: kicker, class: 'atelier-article__kicker' %}{%- endif -%}
+      <h1 class="atelier-article__title">{{ article.title }}</h1>
+      {%- if standfirst != blank -%}<p class="atelier-article__standfirst">{{ standfirst }}</p>{%- endif -%}
+    </div>
+  </header>
+
+  <div class="a-section">
+    <div class="page-width">
+      <dl class="atelier-article__meta">
+        {%- assign words_by = words | default: article.author -%}
+        {%- if words_by != blank -%}<div><dt>{{ 'sections.atelier_article.words' | t }}</dt><dd>{{ words_by }}</dd></div>{%- endif -%}
+        {%- if photographs != blank -%}<div><dt>{{ 'sections.atelier_article.photographs' | t }}</dt><dd>{{ photographs }}</dd></div>{%- endif -%}
+        {%- if read_time != blank -%}<div><dt>{{ 'sections.atelier_article.read_time' | t }}</dt><dd>{{ read_time }}</dd></div>{%- endif -%}
+        {%- if element != blank -%}<div><dt>{{ 'sections.atelier_article.element' | t }}</dt><dd>{{ element }}</dd></div>{%- endif -%}
+      </dl>
+
+      <div class="atelier-article__body rte">
+        {{ article.content }}
+      </div>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Atelier article",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "default_kicker", "label": "Default kicker", "default": "Field Note" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,40 @@
+{{ 'section-atelier-about.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-visit color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-visit__grid">
+      <div class="atelier-visit__copy">
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+        {%- endif -%}
+        <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
+        <div class="atelier-visit__body">{{ section.settings.body }}</div>
+        {%- if section.settings.cta_label != blank -%}
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="button">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+      </div>
+      <div class="atelier-visit__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '550, 800, 1200', alt: section.settings.title | escape }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier visit",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Visit us" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "By appointment, <em>in Bombay.</em>" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>A small showroom of our current work. Tea, and no pressure to buy. Open Tuesday to Saturday, 11–7.</p>" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Book a visit" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "Atelier visit" }]
+}
+{% endschema %}

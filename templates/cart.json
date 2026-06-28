@@ -9,6 +9,18 @@
  */
 {
   "sections": {
+    "milestone": {
+      "type": "atelier-milestone-ribbon",
+      "blocks": {
+        "t1": { "type": "tier", "settings": { "threshold": 10000, "label": "Hand-tied muslin wrap", "hint": "On the box, tied with twine." } },
+        "t2": { "type": "tier", "settings": { "threshold": 15000, "label": "A ceramic dish, our gift", "hint": "Cream stoneware, 4″ — a small thank-you." } },
+        "t3": { "type": "tier", "settings": { "threshold": 25000, "label": "White-glove installation", "hint": "In Bombay. We come, we place, we leave." } }
+      },
+      "block_order": ["t1", "t2", "t3"],
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
+    },
     "cart-items": {
       "type": "main-cart-items",
       "settings": {
@@ -40,10 +52,19 @@
         "subtotal",
         "buttons"
       ]
+    },
+    "continue": {
+      "type": "atelier-product-row",
+      "settings": {
+        "title": "Continue collecting.",
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
+    "milestone",
     "cart-items",
-    "cart-footer"
+    "cart-footer",
+    "continue"
   ]
 }

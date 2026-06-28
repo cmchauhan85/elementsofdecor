@@ -38,6 +38,9 @@
       }
     },
     "continue_shopping": "Continue shopping",
+    "breadcrumbs": {
+      "home": "Home"
+    },
     "pagination": {
       "label": "Pagination",
       "page": "Page {{ number }}",
@@ -114,6 +117,12 @@
     "collection_title": "Your collection's name"
   },
   "products": {
+    "atelier": {
+      "pieces_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      }
+    },
     "product": {
       "add_to_cart": "Add to cart",
       "buy_now": "Buy Now",
@@ -195,6 +204,7 @@
       "label": "Media gallery"
     },
     "facets": {
+      "all": "All",
       "filter_and_operator_subtitle": "Match all",
       "apply": "Apply",
       "clear": "Clear",
@@ -277,6 +287,25 @@
     }
   },
   "sections": {
+    "open_box_sale": {
+      "days": "Days",
+      "hours": "Hrs",
+      "minutes": "Min",
+      "seconds": "Sec",
+      "percent_off": "% Off",
+      "no_products": "No products found in this collection yet."
+    },
+    "atelier_cart": {
+      "milestone_next_html": "{{ amount }} from the {{ label }}.",
+      "milestone_all": "All thank-yous earned.",
+      "milestone_earned": "Earned"
+    },
+    "atelier_article": {
+      "words": "Words",
+      "photographs": "Photographs",
+      "read_time": "Read time",
+      "element": "Element"
+    },
     "announcements": {
       "previous_announcement": "Previous announcement",
       "next_announcement": "Next announcement",

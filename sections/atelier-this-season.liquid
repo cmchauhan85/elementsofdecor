@@ -1,0 +1,139 @@
+{{ 'section-atelier-this-season.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign limit        = section.settings.products_to_show
+  assign coll         = section.settings.collection
+  assign picked       = section.settings.best_sellers
+  assign n            = 0
+-%}
+
+<div class="atelier-season color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-season__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+        {%- endif -%}
+        <h2 class="atelier-season__title">{{ section.settings.title }}</h2>
+      </div>
+    </div>
+
+    <div class="atelier-season__rail">
+
+      {%- if picked.count > 0 -%}
+        {%- comment %} Source 1: explicit picks from the Theme Editor product_list setting {%- endcomment -%}
+        {%- for product in picked limit: limit -%}
+          {%- assign n = n | plus: 1 -%}
+          {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
+          {% render 'atelier-product-card', product: product, number: num %}
+        {%- endfor -%}
+
+      {%- else -%}
+        {%- comment %} Source 2: scan all products for custom.best_seller = true {%- endcomment -%}
+        {%- for product in collections.all.products -%}
+          {%- if product.metafields.custom.best_seller.value == true -%}
+            {%- assign n = n | plus: 1 -%}
+            {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
+            {% render 'atelier-product-card', product: product, number: num %}
+            {%- if n >= limit -%}{%- break -%}{%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if n == 0 -%}
+        {%- comment %} Source 3: fall back to the collection setting {%- endcomment -%}
+        {%- for product in coll.products limit: limit -%}
+          {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
+          {% render 'atelier-product-card', product: product, number: num %}
+        {%- else -%}
+          {%- for i in (1..5) -%}
+            <div class="atelier-pcard">
+              <div class="atelier-pcard__media">{{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}</div>
+            </div>
+          {%- endfor -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if section.settings.show_all_tile -%}
+        <a href="{{ coll.url | default: routes.all_products_collection_url }}" class="atelier-season__all a-anim">
+          {% render 'atelier-eyebrow', text: section.settings.all_eyebrow %}
+          <h3 class="atelier-season__all-title">{{ section.settings.all_title }}</h3>
+          <span class="atelier-season__all-arrow" aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier This Season",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "This Season"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Considered, <em>not collected.</em>"
+    },
+    {
+      "type": "product_list",
+      "id": "best_sellers",
+      "label": "Best Sellers",
+      "info": "Pick products here to feature them. Alternatively, toggle 'Best Seller' on each product in Shopify Admin → Products — the section will auto-include them.",
+      "limit": 20
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Fallback collection",
+      "info": "Shown only when no Best Sellers are set above."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "default": 10,
+      "label": "Max products to show"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_tile",
+      "label": "Show \"full shop\" tile",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "all_eyebrow",
+      "label": "Tile eyebrow",
+      "default": "Everything"
+    },
+    {
+      "type": "text",
+      "id": "all_title",
+      "label": "Tile title",
+      "default": "The full shop →"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier This Season"
+    }
+  ]
+}
+{% endschema %}

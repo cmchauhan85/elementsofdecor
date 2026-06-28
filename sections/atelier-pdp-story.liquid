@@ -1,0 +1,61 @@
+{{ 'section-atelier-pdp-blocks.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign origin = product.metafields.atelier.story_origin.value
+  assign craft = product.metafields.atelier.story_craft.value
+  assign leadtime = product.metafields.atelier.story_leadtime.value
+  assign story_img = section.settings.image | default: product.featured_media
+-%}
+
+<div class="atelier-story color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-story__grid">
+      <div class="atelier-story__media">
+        {%- if story_img != blank -%}
+          {{ story_img | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '550, 800, 1200', alt: product.title | escape }}
+        {%- endif -%}
+      </div>
+      <div class="atelier-story__copy">
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true %}
+        {%- endif -%}
+        <h2 class="atelier-story__title">{{ section.settings.title }}</h2>
+        {%- if section.settings.body != blank -%}
+          <div class="atelier-story__body">{{ section.settings.body }}</div>
+        {%- endif -%}
+
+        {%- if origin != blank or craft != blank or leadtime != blank -%}
+          <dl class="atelier-story__stats">
+            {%- if origin != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_origin }}</dt><dd>{{ origin }}</dd></div>{%- endif -%}
+            {%- if craft != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_craft }}</dt><dd>{{ craft }}</dd></div>{%- endif -%}
+            {%- if leadtime != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_leadtime }}</dt><dd>{{ leadtime }}</dd></div>{%- endif -%}
+          </dl>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
+          <a href="{{ section.settings.cta_link }}" class="atelier-chip" style="display:inline-block">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier PDP story",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image (blank = product image)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Story" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Marble <em>remembers.</em>" },
+    { "type": "richtext", "id": "body", "label": "Body" },
+    { "type": "text", "id": "label_origin", "label": "Stat 1 label", "default": "Origin" },
+    { "type": "text", "id": "label_craft", "label": "Stat 2 label", "default": "Craft" },
+    { "type": "text", "id": "label_leadtime", "label": "Stat 3 label", "default": "Lead time" },
+    { "type": "text", "id": "cta_label", "label": "Link label", "default": "Read the field note" },
+    { "type": "url", "id": "cta_link", "label": "Link" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-2" }
+  ],
+  "presets": [{ "name": "Atelier PDP story" }]
+}
+{% endschema %}

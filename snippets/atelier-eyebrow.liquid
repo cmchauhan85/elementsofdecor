@@ -1,0 +1,26 @@
+{% comment %}
+  Atelier eyebrow / label ("aCaps").
+
+  Small uppercase tracked label used above headings and on cards.
+
+  Accepts:
+    text   {string}  - the label text (required; pass an already-translated string)
+    ochre  {boolean} - colour it with the ochre accent instead of muted (default false)
+    tag    {string}  - wrapper element (default 'p')
+    class  {string}  - extra classes appended to the wrapper
+
+  Usage:
+    {% render 'atelier-eyebrow', text: 'Manifesto · No. 01', ochre: true %}
+{% endcomment %}
+
+{%- liquid
+  assign a_tag = tag | default: 'p'
+  assign a_class = 'a-eyebrow'
+  if ochre
+    assign a_class = a_class | append: ' a-eyebrow--ochre'
+  endif
+  if class != blank
+    assign a_class = a_class | append: ' ' | append: class
+  endif
+-%}
+<{{ a_tag }} class="{{ a_class }}">{{ text }}</{{ a_tag }}>

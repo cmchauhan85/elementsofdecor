@@ -9,86 +9,217 @@
  */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero": {
+      "type": "atelier-hero",
+      "settings": {
+        "image": "shopify://shop_images/ChatGPTImageMay20_2026_04_40_55PM.png",
+        "height": "medium",
+        "eyebrow": "Manifesto · No. 01",
+        "heading_line_1": "Home is not styled.",
+        "heading_line_2": "It is felt.",
+        "cta_label": "Check our latest designs",
+        "cta_link": "shopify://collections/urlis",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "browse": {
+      "type": "atelier-browse",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "el_stone": {
+          "type": "card",
           "settings": {
-            "heading": "<strong>Artistry in Every Element</strong>",
-            "heading_size": "hxl"
+            "collection": "stone",
+            "mode": "element",
+            "show_element": false
           }
         },
-        "text_ezBrwT": {
-          "type": "text",
+        "el_metal": {
+          "type": "card",
           "settings": {
-            "text": "Elevating everyday spaces with handcrafted, timeless decor",
-            "text_style": "subtitle"
+            "collection": "metal",
+            "mode": "element",
+            "show_element": false
           }
         },
-        "button": {
-          "type": "buttons",
-          "disabled": true,
+        "el_ceramic": {
+          "type": "card",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "collection": "ceramic",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "el_wood": {
+          "type": "card",
+          "settings": {
+            "collection": "wood",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "el_fabric": {
+          "type": "card",
+          "settings": {
+            "collection": "fabric",
+            "mode": "element",
+            "show_element": false
+          }
+        },
+        "ob_urlis": {
+          "type": "card",
+          "settings": {
+            "collection": "urlis",
+            "mode": "object",
+            "show_element": false
+          }
+        },
+        "ob_vases": {
+          "type": "card",
+          "settings": {
+            "collection": "decorative-vases",
+            "mode": "object",
+            "show_element": true
+          }
+        },
+        "ob_lighting": {
+          "type": "card",
+          "settings": {
+            "collection": "candle-holders",
+            "mode": "object",
+            "show_element": true
+          }
+        },
+        "ob_trays": {
+          "type": "card",
+          "settings": {
+            "collection": "trays-stands",
+            "mode": "object",
+            "show_element": true
+          }
+        },
+        "ob_wall": {
+          "type": "card",
+          "settings": {
+            "collection": "wall-tabletop",
+            "mode": "object",
+            "show_element": false
           }
         }
       },
       "block_order": [
-        "heading",
-        "text_ezBrwT",
-        "button"
+        "el_stone",
+        "el_metal",
+        "el_ceramic",
+        "el_wood",
+        "el_fabric",
+        "ob_urlis",
+        "ob_vases",
+        "ob_lighting",
+        "ob_trays",
+        "ob_wall"
       ],
       "settings": {
-        "image": "shopify://shop_images/Gemini_Generated_Image_zbn97lzbn97lzbn9.png",
-        "image_overlay_opacity": 0,
-        "image_height": "large",
-        "image_behavior": "none",
-        "desktop_content_position": "middle-left",
-        "desktop_content_alignment": "left",
-        "show_text_box": false,
-        "color_scheme": "scheme-3",
-        "stack_images_on_mobile": false,
-        "mobile_content_alignment": "center",
-        "show_text_below": false
+        "lead": "Shop by",
+        "element_label": "Element",
+        "object_label": "Object",
+        "element_caption": "By material – the way we make them.",
+        "object_caption": "By what it is – the familiar way to shop.",
+        "element_status_text": "TWO OF FIVE LIVE · THREE COMING SOON",
+        "object_status_text": "THREE OF FIVE LIVE · TWO COMING SOON",
+        "color_scheme": "scheme-2"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "philosophy": {
+      "type": "atelier-philosophy",
       "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 44,
-        "padding_bottom": 36
+        "eyebrow": "Our Philosophy",
+        "quote": "Every material we choose — from the strength of stone to the warmth of wood, the elegance of clay to the softness of cloth — is thoughtfully curated to bring balance and natural beauty into your space.",
+        "attribution": "— The Elements of Decor family",
+        "show_mandala": true,
+        "color_scheme": "scheme-3"
+      }
+    },
+    "this_season": {
+      "type": "atelier-this-season",
+      "settings": {
+        "eyebrow": "Best Sellers",
+        "title": "Considered, <em>not collected.</em>",
+        "best_sellers": [
+          "elements-of-decor-aurum-hand-etched-brass-vase",
+          "elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes",
+          "flower-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "lotus-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "oria-hammered-silver-globe-vase"
+        ],
+        "collection": "candle-holders",
+        "products_to_show": 10,
+        "show_all_tile": false,
+        "all_eyebrow": "Everything",
+        "all_title": "The full shop →",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "atelier_this_season_r8jXX7": {
+      "type": "atelier-this-season",
+      "settings": {
+        "eyebrow": "Design your spaces",
+        "title": "Personalise your space",
+        "best_sellers": [
+          "elements-of-decor-aurum-hand-etched-brass-vase",
+          "elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes",
+          "flower-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "lotus-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "oria-hammered-silver-globe-vase"
+        ],
+        "collection": "candle-holders",
+        "products_to_show": 10,
+        "show_all_tile": false,
+        "all_eyebrow": "Everything",
+        "all_title": "The full shop →",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "tool_teaser": {
+      "type": "atelier-tool-teaser",
+      "settings": {
+        "eyebrow": "Phase Two · Spring 2026",
+        "title": "Design your space, <em>element by element.</em>",
+        "chips": "Console, Side table, Corner, Sofa side, Dehleez",
+        "cta_label": "Notify me",
+        "cta_link": "",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "notes": {
+      "type": "atelier-notes",
+      "settings": {
+        "eyebrow": "Stories",
+        "title": "Notes from the Atelier",
+        "blog": "news",
+        "posts_to_show": 3,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "gratitude": {
+      "type": "atelier-gratitude",
+      "disabled": true,
+      "settings": {
+        "mark": "EoD",
+        "elements": "Stone, Metal, Wood, Ceramic, Fabric",
+        "title": "Thank you.",
+        "note": "<p>A beautiful space is never accidental. Thank you for letting our work into your home.</p>",
+        "color_scheme": "scheme-2"
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "hero",
+    "browse",
+    "philosophy",
+    "this_season",
+    "atelier_this_season_r8jXX7",
+    "tool_teaser",
+    "notes",
+    "gratitude"
   ]
 }

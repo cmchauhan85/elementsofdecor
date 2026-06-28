@@ -1,0 +1,173 @@
+{{ 'section-open-box-sale.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'open-box-countdown.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign coll = section.settings.collection
+  assign limit = section.settings.products_to_show
+  assign off_label = 'sections.open_box_sale.percent_off' | t
+-%}
+
+<div class="openbox color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="openbox__head">
+      <div class="openbox__intro">
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+        {%- endif -%}
+        <h2 class="openbox__title">{{ section.settings.title }}</h2>
+        {%- if section.settings.description != blank -%}
+          <div class="openbox__desc rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.enable_countdown and section.settings.countdown_end != blank -%}
+        <open-box-countdown class="openbox__countdown" data-end="{{ section.settings.countdown_end }}">
+          <span class="openbox__countdown-label">{{ section.settings.countdown_label }}</span>
+          <div class="openbox__countdown-clock" aria-live="polite">
+            <span class="openbox__countdown-unit"><span data-unit="days">00</span><small>{{ 'sections.open_box_sale.days' | t }}</small></span>
+            <span class="openbox__countdown-unit"><span data-unit="hours">00</span><small>{{ 'sections.open_box_sale.hours' | t }}</small></span>
+            <span class="openbox__countdown-unit"><span data-unit="minutes">00</span><small>{{ 'sections.open_box_sale.minutes' | t }}</small></span>
+            <span class="openbox__countdown-unit"><span data-unit="seconds">00</span><small>{{ 'sections.open_box_sale.seconds' | t }}</small></span>
+          </div>
+        </open-box-countdown>
+      {%- endif -%}
+    </div>
+
+    <div class="openbox__grid">
+      {%- for product in coll.products limit: limit -%}
+        {%- liquid
+          assign badge_override = blank
+          if section.settings.badge_mode == 'percent_off' and product.compare_at_price > product.price
+            assign pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
+            assign badge_override = pct | append: off_label
+          elsif section.settings.badge_mode == 'fixed' and section.settings.badge_text != blank
+            assign badge_override = section.settings.badge_text
+          endif
+        -%}
+        {% render 'atelier-product-card', product: product, badge_override: badge_override %}
+      {%- else -%}
+        <p class="openbox__empty">{{ 'sections.open_box_sale.no_products' | t }}</p>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_view_all and coll != blank -%}
+      <a href="{{ coll.url }}" class="openbox__view-all a-anim">
+        {{ section.settings.view_all_label }}
+        <span aria-hidden="true">→</span>
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Open Box Sale",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Limited Stock"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Open Box Sale"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Like-new pieces, opened for display or returned unused — at a steep discount.</p>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Products to feature, e.g. an \"Open Box\" or \"Clearance\" collection."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8,
+      "label": "Max products to show"
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "select",
+      "id": "badge_mode",
+      "label": "Badge style",
+      "options": [
+        { "value": "percent_off", "label": "Percent off (calculated from compare-at price)" },
+        { "value": "fixed", "label": "Fixed label" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "percent_off"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Fixed badge label",
+      "default": "Open Box",
+      "info": "Used only when Badge style is set to \"Fixed label\"."
+    },
+    {
+      "type": "header",
+      "content": "Countdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_countdown",
+      "label": "Show countdown timer",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "countdown_end",
+      "label": "Sale end date & time",
+      "info": "Format: YYYY-MM-DDTHH:MM, e.g. 2026-07-15T18:00. Uses the visitor's local time zone. Leave blank to hide the timer."
+    },
+    {
+      "type": "text",
+      "id": "countdown_label",
+      "label": "Countdown label",
+      "default": "Sale ends in"
+    },
+    {
+      "type": "header",
+      "content": "View all link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"view all\" link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Link label",
+      "default": "Shop all open box"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Open Box Sale"
+    }
+  ]
+}
+{% endschema %}

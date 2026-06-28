@@ -1,0 +1,64 @@
+{% comment %}
+  Atelier "Shop By" switch — the canonical IA control (Element ⇄ Object).
+
+  The single, reused segmented control that toggles the browse axis on Home,
+  the Shop/PLP and the Phase-2 tool. Rendered as real links so it works with no
+  JS (each option points at the same URL with ?shop_by=…); consuming sections
+  may progressively enhance it to swap content without a reload by listening to
+  clicks on [data-atelier-shop-by] options.
+
+  Accepts:
+    mode          {string} - active mode: 'element' (default) or 'object'
+    param         {string} - query-param name to set (default 'shop_by')
+    base_url      {string} - URL the options link to (default request.path)
+    lead          {string} - lead text before the options (default 'Shop by')
+    element_label {string} - label for the element option (default 'Element')
+    object_label  {string} - label for the object option (default 'Object')
+    size          {string} - 'lg' (default) or 'sm'
+    id            {string} - optional id for the control wrapper
+
+  Usage:
+    {% render 'atelier-shop-by-switch', mode: current_mode, base_url: collection.url %}
+{% endcomment %}
+
+{%- liquid
+  assign a_mode = mode | default: 'element'
+  assign a_param = param | default: 'shop_by'
+  assign a_base = base_url | default: request.path
+  assign a_lead = lead | default: 'Shop by'
+  assign a_el_label = element_label | default: 'Element'
+  assign a_ob_label = object_label | default: 'Object'
+  assign a_size = size | default: 'lg'
+
+  assign sep = '?'
+  if a_base contains '?'
+    assign sep = '&'
+  endif
+  assign el_url = a_base | append: sep | append: a_param | append: '=element'
+  assign ob_url = a_base | append: sep | append: a_param | append: '=object'
+-%}
+
+<div
+  class="a-shopby a-shopby--{{ a_size }} a-anim"
+  data-atelier-shop-by
+  data-mode="{{ a_mode }}"
+  {% if id %}id="{{ id }}"{% endif %}
+  role="group"
+  aria-label="{{ a_lead | escape }}"
+>
+  <span class="a-shopby__lead a-eyebrow">{{ a_lead }}</span>
+  <div class="a-shopby__track a-pill">
+    <a
+      href="{{ el_url }}"
+      class="a-shopby__opt a-pill{% if a_mode == 'element' %} is-active{% endif %}"
+      data-mode-value="element"
+      {% if a_mode == 'element' %}aria-current="true"{% endif %}
+    >{{ a_el_label }}</a>
+    <a
+      href="{{ ob_url }}"
+      class="a-shopby__opt a-pill{% if a_mode == 'object' %} is-active{% endif %}"
+      data-mode-value="object"
+      {% if a_mode == 'object' %}aria-current="true"{% endif %}
+    >{{ a_ob_label }}</a>
+  </div>
+</div>

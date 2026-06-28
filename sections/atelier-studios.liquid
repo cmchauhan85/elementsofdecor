@@ -1,0 +1,59 @@
+{{ 'section-atelier-about.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-studios color-{{ section.settings.color_scheme }} a-section a-section--tall">
+  {%- if section.settings.show_mandala -%}{% render 'atelier-mandala', align: 'left' %}{%- endif -%}
+  <div class="page-width" style="position:relative;z-index:1;">
+    <div class="atelier-block__head">
+      {%- if section.settings.eyebrow != blank -%}
+        {% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true %}
+      {%- endif -%}
+      <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="atelier-studios__grid">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          <p class="atelier-studio__el">{{ block.settings.element }}</p>
+          <p class="atelier-studio__city">{{ block.settings.city }}</p>
+          <p class="atelier-studio__meta">{{ block.settings.meta }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier studios",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Five elements, five small ateliers" },
+    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "The studios we work with." },
+    { "type": "checkbox", "id": "show_mandala", "label": "Show mandala motif", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-3" }
+  ],
+  "blocks": [
+    {
+      "type": "studio",
+      "name": "Studio",
+      "settings": [
+        { "type": "text", "id": "element", "label": "Element" },
+        { "type": "text", "id": "city", "label": "City" },
+        { "type": "text", "id": "meta", "label": "Meta (craft · count, or 'Coming spring')" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier studios",
+      "blocks": [
+        { "type": "studio", "settings": { "element": "Stone", "city": "Jaipur", "meta": "Marble carvers · 12 craftsmen" } },
+        { "type": "studio", "settings": { "element": "Metal", "city": "Moradabad", "meta": "Brass & iron · 18 craftsmen" } },
+        { "type": "studio", "settings": { "element": "Wood", "city": "Saharanpur", "meta": "Joiners · Coming spring" } },
+        { "type": "studio", "settings": { "element": "Ceramic", "city": "Khurja", "meta": "Wheel & mould · 9 craftsmen" } },
+        { "type": "studio", "settings": { "element": "Fabric", "city": "Kutch", "meta": "Hand-block · Coming spring" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

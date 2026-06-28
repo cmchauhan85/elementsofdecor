@@ -1,0 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "tool": {
+      "type": "atelier-tool",
+      "blocks": {
+        "h1": { "type": "step", "settings": { "numeral": "01", "title": "Pick a scene", "body": "Start from a styled surface or room." } },
+        "h2": { "type": "step", "settings": { "numeral": "02", "title": "Make it yours", "body": "Swap pieces, drop what you already have." } },
+        "h3": { "type": "step", "settings": { "numeral": "03", "title": "Buy the look", "body": "Add everything in one tap — the set saving is applied." } }
+      },
+      "block_order": ["h1", "h2", "h3"],
+      "settings": {
+        "bundle_pct": 10,
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "tool"
+  ]
+}
