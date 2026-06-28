@@ -74,3 +74,18 @@
   font-weight: 300;
   font-size: 1.6rem;
 }
+
+.atelier-pcard__tag--sale {
+  background: var(--a-ochre);
+  color: #faf7f1;
+}
+
+.atelier-pcard__price-compare {
+  color: var(--a-muted);
+  font-size: 1.3rem;
+  margin-right: 0.6rem;
+}
+
+.atelier-pcard__price-sale {
+  color: var(--a-ochre);
+}

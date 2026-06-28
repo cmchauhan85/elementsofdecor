@@ -287,6 +287,14 @@
     }
   },
   "sections": {
+    "open_box_sale": {
+      "days": "Days",
+      "hours": "Hrs",
+      "minutes": "Min",
+      "seconds": "Sec",
+      "percent_off": "% Off",
+      "no_products": "No products found in this collection yet."
+    },
     "atelier_cart": {
       "milestone_next_html": "{{ amount }} from the {{ label }}.",
       "milestone_all": "All thank-yous earned.",
