@@ -104,6 +104,14 @@
             "mode": "object",
             "show_element": false
           }
+        },
+        "ob_candles": {
+          "type": "card",
+          "settings": {
+            "collection": "candles",
+            "mode": "object",
+            "show_element": false
+          }
         }
       },
       "block_order": [
@@ -116,7 +124,8 @@
         "ob_vases",
         "ob_lighting",
         "ob_trays",
-        "ob_wall"
+        "ob_wall",
+        "ob_candles"
       ],
       "settings": {
         "lead": "Shop by",
