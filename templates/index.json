@@ -219,6 +219,25 @@
         "note": "<p>A beautiful space is never accidental. Thank you for letting our work into your home.</p>",
         "color_scheme": "scheme-2"
       }
+    },
+    "open_box_sale_LDqbeT": {
+      "type": "open-box-sale",
+      "name": "Open Box Sale",
+      "settings": {
+        "eyebrow": "Limited Stock",
+        "title": "Open Box Sale",
+        "description": "<p>Like-new pieces, opened for display or returned unused — at a steep discount.</p>",
+        "collection": "",
+        "products_to_show": 8,
+        "badge_mode": "percent_off",
+        "badge_text": "Open Box",
+        "enable_countdown": true,
+        "countdown_end": "",
+        "countdown_label": "Sale ends in",
+        "show_view_all": true,
+        "view_all_label": "Shop all open box",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
@@ -229,6 +248,7 @@
     "atelier_this_season_r8jXX7",
     "tool_teaser",
     "notes",
-    "gratitude"
+    "gratitude",
+    "open_box_sale_LDqbeT"
   ]
 }
