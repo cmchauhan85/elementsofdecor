@@ -148,7 +148,8 @@
             <ul class="atelier-plp__nav-list">
               {%- for link in linklists[el_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
-                {%- assign is_current = link_handle == collection.handle -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
                 <li>
                   <a href="{{ link.url }}"
                      class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
@@ -168,7 +169,8 @@
             <ul class="atelier-plp__nav-list">
               {%- for link in linklists[obj_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
-                {%- assign is_current = link_handle == collection.handle -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
                 <li>
                   <a href="{{ link.url }}"
                      class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
