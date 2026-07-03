@@ -1,0 +1,24 @@
+{%- liquid
+  assign bc_collection = product.collections | first
+  if product.collections.size > 0
+    for c in product.collections
+      unless c.handle == 'all' or c.handle == 'frontpage'
+        assign bc_collection = c
+        break
+      endunless
+    endfor
+  endif
+  assign bc_element = product.metafields.atelier.element.value
+-%}
+
+{%- if bc_collection != blank or bc_element != blank -%}
+  <nav class="atelier-pdp-crumb" aria-label="Breadcrumb">
+    {%- if bc_element != blank -%}
+      <span class="atelier-pdp-crumb__el">{{ bc_element | upcase }}</span>
+      <span class="atelier-pdp-crumb__sep" aria-hidden="true">·</span>
+    {%- endif -%}
+    {%- if bc_collection != blank -%}
+      <a href="{{ bc_collection.url }}" class="atelier-pdp-crumb__link">{{ bc_collection.title | upcase }}</a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

@@ -1,0 +1,132 @@
+{{ 'section-atelier-cart-trust.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-cart-trust color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width atelier-cart-trust__inner">
+
+    {%- comment %} WHAT HAPPENS NEXT (c5) {%- endcomment -%}
+    {%- if section.settings.show_next_steps -%}
+      <div class="atelier-cart-trust__next">
+        {% render 'atelier-eyebrow', text: section.settings.next_eyebrow %}
+        <h2 class="atelier-cart-trust__next-title">{{ section.settings.next_title }}</h2>
+        <ol class="atelier-cart-trust__steps">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'step' -%}
+              <li class="atelier-cart-trust__step" {{ block.shopify_attributes }}>
+                <span class="atelier-cart-trust__step-n">{{ forloop.index }}</span>
+                <div>
+                  <strong class="atelier-cart-trust__step-label">{{ block.settings.label }}</strong>
+                  {%- if block.settings.detail != blank -%}
+                    <p class="atelier-cart-trust__step-detail">{{ block.settings.detail }}</p>
+                  {%- endif -%}
+                </div>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ol>
+      </div>
+    {%- endif -%}
+
+    <div class="atelier-cart-trust__foot">
+      {%- comment %} FIRSTROOM promo (c10) {%- endcomment -%}
+      {%- if section.settings.promo_code != blank -%}
+        <div class="atelier-cart-trust__promo">
+          <span class="atelier-cart-trust__promo-code">{{ section.settings.promo_code }}</span>
+          <span class="atelier-cart-trust__promo-copy">{{ section.settings.promo_copy }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- comment %} Payment icons (c9) {%- endcomment -%}
+      {%- if section.settings.show_payment_icons -%}
+        <div class="atelier-cart-trust__payments" aria-label="Accepted payment methods">
+          <span class="atelier-cart-trust__pay-badge">UPI</span>
+          <span class="atelier-cart-trust__pay-badge">VISA</span>
+          <span class="atelier-cart-trust__pay-badge">MC</span>
+          <span class="atelier-cart-trust__pay-badge">AMEX</span>
+          <span class="atelier-cart-trust__pay-badge">EMI</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart trust block",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_next_steps",
+      "label": "Show WHAT HAPPENS NEXT",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "next_eyebrow",
+      "label": "Eyebrow",
+      "default": "What happens next"
+    },
+    {
+      "type": "text",
+      "id": "next_title",
+      "label": "Title",
+      "default": "Every order, handled by hand."
+    },
+    {
+      "type": "text",
+      "id": "promo_code",
+      "label": "Promo code",
+      "default": "FIRSTROOM",
+      "info": "Displayed as a copy-able code callout. Leave blank to hide."
+    },
+    {
+      "type": "text",
+      "id": "promo_copy",
+      "label": "Promo copy",
+      "default": "10% off your first order"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment method badges",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Process step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Step label"
+        },
+        {
+          "type": "text",
+          "id": "detail",
+          "label": "Step detail"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart trust block",
+      "blocks": [
+        { "type": "step", "settings": { "label": "Order placed", "detail": "You receive a confirmation with a hand-written note from us." } },
+        { "type": "step", "settings": { "label": "Made for you", "detail": "4–6 weeks. One artisan, one piece, start to finish." } },
+        { "type": "step", "settings": { "label": "Shipped carefully", "detail": "Cotton-lined pine box, insured door-to-door." } },
+        { "type": "step", "settings": { "label": "White-glove option", "detail": "In Bombay — we come, we place, we leave. On orders above ₹25,000." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

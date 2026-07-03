@@ -119,6 +119,12 @@
         "color_scheme": "scheme-1"
       }
     },
+    "material": {
+      "type": "atelier-pdp-material",
+      "settings": {
+        "color_scheme": "scheme-3"
+      }
+    },
     "pairs": {
       "type": "atelier-pairs",
       "settings": {
@@ -130,6 +136,7 @@
     "main",
     "story",
     "specs",
+    "material",
     "pairs"
   ]
 }

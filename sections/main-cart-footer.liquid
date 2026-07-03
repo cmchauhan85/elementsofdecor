@@ -43,6 +43,40 @@
           {%- case block.type -%}
             {%- when '@app' -%}
               {% render block %}
+            {%- when 'gift_note' -%}
+              <div class="atelier-cart-gift" {{ block.shopify_attributes }}>
+                <button
+                  type="button"
+                  class="atelier-cart-gift__toggle"
+                  aria-expanded="false"
+                  aria-controls="CartGiftPanel-{{ section.id }}"
+                  onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.getElementById('CartGiftPanel-{{ section.id }}').hidden = !document.getElementById('CartGiftPanel-{{ section.id }}').hidden;"
+                >
+                  <span class="atelier-cart-gift__toggle-label">{{ block.settings.toggle_label }}</span>
+                  <span class="atelier-cart-gift__toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="atelier-cart-gift__panel" id="CartGiftPanel-{{ section.id }}" hidden>
+                  <p class="atelier-cart-gift__hint">{{ block.settings.hint }}</p>
+                  <textarea
+                    name="attributes[gift_note]"
+                    form="cart"
+                    class="atelier-cart-gift__textarea"
+                    placeholder="{{ block.settings.placeholder }}"
+                    maxlength="300"
+                    rows="4"
+                  >{{ cart.attributes.gift_note }}</textarea>
+                  <label class="atelier-cart-gift__check">
+                    <input
+                      type="checkbox"
+                      name="attributes[gift_no_prices]"
+                      value="true"
+                      form="cart"
+                      {% if cart.attributes.gift_no_prices == 'true' %}checked{% endif %}
+                    >
+                    {{ block.settings.no_prices_label }}
+                  </label>
+                </div>
+              </div>
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
                 <div>
@@ -171,6 +205,37 @@
     }
   ],
   "blocks": [
+    {
+      "type": "gift_note",
+      "name": "Sending as a gift",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "toggle_label",
+          "label": "Toggle label",
+          "default": "Sending as a gift?"
+        },
+        {
+          "type": "text",
+          "id": "hint",
+          "label": "Hint text",
+          "default": "We'll write your note by hand, on card stock. No prices on the packing slip."
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Textarea placeholder",
+          "default": "Your message, up to 300 characters."
+        },
+        {
+          "type": "text",
+          "id": "no_prices_label",
+          "label": "No-prices checkbox label",
+          "default": "Please leave prices off the packing slip"
+        }
+      ]
+    },
     {
       "type": "subtotal",
       "name": "t:sections.main-cart-footer.blocks.subtotal.name",

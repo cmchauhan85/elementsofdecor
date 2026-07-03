@@ -87,6 +87,8 @@
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
+          {%- render 'atelier-pdp-breadcrumb' -%}
+
           {%- for block in section.blocks -%}
             {%- case block.type -%}
               {%- when '@app' -%}
