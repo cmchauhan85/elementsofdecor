@@ -40,6 +40,9 @@
   for f in collection.filters
     assign active_count = active_count | plus: f.active_values.size
   endfor
+
+  assign el_menu  = section.settings.element_nav_menu
+  assign obj_menu = section.settings.object_nav_menu
 -%}
 
 <div class="atelier-plp color-{{ section.settings.color_scheme }} a-section">
@@ -119,42 +122,139 @@
       </form>
     </div>
 
-    {%- comment %} Mobile REFINE button — shown only below 990 px {% endcomment -%}
-    <div class="atelier-plp__mobilebar">
-      <button class="atelier-plp__refine-btn" id="atelier-refine-btn" aria-controls="atelier-sidebar" aria-expanded="false">
-        <span aria-hidden="true">≡</span>
-        {{ section.settings.refine_label | default: 'Refine' }}
-        {%- if active_count > 0 -%}
-          <span class="atelier-plp__refine-count">{{ active_count }}</span>
+    {%- comment %} Mobile inline nav — always-visible chip rows below 990 px {% endcomment -%}
+    {%- if el_menu != blank or obj_menu != blank -%}
+      <div class="atelier-plp__mobile-nav">
+        {%- liquid
+          assign el_all_url  = section.settings.element_all_url  | default: '/collections/all'
+          assign obj_all_url = section.settings.object_all_url | default: '/collections/all'
+          assign all_active  = true
+          for link in linklists[el_menu].links
+            assign lh = link.url | split: '/collections/' | last
+            if lh == collection.handle
+              assign all_active = false
+            endif
+          endfor
+          for link in linklists[obj_menu].links
+            assign lh = link.url | split: '/collections/' | last
+            if lh == collection.handle
+              assign all_active = false
+            endif
+          endfor
+        -%}
+        {%- if el_menu != blank -%}
+          <div class="atelier-plp__mobile-nav-row">
+            <span class="atelier-plp__mobile-nav-label">{{ section.settings.element_nav_label }}</span>
+            <div class="atelier-plp__mobile-nav-chips a-rail">
+              <a href="{{ el_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All</a>
+              {%- for link in linklists[el_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
+                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+              {%- endfor -%}
+            </div>
+          </div>
         {%- endif -%}
-      </button>
-    </div>
+        {%- if obj_menu != blank -%}
+          <div class="atelier-plp__mobile-nav-row">
+            <span class="atelier-plp__mobile-nav-label">{{ section.settings.object_nav_label }}</span>
+            <div class="atelier-plp__mobile-nav-chips a-rail">
+              <a href="{{ obj_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All</a>
+              {%- for link in linklists[obj_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
+                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment %} Mobile filter button — only shown when price filter is enabled {% endcomment -%}
+    {%- if section.settings.show_price_filter -%}
+      <div class="atelier-plp__mobilebar">
+        <button class="atelier-plp__refine-btn" id="atelier-refine-btn" aria-controls="atelier-sidebar" aria-expanded="false">
+          <span aria-hidden="true">≡</span>
+          {{ 'products.facets.filter_button' | t | default: 'Filter' }}
+        </button>
+      </div>
+    {%- endif -%}
 
     {%- comment %} Body: sidebar column + product grid {% endcomment -%}
     <div class="atelier-plp__body">
 
       <aside class="atelier-plp__sidebar" id="atelier-sidebar">
         <div class="atelier-plp__sidebar-head">
-          {% render 'atelier-eyebrow', text: 'Filter' %}
+          {% render 'atelier-eyebrow', text: 'Discover' %}
           <button class="atelier-plp__sidebar-close" id="atelier-sidebar-close" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}">✕</button>
         </div>
 
-        {%- if category_filter -%}
-          <div data-mode-grid="element" {% if mode != 'element' %}hidden{% endif %}>
-            {% render 'atelier-facet-group', filter: category_filter %}
+        {%- if el_menu != blank -%}
+          <div class="atelier-plp__nav-group">
+            {% render 'atelier-eyebrow', text: section.settings.element_nav_label %}
+            <ul class="atelier-plp__nav-list">
+              <li>
+                <a href="{{ section.settings.element_all_url | default: '/collections/all' }}"
+                   class="atelier-plp__nav-link{% if all_active %} is-current{% endif %}">
+                  <span>All</span>
+                  {%- if all_active -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                </a>
+              </li>
+              {%- for link in linklists[el_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
+                <li>
+                  <a href="{{ link.url }}"
+                     class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
+                     {% if is_current %}aria-current="page"{% endif %}>
+                    <span>{{ link.title }}</span>
+                    {%- if is_current -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
           </div>
         {%- endif -%}
-        {%- if element_filter -%}
-          <div data-mode-grid="object" {% if mode != 'object' %}hidden{% endif %}>
-            {% render 'atelier-facet-group', filter: element_filter %}
+
+        {%- if obj_menu != blank -%}
+          <div class="atelier-plp__nav-group">
+            {% render 'atelier-eyebrow', text: section.settings.object_nav_label %}
+            <ul class="atelier-plp__nav-list">
+              <li>
+                <a href="{{ section.settings.object_all_url | default: '/collections/all' }}"
+                   class="atelier-plp__nav-link{% if all_active %} is-current{% endif %}">
+                  <span>All</span>
+                  {%- if all_active -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                </a>
+              </li>
+              {%- for link in linklists[obj_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
+                <li>
+                  <a href="{{ link.url }}"
+                     class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
+                     {% if is_current %}aria-current="page"{% endif %}>
+                    <span>{{ link.title }}</span>
+                    {%- if is_current -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
           </div>
         {%- endif -%}
-        {%- for f in collection.filters -%}
-          {%- assign pn = f.param_name -%}
-          {%- unless pn == el_key or pn == cat_key -%}
-            {% render 'atelier-facet-group', filter: f %}
-          {%- endunless -%}
-        {%- endfor -%}
+
+        {%- if section.settings.show_price_filter -%}
+          {%- for f in collection.filters -%}
+            {%- if f.type == 'price_range' -%}
+              {% render 'atelier-facet-group', filter: f %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
       </aside>
 
       <div class="atelier-plp__main">
@@ -204,6 +304,15 @@
           </div>
 
           <div class="atelier-plp__more">
+            {%- if paginate.current_page > 1 -%}
+              {%- if paginate.current_page == 2 -%}
+                {%- assign prev_url = collection.url -%}
+              {%- else -%}
+                {%- assign prev_page = paginate.current_page | minus: 1 -%}
+                {%- assign prev_url = collection.url | append: '?page=' | append: prev_page -%}
+              {%- endif -%}
+              <a href="{{ prev_url }}" class="button">← Previous page</a>
+            {%- endif -%}
             {%- if paginate.next.is_link -%}
               <a href="{{ paginate.next.url }}" class="button">{{ section.settings.more_label }}</a>
             {%- else -%}
@@ -293,7 +402,53 @@
     },
     {
       "type": "header",
-      "content": "Filters"
+      "content": "Discovery sidebar"
+    },
+    {
+      "type": "link_list",
+      "id": "element_nav_menu",
+      "label": "Element navigation menu",
+      "info": "Create a menu in Online Store › Navigation with links to all element collections (Stone, Metal, Ceramic, Wood, Fabric)."
+    },
+    {
+      "type": "text",
+      "id": "element_nav_label",
+      "label": "Element group heading",
+      "default": "By Element"
+    },
+    {
+      "type": "url",
+      "id": "element_all_url",
+      "label": "Element 'All' link",
+      "info": "Where the 'All' chip links to. Defaults to /collections/all."
+    },
+    {
+      "type": "link_list",
+      "id": "object_nav_menu",
+      "label": "Object navigation menu",
+      "info": "Create a menu in Online Store › Navigation with links to all object collections (Urlis & Bowls, Vases, etc.)."
+    },
+    {
+      "type": "text",
+      "id": "object_nav_label",
+      "label": "Object group heading",
+      "default": "By Object"
+    },
+    {
+      "type": "url",
+      "id": "object_all_url",
+      "label": "Object 'All' link",
+      "info": "Where the 'All' chip links to. Defaults to /collections/all."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_filter",
+      "label": "Show price filter below nav",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Filters (legacy — for metafield chips)"
     },
     {
       "type": "text",
@@ -312,8 +467,8 @@
     {
       "type": "text",
       "id": "refine_label",
-      "label": "Mobile Refine button label",
-      "default": "Refine"
+      "label": "Mobile Discover button label",
+      "default": "Discover"
     },
     {
       "type": "header",

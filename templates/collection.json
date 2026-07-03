@@ -15,7 +15,14 @@
         "show_breadcrumb": true,
         "products_per_page": 12,
         "editorial_after": 6,
-        "color_scheme": "scheme-1"
+        "color_scheme": "scheme-1",
+        "element_nav_menu": "shop-by-element",
+        "element_nav_label": "By Element",
+        "element_all_url": "/collections/all",
+        "object_nav_menu": "shop-by-object",
+        "object_nav_label": "By Object",
+        "object_all_url": "/collections/all",
+        "show_price_filter": false
       }
     }
   },

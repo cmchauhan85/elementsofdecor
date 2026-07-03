@@ -92,10 +92,6 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
-.atelier-card.is-soon .atelier-card__media img {
-  filter: grayscale(1);
-  opacity: 0.6;
-}
 .atelier-card__name {
   margin: 1.4rem 0 0.4rem;
   color: currentColor;

@@ -147,7 +147,75 @@
   color: var(--a-ochre-light);
 }
 
-/* ── Mobile REFINE bar (hidden on desktop) ── */
+/* ── Mobile first-fold declutter ── */
+@media screen and (max-width: 989px) {
+  .atelier-plp__crumb {
+    display: none;
+  }
+  .atelier-browse__caption,
+  .atelier-browse__status {
+    display: none;
+  }
+  .atelier-plp__band {
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+  .atelier-plp__head {
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    margin-bottom: 2rem;
+  }
+  .atelier-plp__band {
+    display: none;
+  }
+  .atelier-plp__chips {
+    display: none;
+  }
+  .atelier-plp__filter-bar {
+    justify-content: flex-end;
+    margin-bottom: 1.6rem;
+  }
+}
+
+/* ── Mobile inline nav (hidden on desktop) ── */
+.atelier-plp__mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+@media screen and (max-width: 989px) {
+  .atelier-plp__mobile-nav {
+    display: flex;
+  }
+}
+.atelier-plp__mobile-nav-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  min-width: 0;
+}
+.atelier-plp__mobile-nav-label {
+  flex-shrink: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a-muted);
+  width: 5.5rem;
+}
+.atelier-plp__mobile-nav-chips {
+  display: flex;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: none;
+  min-width: 0;
+}
+.atelier-plp__mobile-nav-chips::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Mobile FILTER button (only visible when price filter is on) ── */
 .atelier-plp__mobilebar {
   display: none;
   margin-bottom: 2rem;
@@ -252,6 +320,43 @@
 }
 .atelier-plp__overlay.is-open {
   display: block;
+}
+
+/* ── Discovery nav groups (in sidebar) ── */
+.atelier-plp__nav-group {
+  border-top: 1px solid var(--a-hairline);
+  padding: 1.8rem 0;
+}
+.atelier-plp__nav-list {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.atelier-plp__nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  font-family: var(--font-body-family);
+  font-size: 1.4rem;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+  border-bottom: 1px solid transparent;
+}
+.atelier-plp__nav-link:hover {
+  color: var(--a-ochre);
+}
+.atelier-plp__nav-link.is-current {
+  color: var(--a-ochre);
+}
+.atelier-plp__nav-arrow {
+  color: var(--a-ochre);
+  font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
 /* ── Facet groups (in sidebar) ── */
@@ -377,10 +482,26 @@
   }
 }
 
-/* ── Load more ── */
+/* ── Load more / pagination ── */
 .atelier-plp__more {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
   margin-top: 4.8rem;
+}
+.atelier-plp__prev {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+.atelier-plp__prev:hover {
+  opacity: 1;
 }
 .atelier-plp__more p {
   font-family: var(--font-heading-family);

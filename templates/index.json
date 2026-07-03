@@ -18,7 +18,7 @@
         "heading_line_1": "Home is not styled.",
         "heading_line_2": "It is felt.",
         "cta_label": "Check our latest designs",
-        "cta_link": "shopify://collections/urlis",
+        "cta_link": "shopify://collections/urlis-bowls",
         "color_scheme": "scheme-1"
       }
     },
@@ -65,10 +65,18 @@
             "show_element": false
           }
         },
+        "el_wax": {
+          "type": "card",
+          "settings": {
+            "collection": "candles",
+            "mode": "element",
+            "show_element": false
+          }
+        },
         "ob_urlis": {
           "type": "card",
           "settings": {
-            "collection": "urlis",
+            "collection": "urlis-bowls",
             "mode": "object",
             "show_element": false
           }
@@ -104,6 +112,14 @@
             "mode": "object",
             "show_element": false
           }
+        },
+        "ob_candles": {
+          "type": "card",
+          "settings": {
+            "collection": "candles",
+            "mode": "object",
+            "show_element": false
+          }
         }
       },
       "block_order": [
@@ -112,11 +128,13 @@
         "el_ceramic",
         "el_wood",
         "el_fabric",
+        "el_wax",
         "ob_urlis",
         "ob_vases",
         "ob_lighting",
         "ob_trays",
-        "ob_wall"
+        "ob_wall",
+        "ob_candles"
       ],
       "settings": {
         "lead": "Shop by",
@@ -124,8 +142,8 @@
         "object_label": "Object",
         "element_caption": "By material – the way we make them.",
         "object_caption": "By what it is – the familiar way to shop.",
-        "element_status_text": "TWO OF FIVE LIVE · THREE COMING SOON",
-        "object_status_text": "THREE OF FIVE LIVE · TWO COMING SOON",
+        "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
+        "object_status_text": "THREE OF SIX LIVE · THREE COMING SOON",
         "color_scheme": "scheme-2"
       }
     },
@@ -145,13 +163,13 @@
         "eyebrow": "Best Sellers",
         "title": "Considered, <em>not collected.</em>",
         "best_sellers": [
-          "elements-of-decor-aurum-hand-etched-brass-vase",
-          "elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes",
-          "flower-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
-          "lotus-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
-          "oria-hammered-silver-globe-vase"
+          "gid://shopify/Product/9477182619873",
+          "gid://shopify/Product/9479391150305",
+          "gid://shopify/Product/9485966541025",
+          "gid://shopify/Product/9485889339617",
+          "gid://shopify/Product/9477421990113"
         ],
-        "collection": "candle-holders",
+        "collection": "best-sellers",
         "products_to_show": 10,
         "show_all_tile": false,
         "all_eyebrow": "Everything",
@@ -162,21 +180,43 @@
     "atelier_this_season_r8jXX7": {
       "type": "atelier-this-season",
       "settings": {
-        "eyebrow": "Design your spaces",
-        "title": "Personalise your space",
+        "eyebrow": "New Additions",
+        "title": "Explore the full collection.",
         "best_sellers": [
-          "elements-of-decor-aurum-hand-etched-brass-vase",
-          "elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes",
-          "flower-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
-          "lotus-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
-          "oria-hammered-silver-globe-vase"
+          "gid://shopify/Product/9484720996577",
+          "gid://shopify/Product/9536126648545",
+          "gid://shopify/Product/9536126615777",
+          "gid://shopify/Product/9536126714081",
+          "gid://shopify/Product/9479407698145",
+          "gid://shopify/Product/9486089486561",
+          "gid://shopify/Product/9423365996769",
+          "gid://shopify/Product/9423034745057"
         ],
-        "collection": "candle-holders",
+        "collection": "gifting-edit",
         "products_to_show": 10,
         "show_all_tile": false,
         "all_eyebrow": "Everything",
         "all_title": "The full shop →",
         "color_scheme": "scheme-1"
+      }
+    },
+    "open_box_sale": {
+      "type": "open-box-sale",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Limited Stock",
+        "title": "Open Box Sale",
+        "description": "<p>Like-new pieces, opened for display or returned unused — at a steep discount.</p>",
+        "collection": "open-box-sale",
+        "products_to_show": 8,
+        "badge_mode": "percent_off",
+        "badge_text": "Open Box",
+        "enable_countdown": false,
+        "countdown_end": "",
+        "countdown_label": "Sale ends in",
+        "show_view_all": true,
+        "view_all_label": "Shop all open box",
+        "color_scheme": "scheme-4"
       }
     },
     "tool_teaser": {
@@ -210,6 +250,25 @@
         "note": "<p>A beautiful space is never accidental. Thank you for letting our work into your home.</p>",
         "color_scheme": "scheme-2"
       }
+    },
+    "open_box_sale_LDqbeT": {
+      "type": "open-box-sale",
+      "name": "Open Box Sale",
+      "settings": {
+        "eyebrow": "Limited Stock",
+        "title": "Open Box Sale",
+        "description": "<p>Like-new pieces, opened for display or returned unused — at a steep discount.</p>",
+        "collection": "",
+        "products_to_show": 8,
+        "badge_mode": "percent_off",
+        "badge_text": "Open Box",
+        "enable_countdown": true,
+        "countdown_end": "",
+        "countdown_label": "Sale ends in",
+        "show_view_all": true,
+        "view_all_label": "Shop all open box",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
@@ -218,8 +277,10 @@
     "philosophy",
     "this_season",
     "atelier_this_season_r8jXX7",
+    "open_box_sale",
     "tool_teaser",
     "notes",
-    "gratitude"
+    "gratitude",
+    "open_box_sale_LDqbeT"
   ]
 }
