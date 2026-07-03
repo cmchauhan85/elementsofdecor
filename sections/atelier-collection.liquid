@@ -304,6 +304,9 @@
           </div>
 
           <div class="atelier-plp__more">
+            {%- if paginate.previous.is_link -%}
+              <a href="{{ paginate.previous.url }}" class="atelier-plp__prev">← {{ section.settings.prev_label | default: 'Previous' }}</a>
+            {%- endif -%}
             {%- if paginate.next.is_link -%}
               <a href="{{ paginate.next.url }}" class="button">{{ section.settings.more_label }}</a>
             {%- else -%}

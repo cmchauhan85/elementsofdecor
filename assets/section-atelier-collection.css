@@ -482,10 +482,26 @@
   }
 }
 
-/* ── Load more ── */
+/* ── Load more / pagination ── */
 .atelier-plp__more {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
   margin-top: 4.8rem;
+}
+.atelier-plp__prev {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+.atelier-plp__prev:hover {
+  opacity: 1;
 }
 .atelier-plp__more p {
   font-family: var(--font-heading-family);
