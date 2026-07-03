@@ -65,6 +65,14 @@
             "show_element": false
           }
         },
+        "el_wax": {
+          "type": "card",
+          "settings": {
+            "collection": "candles",
+            "mode": "element",
+            "show_element": false
+          }
+        },
         "ob_urlis": {
           "type": "card",
           "settings": {
@@ -120,6 +128,7 @@
         "el_ceramic",
         "el_wood",
         "el_fabric",
+        "el_wax",
         "ob_urlis",
         "ob_vases",
         "ob_lighting",
@@ -133,7 +142,7 @@
         "object_label": "Object",
         "element_caption": "By material – the way we make them.",
         "object_caption": "By what it is – the familiar way to shop.",
-        "element_status_text": "TWO OF FIVE LIVE · THREE COMING SOON",
+        "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
         "object_status_text": "THREE OF SIX LIVE · THREE COMING SOON",
         "color_scheme": "scheme-2"
       }
