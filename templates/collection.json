@@ -13,8 +13,27 @@
       "type": "atelier-collection",
       "settings": {
         "show_breadcrumb": true,
+        "heading": "Stone and Metal. <em>Eleven pieces, in the room now.</em>",
+        "element_caption": "By material – the way we make them.",
+        "object_caption": "By what it is – the familiar way to shop.",
+        "element_status_text": "FIVE MATERIALS",
+        "object_status_text": "FIVE OBJECTS",
+        "element_nav_menu": "elements-menu",
+        "element_nav_label": "By Element",
+        "object_nav_menu": "objects-menu",
+        "object_nav_label": "By Object",
+        "show_price_filter": false,
+        "element_filter_key": "filter.p.m.atelier.element",
+        "category_filter_key": "filter.p.m.atelier.category",
+        "refine_label": "Discover",
         "products_per_page": 12,
+        "more_label": "Show the next twelve",
+        "end_label": "That's the full shop — for now.",
         "editorial_after": 6,
+        "editorial_eyebrow": "Field note",
+        "editorial_title": "Where the brass is folded by hand.",
+        "editorial_cta": "Read the note →",
+        "editorial_link": "",
         "color_scheme": "scheme-1"
       }
     }
