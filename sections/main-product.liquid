@@ -92,12 +92,13 @@
             {%- assign vi_parts = '' -%}
             {%- for variant in product.variants -%}
               {%- if variant.featured_media != blank -%}
-                {%- capture vi_entry -%}"{{ variant.title | escape }}":{"src":"{{ variant.featured_media | image_url: width: 80 }}","id":{{ variant.featured_media.id }}}{%- endcapture -%}
+                {%- capture vi_entry -%}{{ variant.title | json }}:{"src":"{{ variant.featured_media | image_url: width: 80 }}","color":{{ variant.metafields.atelier.swatch_color.value | json }}}{%- endcapture -%}
                 {%- unless forloop.first -%}{%- assign vi_parts = vi_parts | append: ',' -%}{%- endunless -%}
                 {%- assign vi_parts = vi_parts | append: vi_entry -%}
               {%- endif -%}
             {%- endfor -%}
-            {{ '{' }}{{ vi_parts }}{{ '}' }}
+            {%- assign vi_json = '{' | append: vi_parts | append: '}' -%}
+            {{ vi_json }}
           </script>
           <script src="{{ 'atelier-color-swatches.js' | asset_url }}" defer="defer"></script>
 

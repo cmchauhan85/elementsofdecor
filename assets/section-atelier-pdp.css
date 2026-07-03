@@ -226,32 +226,66 @@
 }
 
 /* Colour swatch dots (auto-extracted from variant images) */
+/* Swatch dot: label is a flex column wrapper, not the circle itself */
 .atelier-swatch-dot {
   position: relative;
-  width: 3.6rem !important;
-  height: 3.6rem !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
   padding: 0 !important;
-  border-radius: 50% !important;
-  background: var(--dot-color, #C4B49A) !important;
-  border: 1.5px solid rgba(27, 25, 22, 0.12) !important;
-  overflow: hidden;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  text-align: center !important;
+}
+.atelier-swatch-dot__circle {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background: var(--dot-color, #C4B49A);
+  border: 1.5px solid rgba(27, 25, 22, 0.12);
+  display: block;
   flex-shrink: 0;
-  transition: outline 0.1s ease !important;
+  transition: outline 0.1s ease, border-color 0.1s ease;
 }
-input[type='radio']:checked + .atelier-swatch-dot {
-  outline: 2px solid var(--a-ochre) !important;
-  outline-offset: 3px !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
+input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__circle {
+  outline: 2px solid var(--a-ochre);
+  outline-offset: 3px;
+  border-color: transparent;
+  box-shadow: none;
 }
-input[type='radio']:hover + .atelier-swatch-dot {
-  outline: 2px solid rgba(27, 25, 22, 0.3) !important;
-  outline-offset: 2px !important;
+input[type='radio']:hover + .atelier-swatch-dot .atelier-swatch-dot__circle {
+  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline-offset: 2px;
 }
-/* Flex-wrap the colour option row so dots sit side by side */
+.atelier-swatch-dot__name {
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  color: var(--a-muted);
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__name {
+  color: var(--a-ink);
+}
+/* Swatch container: horizontal row */
 .product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  align-items: center;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 1.2rem 1.6rem !important;
+  align-items: flex-start !important;
+}
+/* Hide Dawn's sold-out sibling text elements — accessibility text is already in the sr-only span inside the dot */
+.product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group > p,
+.product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group > span:not([style]) {
+  display: none !important;
 }
