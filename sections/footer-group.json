@@ -51,15 +51,22 @@
         "link_list_category": {
           "type": "link_list",
           "settings": {
-            "heading": "<strong>Shop</strong>",
-            "menu": "footer-shop"
+            "heading": "Category",
+            "menu": "footer"
           }
         },
         "link_list_policy": {
           "type": "link_list",
           "settings": {
-            "heading": "<strong>About Us</strong>",
+            "heading": "Policy Pages",
             "menu": "footer"
+          }
+        },
+        "link_list_support": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer-shop"
           }
         },
         "social_links": {
@@ -72,18 +79,19 @@
       "block_order": [
         "link_list_category",
         "link_list_policy",
+        "link_list_support",
         "social_links"
       ],
       "settings": {
-        "color_scheme": "scheme-luxury-premium",
+        "color_scheme": "scheme-4",
         "newsletter_enable": false,
         "newsletter_heading": "Subscribe to our emails",
         "enable_follow_on_shop": false,
         "show_social": false,
         "enable_country_selector": false,
         "enable_language_selector": false,
-        "payment_enable": true,
-        "show_policy": true,
+        "payment_enable": false,
+        "show_policy": false,
         "margin_top": 0,
         "padding_top": 36,
         "padding_bottom": 36

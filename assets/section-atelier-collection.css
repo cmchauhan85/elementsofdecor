@@ -254,6 +254,43 @@
   display: block;
 }
 
+/* ── Discovery nav groups (in sidebar) ── */
+.atelier-plp__nav-group {
+  border-top: 1px solid var(--a-hairline);
+  padding: 1.8rem 0;
+}
+.atelier-plp__nav-list {
+  list-style: none;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.atelier-plp__nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  font-family: var(--font-body-family);
+  font-size: 1.4rem;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+  border-bottom: 1px solid transparent;
+}
+.atelier-plp__nav-link:hover {
+  color: var(--a-ochre);
+}
+.atelier-plp__nav-link.is-current {
+  color: var(--a-ochre);
+}
+.atelier-plp__nav-arrow {
+  color: var(--a-ochre);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
 /* ── Facet groups (in sidebar) ── */
 .atelier-facets__group {
   border-top: 1px solid var(--a-hairline);
