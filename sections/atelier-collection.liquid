@@ -135,26 +135,60 @@
 
       <aside class="atelier-plp__sidebar" id="atelier-sidebar">
         <div class="atelier-plp__sidebar-head">
-          {% render 'atelier-eyebrow', text: 'Filter' %}
+          {% render 'atelier-eyebrow', text: 'Discover' %}
           <button class="atelier-plp__sidebar-close" id="atelier-sidebar-close" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}">✕</button>
         </div>
 
-        {%- if category_filter -%}
-          <div data-mode-grid="element" {% if mode != 'element' %}hidden{% endif %}>
-            {% render 'atelier-facet-group', filter: category_filter %}
+        {%- assign el_menu  = section.settings.element_nav_menu -%}
+        {%- assign obj_menu = section.settings.object_nav_menu -%}
+
+        {%- if el_menu != blank -%}
+          <div class="atelier-plp__nav-group">
+            {% render 'atelier-eyebrow', text: section.settings.element_nav_label %}
+            <ul class="atelier-plp__nav-list">
+              {%- for link in linklists[el_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = link_handle == collection.handle -%}
+                <li>
+                  <a href="{{ link.url }}"
+                     class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
+                     {% if is_current %}aria-current="page"{% endif %}>
+                    <span>{{ link.title }}</span>
+                    {%- if is_current -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
           </div>
         {%- endif -%}
-        {%- if element_filter -%}
-          <div data-mode-grid="object" {% if mode != 'object' %}hidden{% endif %}>
-            {% render 'atelier-facet-group', filter: element_filter %}
+
+        {%- if obj_menu != blank -%}
+          <div class="atelier-plp__nav-group">
+            {% render 'atelier-eyebrow', text: section.settings.object_nav_label %}
+            <ul class="atelier-plp__nav-list">
+              {%- for link in linklists[obj_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = link_handle == collection.handle -%}
+                <li>
+                  <a href="{{ link.url }}"
+                     class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
+                     {% if is_current %}aria-current="page"{% endif %}>
+                    <span>{{ link.title }}</span>
+                    {%- if is_current -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
           </div>
         {%- endif -%}
-        {%- for f in collection.filters -%}
-          {%- assign pn = f.param_name -%}
-          {%- unless pn == el_key or pn == cat_key -%}
-            {% render 'atelier-facet-group', filter: f %}
-          {%- endunless -%}
-        {%- endfor -%}
+
+        {%- if section.settings.show_price_filter -%}
+          {%- for f in collection.filters -%}
+            {%- if f.type == 'price_range' -%}
+              {% render 'atelier-facet-group', filter: f %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
       </aside>
 
       <div class="atelier-plp__main">
@@ -293,7 +327,41 @@
     },
     {
       "type": "header",
-      "content": "Filters"
+      "content": "Discovery sidebar"
+    },
+    {
+      "type": "link_list",
+      "id": "element_nav_menu",
+      "label": "Element navigation menu",
+      "info": "Create a menu in Online Store › Navigation with links to all element collections (Stone, Metal, Ceramic, Wood, Fabric)."
+    },
+    {
+      "type": "text",
+      "id": "element_nav_label",
+      "label": "Element group heading",
+      "default": "By Element"
+    },
+    {
+      "type": "link_list",
+      "id": "object_nav_menu",
+      "label": "Object navigation menu",
+      "info": "Create a menu in Online Store › Navigation with links to all object collections (Urlis & Bowls, Vases, etc.)."
+    },
+    {
+      "type": "text",
+      "id": "object_nav_label",
+      "label": "Object group heading",
+      "default": "By Object"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_filter",
+      "label": "Show price filter below nav",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Filters (legacy — for metafield chips)"
     },
     {
       "type": "text",
@@ -312,8 +380,8 @@
     {
       "type": "text",
       "id": "refine_label",
-      "label": "Mobile Refine button label",
-      "default": "Refine"
+      "label": "Mobile Discover button label",
+      "default": "Discover"
     },
     {
       "type": "header",
