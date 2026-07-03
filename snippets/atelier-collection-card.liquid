@@ -17,6 +17,9 @@
   assign col = collection
   assign descriptor = col.metafields.atelier.descriptor.value
   assign is_soon = col.metafields.atelier.coming_soon.value
+  if col.products_count == 0
+    assign is_soon = true
+  endif
   assign element_tag = col.metafields.atelier.element.value
   assign card_image = col.featured_image
   if card_image == blank and col.products.first != blank
