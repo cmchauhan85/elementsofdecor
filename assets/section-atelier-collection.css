@@ -147,7 +147,46 @@
   color: var(--a-ochre-light);
 }
 
-/* ── Mobile REFINE bar (hidden on desktop) ── */
+/* ── Mobile inline nav (hidden on desktop) ── */
+.atelier-plp__mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+@media screen and (max-width: 989px) {
+  .atelier-plp__mobile-nav {
+    display: flex;
+  }
+}
+.atelier-plp__mobile-nav-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  min-width: 0;
+}
+.atelier-plp__mobile-nav-label {
+  flex-shrink: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a-muted);
+  width: 5.5rem;
+}
+.atelier-plp__mobile-nav-chips {
+  display: flex;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: none;
+  min-width: 0;
+}
+.atelier-plp__mobile-nav-chips::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Mobile FILTER button (only visible when price filter is on) ── */
 .atelier-plp__mobilebar {
   display: none;
   margin-bottom: 2rem;

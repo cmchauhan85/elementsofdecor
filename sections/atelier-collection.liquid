@@ -40,6 +40,9 @@
   for f in collection.filters
     assign active_count = active_count | plus: f.active_values.size
   endfor
+
+  assign el_menu  = section.settings.element_nav_menu
+  assign obj_menu = section.settings.object_nav_menu
 -%}
 
 <div class="atelier-plp color-{{ section.settings.color_scheme }} a-section">
@@ -119,16 +122,47 @@
       </form>
     </div>
 
-    {%- comment %} Mobile REFINE button — shown only below 990 px {% endcomment -%}
-    <div class="atelier-plp__mobilebar">
-      <button class="atelier-plp__refine-btn" id="atelier-refine-btn" aria-controls="atelier-sidebar" aria-expanded="false">
-        <span aria-hidden="true">≡</span>
-        {{ section.settings.refine_label | default: 'Refine' }}
-        {%- if active_count > 0 -%}
-          <span class="atelier-plp__refine-count">{{ active_count }}</span>
+    {%- comment %} Mobile inline nav — always-visible chip rows below 990 px {% endcomment -%}
+    {%- if el_menu != blank or obj_menu != blank -%}
+      <div class="atelier-plp__mobile-nav">
+        {%- if el_menu != blank -%}
+          <div class="atelier-plp__mobile-nav-row">
+            <span class="atelier-plp__mobile-nav-label">{{ section.settings.element_nav_label }}</span>
+            <div class="atelier-plp__mobile-nav-chips a-rail">
+              {%- for link in linklists[el_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
+                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+              {%- endfor -%}
+            </div>
+          </div>
         {%- endif -%}
-      </button>
-    </div>
+        {%- if obj_menu != blank -%}
+          <div class="atelier-plp__mobile-nav-row">
+            <span class="atelier-plp__mobile-nav-label">{{ section.settings.object_nav_label }}</span>
+            <div class="atelier-plp__mobile-nav-chips a-rail">
+              {%- for link in linklists[obj_menu].links -%}
+                {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                {%- assign is_current = false -%}
+                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
+                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment %} Mobile filter button — only shown when price filter is enabled {% endcomment -%}
+    {%- if section.settings.show_price_filter -%}
+      <div class="atelier-plp__mobilebar">
+        <button class="atelier-plp__refine-btn" id="atelier-refine-btn" aria-controls="atelier-sidebar" aria-expanded="false">
+          <span aria-hidden="true">≡</span>
+          {{ 'products.facets.filter_button' | t | default: 'Filter' }}
+        </button>
+      </div>
+    {%- endif -%}
 
     {%- comment %} Body: sidebar column + product grid {% endcomment -%}
     <div class="atelier-plp__body">
@@ -138,9 +172,6 @@
           {% render 'atelier-eyebrow', text: 'Discover' %}
           <button class="atelier-plp__sidebar-close" id="atelier-sidebar-close" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}">✕</button>
         </div>
-
-        {%- assign el_menu  = section.settings.element_nav_menu -%}
-        {%- assign obj_menu = section.settings.object_nav_menu -%}
 
         {%- if el_menu != blank -%}
           <div class="atelier-plp__nav-group">
