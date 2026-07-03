@@ -125,10 +125,28 @@
     {%- comment %} Mobile inline nav — always-visible chip rows below 990 px {% endcomment -%}
     {%- if el_menu != blank or obj_menu != blank -%}
       <div class="atelier-plp__mobile-nav">
+        {%- liquid
+          assign el_all_url  = section.settings.element_all_url  | default: '/collections/all'
+          assign obj_all_url = section.settings.object_all_url | default: '/collections/all'
+          assign all_active  = true
+          for link in linklists[el_menu].links
+            assign lh = link.url | split: '/collections/' | last
+            if lh == collection.handle
+              assign all_active = false
+            endif
+          endfor
+          for link in linklists[obj_menu].links
+            assign lh = link.url | split: '/collections/' | last
+            if lh == collection.handle
+              assign all_active = false
+            endif
+          endfor
+        -%}
         {%- if el_menu != blank -%}
           <div class="atelier-plp__mobile-nav-row">
             <span class="atelier-plp__mobile-nav-label">{{ section.settings.element_nav_label }}</span>
             <div class="atelier-plp__mobile-nav-chips a-rail">
+              <a href="{{ el_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All</a>
               {%- for link in linklists[el_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
                 {%- assign is_current = false -%}
@@ -142,6 +160,7 @@
           <div class="atelier-plp__mobile-nav-row">
             <span class="atelier-plp__mobile-nav-label">{{ section.settings.object_nav_label }}</span>
             <div class="atelier-plp__mobile-nav-chips a-rail">
+              <a href="{{ obj_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All</a>
               {%- for link in linklists[obj_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
                 {%- assign is_current = false -%}
@@ -177,6 +196,13 @@
           <div class="atelier-plp__nav-group">
             {% render 'atelier-eyebrow', text: section.settings.element_nav_label %}
             <ul class="atelier-plp__nav-list">
+              <li>
+                <a href="{{ section.settings.element_all_url | default: '/collections/all' }}"
+                   class="atelier-plp__nav-link{% if all_active %} is-current{% endif %}">
+                  <span>All</span>
+                  {%- if all_active -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                </a>
+              </li>
               {%- for link in linklists[el_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
                 {%- assign is_current = false -%}
@@ -198,6 +224,13 @@
           <div class="atelier-plp__nav-group">
             {% render 'atelier-eyebrow', text: section.settings.object_nav_label %}
             <ul class="atelier-plp__nav-list">
+              <li>
+                <a href="{{ section.settings.object_all_url | default: '/collections/all' }}"
+                   class="atelier-plp__nav-link{% if all_active %} is-current{% endif %}">
+                  <span>All</span>
+                  {%- if all_active -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                </a>
+              </li>
               {%- for link in linklists[obj_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
                 {%- assign is_current = false -%}
@@ -375,6 +408,12 @@
       "default": "By Element"
     },
     {
+      "type": "url",
+      "id": "element_all_url",
+      "label": "Element 'All' link",
+      "info": "Where the 'All' chip links to. Defaults to /collections/all."
+    },
+    {
       "type": "link_list",
       "id": "object_nav_menu",
       "label": "Object navigation menu",
@@ -385,6 +424,12 @@
       "id": "object_nav_label",
       "label": "Object group heading",
       "default": "By Object"
+    },
+    {
+      "type": "url",
+      "id": "object_all_url",
+      "label": "Object 'All' link",
+      "info": "Where the 'All' chip links to. Defaults to /collections/all."
     },
     {
       "type": "checkbox",
