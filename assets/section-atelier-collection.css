@@ -147,6 +147,32 @@
   color: var(--a-ochre-light);
 }
 
+/* ── Mobile first-fold declutter ── */
+@media screen and (max-width: 989px) {
+  .atelier-plp__crumb {
+    display: none;
+  }
+  .atelier-browse__caption,
+  .atelier-browse__status {
+    display: none;
+  }
+  .atelier-plp__band {
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+  .atelier-plp__head {
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    margin-bottom: 2rem;
+  }
+  .atelier-plp__chips {
+    display: none;
+  }
+  .atelier-plp__filter-bar {
+    justify-content: flex-end;
+    margin-bottom: 1.6rem;
+  }
+}
+
 /* ── Mobile inline nav (hidden on desktop) ── */
 .atelier-plp__mobile-nav {
   display: none;
