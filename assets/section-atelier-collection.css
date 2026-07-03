@@ -164,6 +164,9 @@
     font-size: clamp(2.2rem, 6vw, 3.2rem);
     margin-bottom: 2rem;
   }
+  .atelier-plp__band {
+    display: none;
+  }
   .atelier-plp__chips {
     display: none;
   }
