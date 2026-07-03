@@ -304,6 +304,15 @@
           </div>
 
           <div class="atelier-plp__more">
+            {%- if paginate.current_page > 1 -%}
+              {%- if paginate.current_page == 2 -%}
+                {%- assign prev_url = collection.url -%}
+              {%- else -%}
+                {%- assign prev_page = paginate.current_page | minus: 1 -%}
+                {%- assign prev_url = collection.url | append: '?page=' | append: prev_page -%}
+              {%- endif -%}
+              <a href="{{ prev_url }}" class="atelier-plp__prev">← Previous page</a>
+            {%- endif -%}
             {%- if paginate.next.is_link -%}
               <a href="{{ paginate.next.url }}" class="button">{{ section.settings.more_label }}</a>
             {%- else -%}
