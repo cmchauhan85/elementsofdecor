@@ -224,3 +224,34 @@
   width: 1.2rem;
   height: 1.2rem;
 }
+
+/* Colour swatch dots (auto-extracted from variant images) */
+.atelier-swatch-dot {
+  position: relative;
+  width: 3.6rem !important;
+  height: 3.6rem !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: var(--dot-color, #C4B49A) !important;
+  border: 1.5px solid rgba(27, 25, 22, 0.12) !important;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: outline 0.1s ease !important;
+}
+input[type='radio']:checked + .atelier-swatch-dot {
+  outline: 2px solid var(--a-ochre) !important;
+  outline-offset: 3px !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+input[type='radio']:hover + .atelier-swatch-dot {
+  outline: 2px solid rgba(27, 25, 22, 0.3) !important;
+  outline-offset: 2px !important;
+}
+/* Flex-wrap the colour option row so dots sit side by side */
+.product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}

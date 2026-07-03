@@ -52,11 +52,6 @@
   gap: 1.6rem;
   margin-top: 2.4rem;
 }
-@media screen and (max-width: 749px) {
-  .atelier-milestone__cards {
-    grid-template-columns: 1fr;
-  }
-}
 .atelier-milestone__card {
   padding: 1.8rem;
   border: 1px solid var(--a-hairline);
@@ -77,4 +72,45 @@
   font-size: 1.3rem;
   color: var(--a-muted);
   margin: 0;
+}
+
+/* Mobile: compact horizontal scroll strip instead of stacked cards */
+@media screen and (max-width: 749px) {
+  .atelier-milestone {
+    padding-top: 1.4rem !important;
+    padding-bottom: 1.4rem !important;
+  }
+  .atelier-milestone__head {
+    margin-bottom: 1rem;
+  }
+  .atelier-milestone__status {
+    font-size: 1.4rem;
+  }
+  .atelier-milestone__rail {
+    margin: 1.6rem 0 0.8rem;
+  }
+  .atelier-milestone__cards {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 1rem;
+    margin-top: 1.2rem;
+    padding-bottom: 0.4rem;
+  }
+  .atelier-milestone__cards::-webkit-scrollbar { display: none; }
+  .atelier-milestone__card {
+    flex: 0 0 72vw;
+    max-width: 280px;
+    padding: 1.2rem 1.4rem;
+    scroll-snap-align: start;
+  }
+  .atelier-milestone__card-label {
+    font-size: 1.5rem;
+    margin: 0.4rem 0 0.2rem;
+  }
+  .atelier-milestone__card-hint {
+    font-size: 1.2rem;
+  }
 }
