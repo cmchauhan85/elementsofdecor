@@ -753,6 +753,24 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
+              {%- when 'dispatch' -%}
+                {%- liquid
+                  assign leadtime = product.metafields.atelier.story_leadtime.value
+                  assign dispatch_text = leadtime | default: block.settings.fallback_leadtime
+                -%}
+                {%- if dispatch_text != blank or block.settings.packing_note != blank -%}
+                  <div class="atelier-pdp-dispatch" {{ block.shopify_attributes }}>
+                    {%- if dispatch_text != blank -%}
+                      <p class="atelier-pdp-dispatch__line">
+                        <span class="atelier-pdp-dispatch__icon" aria-hidden="true">◷</span>
+                        Made to order · Ships in {{ dispatch_text }}
+                      </p>
+                    {%- endif -%}
+                    {%- if block.settings.packing_note != blank -%}
+                      <p class="atelier-pdp-dispatch__line atelier-pdp-dispatch__packing">{{ block.settings.packing_note }}</p>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
             {%- endcase -%}
           {%- endfor -%}
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -2163,6 +2181,26 @@
           "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
+        }
+      ]
+    },
+    {
+      "type": "dispatch",
+      "name": "Dispatch estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "fallback_leadtime",
+          "label": "Fallback lead time",
+          "info": "Used when atelier.story_leadtime metafield is blank",
+          "default": "4–6 weeks"
+        },
+        {
+          "type": "text",
+          "id": "packing_note",
+          "label": "Packing note",
+          "default": "Delivered in a cotton-lined pine box."
         }
       ]
     }

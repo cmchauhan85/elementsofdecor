@@ -225,6 +225,36 @@
   height: 1.2rem;
 }
 
+/* Dispatch estimate block */
+.atelier-pdp-dispatch {
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--a-hairline);
+  border-bottom: 1px solid var(--a-hairline);
+  margin: 0.4rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.atelier-pdp-dispatch__line {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: var(--a-muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 1.4;
+}
+.atelier-pdp-dispatch__icon {
+  color: var(--a-ochre);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.atelier-pdp-dispatch__packing {
+  font-size: 1.2rem;
+  padding-left: 2.1rem; /* indent to align with text after icon */
+}
+
 /* Colour swatch dots (auto-extracted from variant images) */
 /* Swatch dot: label is a flex column wrapper, not the circle itself */
 .atelier-swatch-dot {

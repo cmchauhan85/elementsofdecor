@@ -45,6 +45,13 @@
             "show_gift_card_recipient": true
           }
         },
+        "dispatch": {
+          "type": "dispatch",
+          "settings": {
+            "fallback_leadtime": "4–6 weeks",
+            "packing_note": "Delivered in a cotton-lined pine box."
+          }
+        },
         "description": {
           "type": "description",
           "settings": {}
@@ -79,6 +86,7 @@
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
+        "dispatch",
         "description",
         "care",
         "shipping",
