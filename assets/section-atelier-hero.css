@@ -99,3 +99,20 @@
     padding: 6rem;
   }
 }
+
+/* Full-screen variant */
+.atelier-hero--full {
+  height: 100svh;
+  min-height: 560px;
+}
+
+/* Subtext */
+.atelier-hero__subtext {
+  margin: 1.4rem 0 0;
+  color: rgba(250, 247, 241, 0.72);
+  font-family: var(--font-body-family);
+  font-size: clamp(1.4rem, 1.6vw, 1.7rem);
+  line-height: 1.55;
+  max-width: 54ch;
+  font-style: italic;
+}

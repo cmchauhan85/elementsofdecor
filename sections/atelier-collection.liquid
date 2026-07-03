@@ -146,12 +146,13 @@
           <div class="atelier-plp__mobile-nav-row">
             <span class="atelier-plp__mobile-nav-label">{{ section.settings.element_nav_label }}</span>
             <div class="atelier-plp__mobile-nav-chips a-rail">
-              <a href="{{ el_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All</a>
+              <a href="{{ el_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All<span class="atelier-chip__count">{{ collection.all_products_count }}</span></a>
               {%- for link in linklists[el_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
                 {%- assign is_current = false -%}
                 {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
-                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+                {%- assign link_coll = collections[link_handle] -%}
+                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}{%- if link_coll.all_products_count > 0 -%}<span class="atelier-chip__count">{{ link_coll.all_products_count }}</span>{%- endif -%}</a>
               {%- endfor -%}
             </div>
           </div>
@@ -160,12 +161,13 @@
           <div class="atelier-plp__mobile-nav-row">
             <span class="atelier-plp__mobile-nav-label">{{ section.settings.object_nav_label }}</span>
             <div class="atelier-plp__mobile-nav-chips a-rail">
-              <a href="{{ obj_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All</a>
+              <a href="{{ obj_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All<span class="atelier-chip__count">{{ collection.all_products_count }}</span></a>
               {%- for link in linklists[obj_menu].links -%}
                 {%- assign link_handle = link.url | split: '/collections/' | last -%}
                 {%- assign is_current = false -%}
                 {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
-                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+                {%- assign link_coll = collections[link_handle] -%}
+                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}{%- if link_coll.all_products_count > 0 -%}<span class="atelier-chip__count">{{ link_coll.all_products_count }}</span>{%- endif -%}</a>
               {%- endfor -%}
             </div>
           </div>

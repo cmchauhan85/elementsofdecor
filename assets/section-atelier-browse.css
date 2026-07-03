@@ -113,3 +113,54 @@
 .atelier-card.is-soon .atelier-card__count {
   color: var(--a-muted);
 }
+
+/* VIEW ALL link */
+.atelier-browse__view-all {
+  margin-top: 3.2rem;
+  text-align: right;
+}
+.atelier-browse__view-all-link {
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--a-ochre);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.1rem;
+  transition: opacity 0.15s;
+}
+.atelier-browse__view-all-link:hover {
+  opacity: 0.7;
+}
+
+/* Mobile shop intro (h4) — hidden on desktop */
+.atelier-browse__mobile-intro {
+  display: none;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid var(--a-hairline);
+  margin-bottom: 3rem;
+}
+.atelier-browse__mobile-intro-label {
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--a-ochre);
+  display: block;
+  margin-bottom: 0.8rem;
+}
+.atelier-browse__mobile-intro-copy {
+  font-family: var(--font-heading-family);
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--a-muted);
+  margin: 0;
+  line-height: 1.2;
+}
+@media screen and (max-width: 749px) {
+  .atelier-browse__mobile-intro {
+    display: block;
+  }
+}

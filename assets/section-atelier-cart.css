@@ -48,3 +48,14 @@
   font-family: var(--font-body-family);
   letter-spacing: 0.04em;
 }
+
+/* Element tag on cart line items */
+.cart-item__element {
+  display: inline-block;
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  margin-bottom: 0.4rem;
+}

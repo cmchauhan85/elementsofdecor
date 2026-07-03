@@ -54,6 +54,22 @@
           "settings": {
             "share_label": "Share"
           }
+        },
+        "care": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Care",
+            "icon": "washing",
+            "content": "<p>Wipe with a clean dry cloth. Avoid prolonged exposure to water or acidic liquids, which can etch the surface. For marble, a food-safe stone sealer applied once a year keeps the material looking its best. For brass, a light coat of mineral oil returns the warm lustre.</p>"
+          }
+        },
+        "shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "<p>Each piece is made to order and ships within 4–6 weeks. Delivered in a cotton-lined pine box, with a hand-signed card. If something arrives damaged, email us within 72 hours and we will arrange a replacement at no cost. We do not accept returns for change of mind on made-to-order pieces.</p>"
+          }
         }
       },
       "block_order": [
@@ -64,6 +80,8 @@
         "quantity_selector",
         "buy_buttons",
         "description",
+        "care",
+        "shipping",
         "share"
       ],
       "settings": {
