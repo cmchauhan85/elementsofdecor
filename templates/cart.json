@@ -45,6 +45,10 @@
           "type": "subtotal",
           "settings": {}
         },
+        "hold": {
+          "type": "hold_timer",
+          "settings": {}
+        },
         "buttons": {
           "type": "buttons",
           "settings": {}
@@ -53,6 +57,7 @@
       "block_order": [
         "gift",
         "subtotal",
+        "hold",
         "buttons"
       ]
     },

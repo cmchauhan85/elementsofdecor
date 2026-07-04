@@ -1,4 +1,5 @@
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'atelier-hold-timer.js' | asset_url }}" defer="defer"></script>
 {{ 'section-atelier-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
@@ -43,6 +44,22 @@
           {%- case block.type -%}
             {%- when '@app' -%}
               {% render block %}
+            {%- when 'hold_timer' -%}
+              {%- if cart != empty -%}
+                <div
+                  class="atelier-hold"
+                  data-hold-duration="{{ block.settings.duration_minutes }}"
+                  data-hold-label="{{ block.settings.label | escape }}"
+                  data-hold-expired="{{ block.settings.expired_text | escape }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <span class="atelier-hold__icon" aria-hidden="true">◷</span>
+                  <div class="atelier-hold__body">
+                    <span class="atelier-hold__label">{{ block.settings.label }}</span>
+                    <strong class="atelier-hold__time" aria-live="polite">—:——</strong>
+                  </div>
+                </div>
+              {%- endif -%}
             {%- when 'gift_note' -%}
               <div class="atelier-cart-gift" {{ block.shopify_attributes }}>
                 <button
@@ -205,6 +222,34 @@
     }
   ],
   "blocks": [
+    {
+      "type": "hold_timer",
+      "name": "Hold timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "duration_minutes",
+          "label": "Hold duration (minutes)",
+          "min": 10,
+          "max": 60,
+          "step": 5,
+          "default": 30
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Active label",
+          "default": "Items reserved for"
+        },
+        {
+          "type": "text",
+          "id": "expired_text",
+          "label": "Expired label",
+          "default": "Reservation expired — items may be released."
+        }
+      ]
+    },
     {
       "type": "gift_note",
       "name": "Sending as a gift",
