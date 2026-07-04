@@ -353,6 +353,23 @@
 .atelier-plp__nav-link.is-current {
   color: var(--a-ochre);
 }
+.atelier-plp__nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.atelier-plp__nav-count {
+  font-size: 1.15rem;
+  color: var(--a-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  transition: color 0.15s ease;
+}
+.atelier-plp__nav-link:hover .atelier-plp__nav-count,
+.atelier-plp__nav-link.is-current .atelier-plp__nav-count {
+  color: var(--a-ochre);
+}
 .atelier-plp__nav-arrow {
   color: var(--a-ochre);
   font-size: 1.2rem;
