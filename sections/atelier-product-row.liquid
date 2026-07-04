@@ -1,23 +1,75 @@
 {{ 'section-atelier-pdp-blocks.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign coll = section.settings.collection
-  assign limit = section.settings.products_to_show
+  assign limit         = section.settings.products_to_show
+  assign static_coll   = section.settings.collection
+  assign cart_coll     = null
+  assign context_label = ''
+
+  comment
+    Try to derive a relevant collection from the cart:
+    read the element metafield of the first cart item, map it to a
+    collection handle (e.g. "Stone" → collections["stone"]).
+  endcomment
+  if cart.item_count > 0
+    assign first_el = cart.items[0].product.metafields.atelier.element.value
+    if first_el != blank
+      assign el_handle = first_el | downcase | replace: ' ', '-'
+      assign cart_coll = collections[el_handle]
+      if cart_coll != blank
+        assign context_label = first_el
+      endif
+    endif
+  endif
+
+  assign active_coll = cart_coll | default: static_coll
 -%}
 
-{%- if coll != blank and coll.products.size > 0 -%}
-  <div class="atelier-pairs color-{{ section.settings.color_scheme }} a-section">
-    <div class="page-width">
-      {%- if section.settings.title != blank -%}
-        <h2 class="atelier-pairs__title">{{ section.settings.title }}</h2>
-      {%- endif -%}
-      <div class="atelier-pairs__grid">
-        {%- for product in coll.products limit: limit -%}
-          {% render 'atelier-product-card', product: product %}
-        {%- endfor -%}
+{%- if active_coll != blank -%}
+  {%- liquid
+    comment Build a comma-wrapped string of cart product IDs for O(1) membership test endcomment
+    assign cart_ids = ','
+    for item in cart.items
+      assign cart_ids = cart_ids | append: item.product.id | append: ','
+    endfor
+  -%}
+
+  {%- comment %} Pre-scan: count eligible products so we don't render an empty wrapper {%- endcomment -%}
+  {%- assign eligible = 0 -%}
+  {%- for product in active_coll.products limit: 20 -%}
+    {%- assign token = ',' | append: product.id | append: ',' -%}
+    {%- unless cart_ids contains token -%}
+      {%- assign eligible = eligible | plus: 1 -%}
+      {%- if eligible >= limit -%}{%- break -%}{%- endif -%}
+    {%- endunless -%}
+  {%- endfor -%}
+
+  {%- if eligible > 0 -%}
+    <div class="atelier-pairs color-{{ section.settings.color_scheme }} a-section">
+      <div class="page-width">
+        <div class="atelier-pairs__head">
+          {%- if context_label != blank -%}
+            {% render 'atelier-eyebrow', text: context_label %}
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="atelier-pairs__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
+        </div>
+        <div class="atelier-pairs__grid">
+          {%- assign shown = 0 -%}
+          {%- for product in active_coll.products limit: 20 -%}
+            {%- assign token = ',' | append: product.id | append: ',' -%}
+            {%- unless cart_ids contains token -%}
+              {%- assign n = shown | plus: 1 | prepend: '0' | slice: -2, 2 -%}
+              {% render 'atelier-product-card', product: product, number: n %}
+              {%- assign shown = shown | plus: 1 -%}
+              {%- if shown >= limit -%}{%- break -%}{%- endif -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
       </div>
     </div>
-  </div>
+  {%- endif -%}
 {%- endif -%}
 
 {% schema %}
@@ -25,10 +77,34 @@
   "name": "Atelier product row",
   "tag": "section",
   "settings": [
-    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Continue collecting." },
-    { "type": "collection", "id": "collection", "label": "Collection" },
-    { "type": "range", "id": "products_to_show", "min": 2, "max": 8, "step": 1, "default": 4, "label": "Products to show" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Continue collecting.",
+      "info": "Shown below the element eyebrow."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Fallback collection",
+      "info": "Used when no cart item has an atelier.element metafield, or when the element collection can't be found."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
   ],
   "presets": [{ "name": "Atelier product row" }]
 }
