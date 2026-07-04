@@ -23,6 +23,7 @@
 {%- unless settings.cart_type == 'drawer' -%}
   <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
+<script src="{{ 'atelier-save-later.js' | asset_url }}" defer="defer"></script>
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
@@ -180,6 +181,20 @@
                           </li>
                         {%- endfor -%}
                       </ul>
+
+                      <button
+                        type="button"
+                        class="atelier-save-later"
+                        data-key="{{ item.key }}"
+                        data-vid="{{ item.variant.id }}"
+                        data-qty="{{ item.quantity }}"
+                        data-title="{{ item.product.title | escape }}"
+                        data-variant="{{ item.variant.title | escape }}"
+                        data-price-fmt="{{ item.final_price | money }}"
+                        data-image="{{ item.image | image_url: width: 200 }}"
+                        data-url="{{ item.url }}"
+                        aria-label="Save {{ item.product.title | escape }} for later"
+                      >Save for later</button>
                     </td>
 
                     <td class="cart-item__totals right medium-hide large-up-hide">
@@ -459,6 +474,9 @@
         {{ 'accessibility.loading' | t }}
       </p>
     </form>
+
+    {%- comment %} Saved-for-later section — populated by atelier-save-later.js {%- endcomment -%}
+    <div id="atelier-saved-section"></div>
   </div>
 </cart-items>
 
