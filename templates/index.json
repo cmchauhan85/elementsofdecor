@@ -30,7 +30,7 @@
         "el_ceramic": { "type": "card", "settings": { "collection": "ceramic", "mode": "element", "show_element": false } },
         "el_wood": { "type": "card", "settings": { "collection": "wood", "mode": "element", "show_element": false } },
         "el_fabric": { "type": "card", "settings": { "collection": "fabric", "mode": "element", "show_element": false } },
-        "el_wax": { "type": "card", "settings": { "collection": "candles", "mode": "element", "show_element": false } },
+        "el_wax": { "type": "card", "settings": { "collection": "candles", "mode": "element", "show_element": false, "title_override": "Wax" } },
         "ob_urlis": { "type": "card", "settings": { "collection": "urlis-bowls", "mode": "object", "show_element": false } },
         "ob_vases": { "type": "card", "settings": { "collection": "decorative-vases", "mode": "object", "show_element": true } },
         "ob_lighting": { "type": "card", "settings": { "collection": "candle-stands-holders", "mode": "object", "show_element": true } },
