@@ -13,8 +13,14 @@
       "type": "atelier-collection",
       "settings": {
         "show_breadcrumb": true,
+        "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
+        "object_status_text": "THREE OF SIX LIVE · THREE COMING SOON",
         "products_per_page": 12,
         "editorial_after": 6,
+        "editorial_eyebrow": "Field note",
+        "editorial_title": "The stone was never really still.",
+        "editorial_cta": "Read the note →",
+        "editorial_link": "/blogs/news/the-stone-was-never-really-still",
         "color_scheme": "scheme-1",
         "element_nav_menu": "shop-by-element",
         "element_nav_label": "By Element",
@@ -26,7 +32,5 @@
       }
     }
   },
-  "order": [
-    "atelier-collection"
-  ]
+  "order": ["atelier-collection"]
 }
