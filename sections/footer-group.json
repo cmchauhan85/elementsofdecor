@@ -48,6 +48,13 @@
     "footer": {
       "type": "footer",
       "blocks": {
+        "link_list_support": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer-shop"
+          }
+        },
         "link_list_category": {
           "type": "link_list",
           "settings": {
@@ -62,13 +69,6 @@
             "menu": "footer"
           }
         },
-        "link_list_support": {
-          "type": "link_list",
-          "settings": {
-            "heading": "Shop",
-            "menu": "footer-shop"
-          }
-        },
         "social_links": {
           "type": "social",
           "settings": {
@@ -77,9 +77,9 @@
         }
       },
       "block_order": [
+        "link_list_support",
         "link_list_category",
         "link_list_policy",
-        "link_list_support",
         "social_links"
       ],
       "settings": {
