@@ -12,19 +12,86 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": { "type": "text", "settings": { "text": "{{ product.vendor }}", "text_style": "uppercase" } },
-        "title": { "type": "title", "settings": {} },
-        "price": { "type": "price", "settings": {} },
-        "variant_picker": { "type": "variant_picker", "settings": { "picker_type": "button", "swatch_shape": "circle" } },
-        "quantity_selector": { "type": "quantity_selector", "settings": {} },
-        "buy_buttons": { "type": "buy_buttons", "settings": { "show_dynamic_checkout": true, "show_gift_card_recipient": true } },
-        "dispatch": { "type": "dispatch", "settings": { "fallback_leadtime": "2-4 business days", "packing_note": "Carefully packed and cushioned for transit." } },
-        "description": { "type": "description", "settings": {} },
-        "share": { "type": "share", "settings": { "share_label": "Share" } },
-        "care": { "type": "collapsible_tab", "settings": { "heading": "Care", "icon": "washing", "content": "<p>Wipe with a clean dry cloth. Avoid prolonged exposure to water or acidic liquids, which can etch the surface. For marble, a food-safe stone sealer applied once a year keeps the material looking its best. For brass, a light coat of mineral oil returns the warm lustre.</p>" } },
-        "shipping": { "type": "collapsible_tab", "settings": { "heading": "Shipping & Returns", "icon": "truck", "content": "<p>All our pieces are held as ready stock — not made to order — so orders ship within 2-4 business days of purchase. Each piece is carefully packed and cushioned for transit. If something arrives damaged, contact us within 48 hours with photos and we'll arrange a replacement or refund. Once an item sells out, it's removed from sale until the next batch of stock arrives.</p>" } }
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "dispatch": {
+          "type": "dispatch",
+          "settings": {
+            "shipping_note": "In stock · Ships in 2–4 business days",
+            "packing_note": "Delivered in a cotton-lined pine box."
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        },
+        "care": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Care",
+            "icon": "washing",
+            "content": "<p>Wipe with a clean dry cloth. Avoid prolonged exposure to water or acidic liquids, which can etch the surface. For marble, a food-safe stone sealer applied once a year keeps the material looking its best. For brass, a light coat of mineral oil returns the warm lustre.</p>"
+          }
+        },
+        "shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "<p>All orders are shipped within 2–4 business days. Delivered in a cotton-lined pine box, with a hand-signed card. If something arrives damaged, email us within 72 hours and we will arrange a replacement at no cost.</p>"
+          }
+        }
       },
-      "block_order": ["vendor", "title", "price", "variant_picker", "quantity_selector", "buy_buttons", "dispatch", "description", "care", "shipping", "share"],
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "dispatch",
+        "description",
+        "care",
+        "shipping",
+        "share"
+      ],
       "settings": {
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
@@ -44,8 +111,6 @@
     "story": {
       "type": "atelier-pdp-story",
       "settings": {
-        "title": "Every piece has a story.",
-        "body": "<p>Every piece begins as a question — what does this material want to become? Stone has grain, memory, weight. We don’t fight it. We find the form already inside it, then spend weeks coaxing it out. The same is true of metal, worked by hand until it holds a shape it was never forced into.</p><p>Nothing here is stamped from a mould at scale. Every piece that reaches your home was touched, individually, by someone who knew what they were making — and why it mattered to make it well.</p>",
         "color_scheme": "scheme-2"
       }
     },
@@ -58,24 +123,28 @@
         "s4": { "type": "spec", "settings": { "label": "Finish" } }
       },
       "block_order": ["s1", "s2", "s3", "s4"],
-      "settings": { "color_scheme": "scheme-1" }
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
     },
     "material": {
       "type": "atelier-pdp-material",
       "settings": {
-        "default_title": "Marble remembers.",
-        "default_body": "<p>Rajasthani white marble is quarried from stone we mine ourselves in Silvassa. Each block carries millions of years of geological compression rendered visible as veining. We choose only slabs with a particular warmth in their undertone — not pure white, but the ivory that ages gracefully in a lived-in home.</p>",
-        "stat1_number": "One artisan",
-        "stat1_label": "Start to finish",
-        "stat2_number": "Ready stock",
-        "stat2_label": "Not made to order",
         "color_scheme": "scheme-3"
       }
     },
     "pairs": {
       "type": "atelier-pairs",
-      "settings": { "color_scheme": "scheme-1" }
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
     }
   },
-  "order": ["main", "story", "specs", "material", "pairs"]
+  "order": [
+    "main",
+    "story",
+    "specs",
+    "material",
+    "pairs"
+  ]
 }
