@@ -13,6 +13,8 @@
       "type": "atelier-collection",
       "settings": {
         "show_breadcrumb": true,
+        "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
+        "object_status_text": "THREE COLLECTIONS LIVE",
         "products_per_page": 12,
         "editorial_after": 6,
         "color_scheme": "scheme-1",
@@ -26,7 +28,5 @@
       }
     }
   },
-  "order": [
-    "atelier-collection"
-  ]
+  "order": ["atelier-collection"]
 }
