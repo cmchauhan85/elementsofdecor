@@ -14,7 +14,7 @@
       "settings": {
         "show_breadcrumb": true,
         "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
-        "object_status_text": "THREE OF SIX LIVE · THREE COMING SOON",
+        "object_status_text": "FOUR OF SIX LIVE · TWO COMING SOON",
         "products_per_page": 12,
         "editorial_after": 6,
         "editorial_eyebrow": "Field note",
