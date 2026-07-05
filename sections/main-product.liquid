@@ -754,16 +754,12 @@
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
               {%- when 'dispatch' -%}
-                {%- liquid
-                  assign leadtime = product.metafields.atelier.story_leadtime.value
-                  assign dispatch_text = leadtime | default: block.settings.fallback_leadtime
-                -%}
-                {%- if dispatch_text != blank or block.settings.packing_note != blank -%}
+                {%- if block.settings.shipping_note != blank or block.settings.packing_note != blank -%}
                   <div class="atelier-pdp-dispatch" {{ block.shopify_attributes }}>
-                    {%- if dispatch_text != blank -%}
+                    {%- if block.settings.shipping_note != blank -%}
                       <p class="atelier-pdp-dispatch__line">
                         <span class="atelier-pdp-dispatch__icon" aria-hidden="true">◷</span>
-                        Made to order · Ships in {{ dispatch_text }}
+                        {{ block.settings.shipping_note }}
                       </p>
                     {%- endif -%}
                     {%- if block.settings.packing_note != blank -%}
@@ -2191,10 +2187,10 @@
       "settings": [
         {
           "type": "text",
-          "id": "fallback_leadtime",
-          "label": "Fallback lead time",
-          "info": "Used when atelier.story_leadtime metafield is blank",
-          "default": "4–6 weeks"
+          "id": "shipping_note",
+          "label": "Shipping note",
+          "info": "Shown with a clock icon below the Add to Bag button",
+          "default": "In stock · Ships in 2–4 business days"
         },
         {
           "type": "text",

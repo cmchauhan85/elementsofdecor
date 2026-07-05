@@ -48,7 +48,7 @@
         "dispatch": {
           "type": "dispatch",
           "settings": {
-            "fallback_leadtime": "4–6 weeks",
+            "shipping_note": "In stock · Ships in 2–4 business days",
             "packing_note": "Delivered in a cotton-lined pine box."
           }
         },
@@ -75,7 +75,7 @@
           "settings": {
             "heading": "Shipping & Returns",
             "icon": "truck",
-            "content": "<p>Each piece is made to order and ships within 4–6 weeks. Delivered in a cotton-lined pine box, with a hand-signed card. If something arrives damaged, email us within 72 hours and we will arrange a replacement at no cost. We do not accept returns for change of mind on made-to-order pieces.</p>"
+            "content": "<p>All orders are shipped within 2–4 business days. Delivered in a cotton-lined pine box, with a hand-signed card. If something arrives damaged, email us within 72 hours and we will arrange a replacement at no cost.</p>"
           }
         }
       },

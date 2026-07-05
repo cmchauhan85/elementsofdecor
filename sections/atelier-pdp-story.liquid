@@ -3,7 +3,6 @@
 {%- liquid
   assign origin = product.metafields.atelier.story_origin.value
   assign craft = product.metafields.atelier.story_craft.value
-  assign leadtime = product.metafields.atelier.story_leadtime.value
   assign story_img = section.settings.image | default: product.featured_media
 -%}
 
@@ -24,11 +23,10 @@
           <div class="atelier-story__body">{{ section.settings.body }}</div>
         {%- endif -%}
 
-        {%- if origin != blank or craft != blank or leadtime != blank -%}
+        {%- if origin != blank or craft != blank -%}
           <dl class="atelier-story__stats">
             {%- if origin != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_origin }}</dt><dd>{{ origin }}</dd></div>{%- endif -%}
             {%- if craft != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_craft }}</dt><dd>{{ craft }}</dd></div>{%- endif -%}
-            {%- if leadtime != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_leadtime }}</dt><dd>{{ leadtime }}</dd></div>{%- endif -%}
           </dl>
         {%- endif -%}
 
@@ -51,7 +49,6 @@
     { "type": "richtext", "id": "body", "label": "Body" },
     { "type": "text", "id": "label_origin", "label": "Stat 1 label", "default": "Origin" },
     { "type": "text", "id": "label_craft", "label": "Stat 2 label", "default": "Craft" },
-    { "type": "text", "id": "label_leadtime", "label": "Stat 3 label", "default": "Lead time" },
     { "type": "text", "id": "cta_label", "label": "Link label", "default": "Read the field note" },
     { "type": "url", "id": "cta_link", "label": "Link" },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-2" }
