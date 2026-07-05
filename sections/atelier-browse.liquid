@@ -60,7 +60,8 @@
               {% render 'atelier-collection-card',
                 collection: block.settings.collection,
                 number: num,
-                show_element: block.settings.show_element
+                show_element: block.settings.show_element,
+                title_override: block.settings.title_override
               %}
             </div>
           {%- endif -%}
@@ -202,6 +203,12 @@
           "id": "show_element",
           "label": "Show element tag (Object cards)",
           "default": false
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Title override",
+          "info": "Leave blank to use the collection's own title. Useful when the same collection appears in both Element and Object mode under different names (e.g. \"Wax\" vs \"Candles\")."
         }
       ]
     }
