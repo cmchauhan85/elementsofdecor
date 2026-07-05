@@ -35,7 +35,7 @@
         "ob_vases": { "type": "card", "settings": { "collection": "decorative-vases", "mode": "object", "show_element": true } },
         "ob_lighting": { "type": "card", "settings": { "collection": "candle-stands-holders", "mode": "object", "show_element": true } },
         "ob_trays": { "type": "card", "settings": { "collection": "trays-stands", "mode": "object", "show_element": true } },
-        "ob_wall": { "type": "card", "settings": { "collection": "wall-tabletop", "mode": "object", "show_element": false } },
+        "ob_wall": { "type": "card", "settings": { "collection": "wall-tabletop", "mode": "object", "show_element": true } },
         "ob_candles": { "type": "card", "settings": { "collection": "candles", "mode": "object", "show_element": false } }
       },
       "block_order": ["el_stone", "el_metal", "el_ceramic", "el_wood", "el_fabric", "el_wax", "ob_urlis", "ob_vases", "ob_lighting", "ob_trays", "ob_wall", "ob_candles"],
@@ -46,7 +46,7 @@
         "element_caption": "By material – the way we make them.",
         "object_caption": "By what it is – the familiar way to shop.",
         "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
-        "object_status_text": "THREE OF SIX LIVE · THREE COMING SOON",
+        "object_status_text": "FOUR OF SIX LIVE · TWO COMING SOON",
         "color_scheme": "scheme-2"
       }
     },
