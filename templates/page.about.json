@@ -12,7 +12,7 @@
     "hero": {
       "type": "atelier-hero",
       "settings": {
-        "height": "small",
+        "height": "full",
         "eyebrow": "The Studio",
         "heading_line_1": "A small studio,",
         "heading_line_2": "doing one thing well.",

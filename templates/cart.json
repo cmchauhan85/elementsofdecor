@@ -37,21 +37,42 @@
         "padding_bottom": 40
       },
       "blocks": {
+        "gift": {
+          "type": "gift_note",
+          "settings": {}
+        },
         "subtotal": {
           "type": "subtotal",
-          "settings": {
-          }
+          "settings": {}
+        },
+        "hold": {
+          "type": "hold_timer",
+          "settings": {}
         },
         "buttons": {
           "type": "buttons",
-          "settings": {
-          }
+          "settings": {}
         }
       },
       "block_order": [
+        "gift",
         "subtotal",
+        "hold",
         "buttons"
       ]
+    },
+    "trust": {
+      "type": "atelier-cart-trust",
+      "blocks": {
+        "step1": { "type": "step", "settings": { "label": "Order placed", "detail": "You receive a confirmation with a hand-written note from us." } },
+        "step2": { "type": "step", "settings": { "label": "Packed with care", "detail": "Quality-checked and packed in our signature pine box." } },
+        "step3": { "type": "step", "settings": { "label": "Shipped carefully", "detail": "Cotton-lined pine box, insured door-to-door." } },
+        "step4": { "type": "step", "settings": { "label": "White-glove option", "detail": "In Bombay — we come, we place, we leave. On orders above ₹25,000." } }
+      },
+      "block_order": ["step1", "step2", "step3", "step4"],
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
     },
     "continue": {
       "type": "atelier-product-row",
@@ -65,6 +86,7 @@
     "milestone",
     "cart-items",
     "cart-footer",
+    "trust",
     "continue"
   ]
 }

@@ -10,9 +10,12 @@
   if article.metafields.atelier.standfirst.value != blank
     assign standfirst = article.metafields.atelier.standfirst.value
   endif
+  assign shop_products = article.metafields.atelier.shop_products.value
 -%}
 
 <article class="atelier-article color-{{ section.settings.color_scheme }}">
+
+  {%- comment %} ── Hero ── {%- endcomment -%}
   <header class="atelier-article__hero">
     {%- if article.image != blank -%}
       {{ article.image | image_url: width: 3000 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '100vw', widths: '750, 1100, 1500, 2000, 3000', alt: article.title | escape }}
@@ -25,22 +28,193 @@
     </div>
   </header>
 
-  <div class="a-section">
-    <div class="page-width">
-      <dl class="atelier-article__meta">
-        {%- assign words_by = words | default: article.author -%}
-        {%- if words_by != blank -%}<div><dt>{{ 'sections.atelier_article.words' | t }}</dt><dd>{{ words_by }}</dd></div>{%- endif -%}
-        {%- if photographs != blank -%}<div><dt>{{ 'sections.atelier_article.photographs' | t }}</dt><dd>{{ photographs }}</dd></div>{%- endif -%}
-        {%- if read_time != blank -%}<div><dt>{{ 'sections.atelier_article.read_time' | t }}</dt><dd>{{ read_time }}</dd></div>{%- endif -%}
-        {%- if element != blank -%}<div><dt>{{ 'sections.atelier_article.element' | t }}</dt><dd>{{ element }}</dd></div>{%- endif -%}
-      </dl>
+  {%- comment %} ── Content — sidebar + body ── {%- endcomment -%}
+  <div class="a-section atelier-article__content-wrap">
+    <div class="page-width atelier-article__layout">
 
-      <div class="atelier-article__body rte">
-        {{ article.content }}
+      {%- comment %} fn3: Sticky sidebar {%- endcomment -%}
+      <aside class="atelier-article__sidebar" aria-label="Article navigation">
+        <dl class="atelier-article__meta">
+          {%- assign words_by = words | default: article.author -%}
+          {%- if words_by != blank -%}<div><dt>{{ 'sections.atelier_article.words' | t }}</dt><dd>{{ words_by }}</dd></div>{%- endif -%}
+          {%- if photographs != blank -%}<div><dt>{{ 'sections.atelier_article.photographs' | t }}</dt><dd>{{ photographs }}</dd></div>{%- endif -%}
+          {%- if read_time != blank -%}<div><dt>{{ 'sections.atelier_article.read_time' | t }}</dt><dd>{{ read_time }}</dd></div>{%- endif -%}
+          {%- if element != blank -%}<div><dt>{{ 'sections.atelier_article.element' | t }}</dt><dd>{{ element }}</dd></div>{%- endif -%}
+        </dl>
+
+        <nav class="atelier-article__toc" id="ArticleToc-{{ section.id }}" aria-label="In this note">
+          <span class="atelier-article__toc-label">In this note</span>
+          <ol class="atelier-article__toc-list" id="ArticleTocList-{{ section.id }}">
+            {%- comment %} Populated by JS from article headings {%- endcomment -%}
+          </ol>
+        </nav>
+      </aside>
+
+      {%- comment %} Article body {%- endcomment -%}
+      <div class="atelier-article__main">
+        <div class="atelier-article__body rte" id="ArticleBody-{{ section.id }}">
+          {{ article.content }}
+        </div>
+
+        {%- comment %} fn6: Photo essay blocks {%- endcomment -%}
+        {%- assign has_photo_blocks = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'photo_pair' or block.type == 'full_image' -%}
+            {%- assign has_photo_blocks = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_photo_blocks -%}
+          <div class="atelier-article__photo-essay">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'full_image' -%}
+                  {%- if block.settings.image != blank -%}
+                    <figure class="atelier-article__photo-full" {{ block.shopify_attributes }}>
+                      {{
+                        block.settings.image
+                        | image_url: width: 1800
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '750, 1100, 1500, 1800',
+                          sizes: '100vw',
+                          alt: block.settings.caption | default: '' | escape
+                      }}
+                      {%- if block.settings.caption != blank -%}
+                        <figcaption class="atelier-article__photo-caption">{{ block.settings.caption }}</figcaption>
+                      {%- endif -%}
+                    </figure>
+                  {%- endif -%}
+                {%- when 'photo_pair' -%}
+                  <figure class="atelier-article__photo-pair" {{ block.shopify_attributes }}>
+                    {%- if block.settings.image_left != blank -%}
+                      {{
+                        block.settings.image_left
+                        | image_url: width: 1000
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '400, 600, 800, 1000',
+                          sizes: '(min-width: 990px) 45vw, 100vw',
+                          alt: block.settings.caption | default: '' | escape
+                      }}
+                    {%- endif -%}
+                    {%- if block.settings.image_right != blank -%}
+                      {{
+                        block.settings.image_right
+                        | image_url: width: 1000
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '400, 600, 800, 1000',
+                          sizes: '(min-width: 990px) 45vw, 100vw',
+                          alt: block.settings.caption | default: '' | escape
+                      }}
+                    {%- endif -%}
+                    {%- if block.settings.caption != blank -%}
+                      <figcaption class="atelier-article__photo-caption">{{ block.settings.caption }}</figcaption>
+                    {%- endif -%}
+                  </figure>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment %} fn7: SHOP THE STORY {%- endcomment -%}
+        {%- if shop_products != blank and shop_products.count > 0 -%}
+          <div class="atelier-article__shop-story">
+            {% render 'atelier-eyebrow', text: section.settings.shop_eyebrow %}
+            <h2 class="atelier-article__shop-title">{{ section.settings.shop_title }}</h2>
+            <div class="atelier-article__shop-rail">
+              {%- for product in shop_products limit: 4 -%}
+                {%- assign n = forloop.index | prepend: '0' | slice: -2, 2 -%}
+                {% render 'atelier-product-card', product: product, number: n %}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
       </div>
+
     </div>
   </div>
+
+  {%- comment %} fn8: More from the field {%- endcomment -%}
+  {%- assign related_articles = blog.articles | where: 'id', article.id | map: 'id' -%}
+  {%- assign more_count = 0 -%}
+  {%- for a in blog.articles limit: 10 -%}
+    {%- if a.id != article.id and more_count < 3 -%}
+      {%- assign more_count = more_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if more_count > 0 -%}
+    <div class="atelier-article__more a-section color-{{ section.settings.more_color_scheme | default: 'scheme-2' }}">
+      <div class="page-width">
+        {% render 'atelier-eyebrow', text: section.settings.more_eyebrow %}
+        <h2 class="atelier-article__more-title">{{ section.settings.more_title }}</h2>
+        <div class="atelier-article__more-grid">
+          {%- for a in blog.articles limit: 4 -%}
+            {%- if a.id != article.id -%}
+              <a href="{{ a.url }}" class="atelier-article__more-card a-anim">
+                {%- if a.image != blank -%}
+                  {{ a.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 990px) 28vw, 80vw', alt: a.title | escape }}
+                {%- endif -%}
+                <div class="atelier-article__more-meta">
+                  {% render 'atelier-eyebrow', text: a.metafields.atelier.element.value | default: 'Field Note' %}
+                  <h3 class="atelier-article__more-h">{{ a.title }}</h3>
+                  {%- assign a_standfirst = a.excerpt_or_content | strip_html | truncatewords: 20 -%}
+                  {%- if a.metafields.atelier.standfirst.value != blank -%}{%- assign a_standfirst = a.metafields.atelier.standfirst.value -%}{%- endif -%}
+                  <p class="atelier-article__more-excerpt">{{ a_standfirst }}</p>
+                </div>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
 </article>
+
+{%- comment %} fn3: TOC + scroll tracking JS {%- endcomment -%}
+<script>
+(function() {
+  var body = document.getElementById('ArticleBody-{{ section.id }}');
+  var tocList = document.getElementById('ArticleTocList-{{ section.id }}');
+  var toc = document.getElementById('ArticleToc-{{ section.id }}');
+  if (!body || !tocList) return;
+
+  var headings = body.querySelectorAll('h2, h3');
+  if (headings.length < 2) { if (toc) toc.hidden = true; return; }
+
+  headings.forEach(function(h, i) {
+    if (!h.id) h.id = 'fn-h-{{ section.id }}-' + i;
+    var li = document.createElement('li');
+    li.className = 'atelier-article__toc-item' + (h.tagName === 'H3' ? ' atelier-article__toc-item--sub' : '');
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.className = 'atelier-article__toc-link';
+    a.textContent = h.textContent;
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  var links = tocList.querySelectorAll('a');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        links.forEach(function(l) { l.classList.remove('is-active'); });
+        var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
+        if (active) active.classList.add('is-active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  headings.forEach(function(h) { observer.observe(h); });
+})();
+</script>
 
 {% schema %}
 {
@@ -48,7 +222,33 @@
   "tag": "section",
   "settings": [
     { "type": "text", "id": "default_kicker", "label": "Default kicker", "default": "Field Note" },
+    { "type": "text", "id": "shop_eyebrow", "label": "Shop the Story — eyebrow", "default": "Shop the story" },
+    { "type": "text", "id": "shop_title", "label": "Shop the Story — title", "default": "The objects in this note." },
+    { "type": "text", "id": "more_eyebrow", "label": "More from the field — eyebrow", "default": "More from the field" },
+    { "type": "text", "id": "more_title", "label": "More from the field — title", "default": "Keep reading." },
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "full_image",
+      "name": "Full-width image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "photo_pair",
+      "name": "Paired images",
+      "settings": [
+        { "type": "image_picker", "id": "image_left", "label": "Left image" },
+        { "type": "image_picker", "id": "image_right", "label": "Right image" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Atelier article" }
   ]
 }
 {% endschema %}

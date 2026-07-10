@@ -11,14 +11,16 @@
       assign h_desktop = 540
     when 'large'
       assign h_desktop = 860
+    when 'full'
+      assign h_desktop = 0
     else
       assign h_desktop = 740
   endcase
 -%}
 
 <div
-  class="atelier-hero color-{{ section.settings.color_scheme }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
-  style="height: min(80vh, {{ h_desktop }}px);"
+  class="atelier-hero color-{{ section.settings.color_scheme }}{% if section.settings.height == 'full' %} atelier-hero--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  {% unless section.settings.height == 'full' %}style="height: min(80vh, {{ h_desktop }}px);"{% endunless %}
 >
   {%- if section.settings.image != blank -%}
     <div class="atelier-hero__media">
@@ -48,6 +50,9 @@
           <em>{{ section.settings.heading_line_2 }}</em>
         {%- endif -%}
       </h1>
+      {%- if section.settings.subtext != blank -%}
+        <p class="atelier-hero__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
     </div>
 
     {%- if section.settings.cta_label != blank -%}
@@ -77,7 +82,8 @@
       "options": [
         { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },
-        { "value": "large", "label": "Large" }
+        { "value": "large", "label": "Large" },
+        { "value": "full", "label": "Full screen" }
       ],
       "default": "medium"
     },
@@ -98,6 +104,12 @@
       "id": "heading_line_2",
       "label": "Heading — second line (italic accent)",
       "default": "It is felt."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "info": "Shown below the heading. Leave blank to hide."
     },
     {
       "type": "text",

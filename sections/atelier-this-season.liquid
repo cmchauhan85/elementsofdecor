@@ -7,7 +7,7 @@
   assign n            = 0
 -%}
 
-<div class="atelier-season color-{{ section.settings.color_scheme }} a-section">
+<div class="atelier-season color-{{ section.settings.color_scheme }} a-section" id="AtelierSeason-{{ section.id }}">
   <div class="page-width">
     <div class="atelier-season__head">
       <div>
@@ -16,9 +16,13 @@
         {%- endif -%}
         <h2 class="atelier-season__title">{{ section.settings.title }}</h2>
       </div>
+      <nav class="atelier-season__nav" aria-label="{{ 'sections.featured_collection.see_all' | t }}">
+        <button class="atelier-season__btn" id="SeasonPrev-{{ section.id }}" aria-label="Previous">←</button>
+        <button class="atelier-season__btn" id="SeasonNext-{{ section.id }}" aria-label="Next">→</button>
+      </nav>
     </div>
 
-    <div class="atelier-season__rail">
+    <div class="atelier-season__rail" id="SeasonRail-{{ section.id }}">
 
       {%- if picked.count > 0 -%}
         {%- comment %} Source 1: explicit picks from the Theme Editor product_list setting {%- endcomment -%}
@@ -65,6 +69,28 @@
     </div>
   </div>
 </div>
+
+<script>
+(function(){
+  var rail = document.getElementById('SeasonRail-{{ section.id }}');
+  var prev = document.getElementById('SeasonPrev-{{ section.id }}');
+  var next = document.getElementById('SeasonNext-{{ section.id }}');
+  if (!rail || !prev || !next) return;
+  function getStep() {
+    var card = rail.querySelector('.atelier-pcard');
+    if (!card) return rail.offsetWidth * 0.8;
+    return card.offsetWidth + parseInt(getComputedStyle(rail).columnGap || 0, 10);
+  }
+  prev.addEventListener('click', function() { rail.scrollBy({ left: -getStep(), behavior: 'smooth' }); });
+  next.addEventListener('click', function() { rail.scrollBy({ left:  getStep(), behavior: 'smooth' }); });
+  function updateButtons() {
+    prev.disabled = rail.scrollLeft <= 4;
+    next.disabled = rail.scrollLeft + rail.offsetWidth >= rail.scrollWidth - 4;
+  }
+  rail.addEventListener('scroll', updateButtons, { passive: true });
+  updateButtons();
+})();
+</script>
 
 {% schema %}
 {

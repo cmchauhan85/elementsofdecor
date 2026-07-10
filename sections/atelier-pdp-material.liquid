@@ -1,0 +1,129 @@
+{{ 'section-atelier-pdp-material.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign mat_title = product.metafields.atelier.material_title.value | default: section.settings.default_title
+  assign mat_issue = section.settings.issue
+  assign mat_body  = product.metafields.atelier.material_body.value | default: section.settings.default_body
+  assign mat_image = section.settings.image
+  assign mat_stat1_n = section.settings.stat1_number
+  assign mat_stat1_l = section.settings.stat1_label
+  assign mat_stat2_n = section.settings.stat2_number
+  assign mat_stat2_l = section.settings.stat2_label
+-%}
+
+<div class="atelier-pdp-mat color-{{ section.settings.color_scheme }}">
+  <div class="page-width atelier-pdp-mat__inner">
+
+    <div class="atelier-pdp-mat__text">
+      <div class="atelier-pdp-mat__meta">
+        {%- if mat_issue != blank -%}
+          {% render 'atelier-eyebrow', text: mat_issue %}
+        {%- endif -%}
+      </div>
+      <h2 class="atelier-pdp-mat__title">{{ mat_title }}</h2>
+      {%- if mat_body != blank -%}
+        <div class="atelier-pdp-mat__body rte">{{ mat_body }}</div>
+      {%- endif -%}
+      {%- if mat_stat1_n != blank or mat_stat2_n != blank -%}
+        <dl class="atelier-pdp-mat__stats">
+          {%- if mat_stat1_n != blank -%}
+            <div class="atelier-pdp-mat__stat">
+              <dd class="atelier-pdp-mat__stat-n">{{ mat_stat1_n }}</dd>
+              <dt class="atelier-pdp-mat__stat-l">{{ mat_stat1_l }}</dt>
+            </div>
+          {%- endif -%}
+          {%- if mat_stat2_n != blank -%}
+            <div class="atelier-pdp-mat__stat">
+              <dd class="atelier-pdp-mat__stat-n">{{ mat_stat2_n }}</dd>
+              <dt class="atelier-pdp-mat__stat-l">{{ mat_stat2_l }}</dt>
+            </div>
+          {%- endif -%}
+        </dl>
+      {%- endif -%}
+    </div>
+
+    {%- if mat_image != blank -%}
+      <div class="atelier-pdp-mat__media">
+        {{
+          mat_image
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            widths: '600, 900, 1200',
+            sizes: '(min-width: 990px) 45vw, 100vw',
+            alt: mat_title | escape
+        }}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "On Material",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "issue",
+      "label": "Issue / eyebrow",
+      "default": "On Material · No. 04",
+      "info": "e.g. 'On Material · No. 04'"
+    },
+    {
+      "type": "text",
+      "id": "default_title",
+      "label": "Default title",
+      "default": "Marble remembers.",
+      "info": "Overridden per product by atelier.material_title metafield"
+    },
+    {
+      "type": "richtext",
+      "id": "default_body",
+      "label": "Default body",
+      "info": "Overridden per product by atelier.material_body metafield"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Material image"
+    },
+    {
+      "type": "text",
+      "id": "stat1_number",
+      "label": "Stat 1 — number",
+      "default": "200 M"
+    },
+    {
+      "type": "text",
+      "id": "stat1_label",
+      "label": "Stat 1 — label",
+      "default": "Years in the earth"
+    },
+    {
+      "type": "text",
+      "id": "stat2_number",
+      "label": "Stat 2 — number",
+      "default": "7 Days"
+    },
+    {
+      "type": "text",
+      "id": "stat2_label",
+      "label": "Stat 2 — label",
+      "default": "To finish one piece"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "On Material"
+    }
+  ]
+}
+{% endschema %}

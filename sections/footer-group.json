@@ -48,6 +48,13 @@
     "footer": {
       "type": "footer",
       "blocks": {
+        "link_list_support": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer-shop"
+          }
+        },
         "link_list_category": {
           "type": "link_list",
           "settings": {
@@ -58,15 +65,8 @@
         "link_list_policy": {
           "type": "link_list",
           "settings": {
-            "heading": "<strong>Our Policy</strong>",
-            "menu": "footer-policy"
-          }
-        },
-        "link_list_support": {
-          "type": "link_list",
-          "settings": {
-            "heading": "Shop",
-            "menu": "footer-shop"
+            "heading": "Policy Pages",
+            "menu": "footer-help"
           }
         },
         "social_links": {
@@ -77,9 +77,9 @@
         }
       },
       "block_order": [
+        "link_list_support",
         "link_list_category",
         "link_list_policy",
-        "link_list_support",
         "social_links"
       ],
       "settings": {

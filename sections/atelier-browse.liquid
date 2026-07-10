@@ -10,6 +10,12 @@
 
 <div class="atelier-browse color-{{ section.settings.color_scheme }} a-section">
   <div class="page-width">
+    {%- if section.settings.mobile_intro != blank -%}
+      <div class="atelier-browse__mobile-intro">
+        <span class="atelier-browse__mobile-intro-label">{{ section.settings.mobile_intro_label }}</span>
+        <p class="atelier-browse__mobile-intro-copy">{{ section.settings.mobile_intro }}</p>
+      </div>
+    {%- endif -%}
     <div class="atelier-browse__head">
       <div class="atelier-browse__lead">
         {% render 'atelier-shop-by-switch',
@@ -54,12 +60,27 @@
               {% render 'atelier-collection-card',
                 collection: block.settings.collection,
                 number: num,
-                show_element: block.settings.show_element
+                show_element: block.settings.show_element,
+                title_override: block.settings.title_override
               %}
             </div>
           {%- endif -%}
         {%- endfor -%}
       </div>
+      {%- liquid
+        if mode == 'element'
+          assign view_all_url = section.settings.element_view_all_url | default: '/collections/all'
+          assign view_all_label = section.settings.element_view_all_label | default: 'View all elements →'
+        else
+          assign view_all_url = section.settings.object_view_all_url | default: '/collections/all'
+          assign view_all_label = section.settings.object_view_all_label | default: 'View all objects →'
+        endif
+      -%}
+      {%- if view_all_url != blank -%}
+        <div class="atelier-browse__view-all" data-mode-grid="{{ mode }}" {% if req_mode != mode %}hidden{% endif %}>
+          <a href="{{ view_all_url }}" class="atelier-browse__view-all-link">{{ view_all_label }}</a>
+        </div>
+      {%- endif -%}
     {%- endfor -%}
   </div>
 </div>
@@ -70,6 +91,20 @@
   "tag": "section",
   "max_blocks": 12,
   "settings": [
+    {
+      "type": "text",
+      "id": "mobile_intro_label",
+      "label": "Mobile intro — label",
+      "default": "THE SHOP",
+      "info": "Shown only on mobile, above the browse toggle"
+    },
+    {
+      "type": "text",
+      "id": "mobile_intro",
+      "label": "Mobile intro — tagline",
+      "default": "Considered, not collected.",
+      "info": "Leave blank to hide this intro block"
+    },
     {
       "type": "text",
       "id": "lead",
@@ -113,6 +148,30 @@
       "default": "THREE OF FIVE LIVE · TWO COMING SOON"
     },
     {
+      "type": "url",
+      "id": "element_view_all_url",
+      "label": "Element mode — View all URL",
+      "info": "Leave blank to hide the link"
+    },
+    {
+      "type": "text",
+      "id": "element_view_all_label",
+      "label": "Element mode — View all label",
+      "default": "View all elements →"
+    },
+    {
+      "type": "url",
+      "id": "object_view_all_url",
+      "label": "Object mode — View all URL",
+      "info": "Leave blank to hide the link"
+    },
+    {
+      "type": "text",
+      "id": "object_view_all_label",
+      "label": "Object mode — View all label",
+      "default": "View all objects →"
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
@@ -144,6 +203,12 @@
           "id": "show_element",
           "label": "Show element tag (Object cards)",
           "default": false
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Title override",
+          "info": "Leave blank to use the collection's own title. Useful when the same collection appears in both Element and Object mode under different names (e.g. \"Wax\" vs \"Candles\")."
         }
       ]
     }

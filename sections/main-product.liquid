@@ -87,6 +87,23 @@
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
+          <script type="application/json" id="AtelierVariantImages-{{ section.id }}">
+            {%- assign vi = '{}' -%}
+            {%- assign vi_parts = '' -%}
+            {%- for variant in product.variants -%}
+              {%- if variant.featured_media != blank -%}
+                {%- capture vi_entry -%}{{ variant.title | json }}:{"src":"{{ variant.featured_media | image_url: width: 80 }}","color":{{ variant.metafields.atelier.swatch_color.value | json }}}{%- endcapture -%}
+                {%- unless forloop.first -%}{%- assign vi_parts = vi_parts | append: ',' -%}{%- endunless -%}
+                {%- assign vi_parts = vi_parts | append: vi_entry -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign vi_json = '{' | append: vi_parts | append: '}' -%}
+            {{ vi_json }}
+          </script>
+          <script src="{{ 'atelier-color-swatches.js' | asset_url }}" defer="defer"></script>
+
+          {%- render 'atelier-pdp-breadcrumb' -%}
+
           {%- for block in section.blocks -%}
             {%- case block.type -%}
               {%- when '@app' -%}
@@ -736,6 +753,20 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
+              {%- when 'dispatch' -%}
+                {%- if block.settings.shipping_note != blank or block.settings.packing_note != blank -%}
+                  <div class="atelier-pdp-dispatch" {{ block.shopify_attributes }}>
+                    {%- if block.settings.shipping_note != blank -%}
+                      <p class="atelier-pdp-dispatch__line">
+                        <span class="atelier-pdp-dispatch__icon" aria-hidden="true">◷</span>
+                        {{ block.settings.shipping_note }}
+                      </p>
+                    {%- endif -%}
+                    {%- if block.settings.packing_note != blank -%}
+                      <p class="atelier-pdp-dispatch__line atelier-pdp-dispatch__packing">{{ block.settings.packing_note }}</p>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
             {%- endcase -%}
           {%- endfor -%}
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -2146,6 +2177,26 @@
           "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
+        }
+      ]
+    },
+    {
+      "type": "dispatch",
+      "name": "Dispatch estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "shipping_note",
+          "label": "Shipping note",
+          "info": "Shown with a clock icon below the Add to Bag button",
+          "default": "In stock · Ships in 2–4 business days"
+        },
+        {
+          "type": "text",
+          "id": "packing_note",
+          "label": "Packing note",
+          "default": "Delivered in a cotton-lined pine box."
         }
       ]
     }
