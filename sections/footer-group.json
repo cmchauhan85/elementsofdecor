@@ -68,19 +68,12 @@
             "heading": "<strong>Policy Pages</strong>",
             "menu": "footer-policy"
           }
-        },
-        "social_links": {
-          "type": "social",
-          "settings": {
-            "heading": "Social"
-          }
         }
       },
       "block_order": [
         "link_list_support",
         "link_list_category",
-        "link_list_policy",
-        "social_links"
+        "link_list_policy"
       ],
       "settings": {
         "color_scheme": "scheme-luxury-premium",
