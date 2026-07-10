@@ -3,6 +3,14 @@
 <div class="atelier-cart-trust color-{{ section.settings.color_scheme }} a-section">
   <div class="page-width atelier-cart-trust__inner">
 
+    {%- comment %} Material / craftsmanship notice {%- endcomment -%}
+    {%- if section.settings.show_material_notice and section.settings.material_notice != blank -%}
+      <p class="atelier-cart-trust__material">
+        {%- render 'icon-accordion', icon: 'leaf' -%}
+        <span>{{ section.settings.material_notice }}</span>
+      </p>
+    {%- endif -%}
+
     {%- comment %} WHAT HAPPENS NEXT (c5) {%- endcomment -%}
     {%- if section.settings.show_next_steps -%}
       <div class="atelier-cart-trust__next">
@@ -27,6 +35,27 @@
     {%- endif -%}
 
     <div class="atelier-cart-trust__foot">
+      {%- comment %} Security / certification badges {%- endcomment -%}
+      {%- assign has_badges = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'badge' -%}
+          {%- assign has_badges = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if has_badges -%}
+        <ul class="atelier-cart-trust__badges list-unstyled" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'badge' -%}
+              <li class="atelier-cart-trust__badge" {{ block.shopify_attributes }}>
+                {%- render 'icon-accordion', icon: block.settings.icon -%}
+                <span>{{ block.settings.label }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
       {%- comment %} FIRSTROOM promo (c10) {%- endcomment -%}
       {%- if section.settings.promo_code != blank -%}
         <div class="atelier-cart-trust__promo">
@@ -55,6 +84,18 @@
   "name": "Cart trust block",
   "tag": "section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_material_notice",
+      "label": "Show material notice",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "material_notice",
+      "label": "Material notice",
+      "default": "<p>Handmade from natural materials — wood grain, stone veining, and finish vary slightly, piece to piece.</p>"
+    },
     {
       "type": "checkbox",
       "id": "show_next_steps",
@@ -115,6 +156,31 @@
           "label": "Step detail"
         }
       ]
+    },
+    {
+      "type": "badge",
+      "name": "Security badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "lock", "label": "Lock" },
+            { "value": "check_mark", "label": "Checkmark" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" },
+            { "value": "recycle", "label": "Recycle" }
+          ],
+          "default": "lock"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Secured by Razorpay"
+        }
+      ]
     }
   ],
   "presets": [
@@ -124,7 +190,9 @@
         { "type": "step", "settings": { "label": "Order placed", "detail": "You receive a confirmation with a hand-written note from us." } },
         { "type": "step", "settings": { "label": "Packed with care", "detail": "Quality-checked and packed in our signature pine box." } },
         { "type": "step", "settings": { "label": "Shipped carefully", "detail": "Cotton-lined pine box, insured door-to-door." } },
-        { "type": "step", "settings": { "label": "White-glove option", "detail": "In Bombay — we come, we place, we leave. On orders above ₹25,000." } }
+        { "type": "step", "settings": { "label": "White-glove option", "detail": "In Bombay — we come, we place, we leave. On orders above ₹25,000." } },
+        { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay" } },
+        { "type": "badge", "settings": { "icon": "check_mark", "label": "Certified handmade" } }
       ]
     }
   ]

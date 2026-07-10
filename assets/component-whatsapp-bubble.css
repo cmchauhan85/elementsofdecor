@@ -1,0 +1,61 @@
+.whatsapp-bubble {
+  position: fixed;
+  z-index: 40;
+  right: 2rem;
+  bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+  background-color: #25d366;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.25);
+  color: #fff;
+  transition: transform 0.15s ease;
+}
+
+.whatsapp-bubble:hover {
+  transform: scale(1.06);
+}
+
+.whatsapp-bubble .svg-wrapper {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+
+.whatsapp-bubble .svg-wrapper svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media screen and (max-width: 749px) {
+  .whatsapp-bubble {
+    right: 1.5rem;
+    bottom: 1.5rem;
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+/* Product page inline button */
+.product__whatsapp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.product__whatsapp-button .svg-wrapper {
+  width: 2rem;
+  height: 2rem;
+  color: #25d366;
+}
+
+.product__whatsapp-button .svg-wrapper svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

@@ -1,0 +1,112 @@
+{{ 'section-atelier-trust-bar.css' | asset_url | stylesheet_tag }}
+
+<div class="atelier-trust-bar color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
+      <div class="atelier-block__head">
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <ul class="atelier-trust-bar__grid list-unstyled" role="list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'badge' -%}
+          <li class="atelier-trust-bar__item" {{ block.shopify_attributes }}>
+            {%- render 'icon-accordion', icon: block.settings.icon -%}
+            <div class="atelier-trust-bar__copy">
+              <strong class="atelier-trust-bar__label">{{ block.settings.label }}</strong>
+              {%- if block.settings.subtext != blank -%}
+                <span class="atelier-trust-bar__subtext">{{ block.settings.subtext }}</span>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust bar",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Leave blank to hide"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "info": "Leave blank to hide"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "return", "label": "Return" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "check_mark", "label": "Checkmark" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "box", "label": "Box" },
+            { "value": "star", "label": "Star" },
+            { "value": "price_tag", "label": "Price tag" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "recycle", "label": "Recycle" },
+            { "value": "question_mark", "label": "Question mark" }
+          ],
+          "default": "check_mark"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Trust claim"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext",
+          "info": "Optional, shown beneath the label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust bar",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "truck", "label": "Free shipping", "subtext": "On every order" } },
+        { "type": "badge", "settings": { "icon": "return", "label": "Easy 7-day returns", "subtext": "No questions asked" } },
+        { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments" } },
+        { "type": "badge", "settings": { "icon": "leaf", "label": "Handmade, naturally varied", "subtext": "Wood grain, stone veining, and finish differ slightly piece to piece" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

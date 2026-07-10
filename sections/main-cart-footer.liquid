@@ -94,6 +94,11 @@
                   </label>
                 </div>
               </div>
+            {%- when 'dispatch_note' -%}
+              <p class="cart-dispatch-note caption-large rte" {{ block.shopify_attributes }}>
+                <span class="svg-wrapper">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                {{ block.settings.text }}
+              </p>
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
                 <div>
@@ -278,6 +283,19 @@
           "id": "no_prices_label",
           "label": "No-prices checkbox label",
           "default": "Please leave prices off the packing slip"
+        }
+      ]
+    },
+    {
+      "type": "dispatch_note",
+      "name": "Delivery estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Delivery estimate text",
+          "default": "In stock · Ships in 2-4 business days"
         }
       ]
     },

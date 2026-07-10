@@ -131,9 +131,6 @@
                     price_class: 'price--large'
                   -%}
                 </div>
-                <div class="product__trust">
-                  ⭐ 4.8 | Free Shipping | 7-Day Easy Returns
-</div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -753,6 +750,28 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
+              {%- when 'whatsapp_button' -%}
+                {%- liquid
+                  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-'
+                  assign wa_message = block.settings.message
+                  if wa_message == blank
+                    assign wa_message = 'general.whatsapp.chat_about_product' | t
+                  endif
+                  assign wa_message = wa_message | append: ' ' | append: product.title | append: ' - ' | append: shop.url | append: product.url
+                -%}
+                {%- if settings.whatsapp_enable and wa_number != blank -%}
+                  {{ 'component-whatsapp-bubble.css' | asset_url | stylesheet_tag }}
+                  <a
+                    href="https://wa.me/{{ wa_number }}?text={{ wa_message | url_encode }}"
+                    class="product__whatsapp-button button button--secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    {{ block.shopify_attributes }}
+                  >
+                    <span class="svg-wrapper">{{- 'icon-whatsapp.svg' | inline_asset_content -}}</span>
+                    {{- block.settings.label -}}
+                  </a>
+                {%- endif -%}
               {%- when 'dispatch' -%}
                 {%- if block.settings.shipping_note != blank or block.settings.packing_note != blank -%}
                   <div class="atelier-pdp-dispatch" {{ block.shopify_attributes }}>
@@ -2197,6 +2216,26 @@
           "id": "packing_note",
           "label": "Packing note",
           "default": "Delivered in a cotton-lined pine box."
+        }
+      ]
+    },
+    {
+      "type": "whatsapp_button",
+      "name": "WhatsApp button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button label",
+          "default": "Chat with us on WhatsApp"
+        },
+        {
+          "type": "text",
+          "id": "message",
+          "label": "Message prefix",
+          "info": "The product name and link are appended automatically. Leave blank to use the default.",
+          "default": "Hi! I'm interested in"
         }
       ]
     }

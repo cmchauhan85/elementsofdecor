@@ -1387,6 +1387,37 @@
     ]
   },
   {
+    "name": "t:settings_schema.whatsapp_chat.name",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "whatsapp_enable",
+        "default": true,
+        "label": "t:settings_schema.whatsapp_chat.settings.whatsapp_enable.label"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "t:settings_schema.whatsapp_chat.settings.whatsapp_number.label",
+        "info": "t:settings_schema.whatsapp_chat.settings.whatsapp_number.info",
+        "default": "916353052025"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_message",
+        "label": "t:settings_schema.whatsapp_chat.settings.whatsapp_message.label",
+        "default": "Hi! I have a question about your products."
+      },
+      {
+        "type": "checkbox",
+        "id": "whatsapp_show_bubble",
+        "default": true,
+        "label": "t:settings_schema.whatsapp_chat.settings.whatsapp_show_bubble.label",
+        "info": "t:settings_schema.whatsapp_chat.settings.whatsapp_show_bubble.info"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.search_input.name",
     "settings": [
       {

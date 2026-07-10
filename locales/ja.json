@@ -67,6 +67,10 @@
     },
     "breadcrumbs": {
       "home": "Home"
+    },
+    "whatsapp": {
+      "chat_with_us": "Chat with us on WhatsApp",
+      "chat_about_product": "Ask about this product on WhatsApp"
     }
   },
   "newsletter": {
@@ -236,6 +240,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "ページが見つかりません",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "「{{ terms }}」に一致する結果は見つかりませんでした。スペルを確認するか、別の単語やフレーズを使用してください。",
       "results_with_count": {
@@ -279,10 +287,6 @@
         "error_heading": "以下を確認してください。",
         "title": "お問い合わせフォーム"
       }
-    },
-    "404": {
-      "title": "ページが見つかりません",
-      "subtext": "404"
     }
   },
   "sections": {

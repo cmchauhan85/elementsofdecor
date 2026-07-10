@@ -67,6 +67,10 @@
     },
     "breadcrumbs": {
       "home": "Home"
+    },
+    "whatsapp": {
+      "chat_with_us": "Chat with us on WhatsApp",
+      "chat_about_product": "Ask about this product on WhatsApp"
     }
   },
   "newsletter": {
@@ -236,6 +240,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Siden finnes ikke",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Fant ingen resultater for «{{ terms }}». Kontroller stavemåten, eller bruk et annet ord.",
       "page": "Side",
@@ -279,10 +287,6 @@
         "error_heading": "Juster følgende:",
         "title": "Kontaktskjema"
       }
-    },
-    "404": {
-      "title": "Siden finnes ikke",
-      "subtext": "404"
     }
   },
   "sections": {

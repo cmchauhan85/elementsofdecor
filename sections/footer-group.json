@@ -69,10 +69,38 @@
             "menu": "footer-help"
           }
         },
+        "address": {
+          "type": "text",
+          "settings": {
+            "heading": "Our Studio",
+            "subtext": "<p>16, Nest, Tokarkhada, Silvassa, UT of Dadra and Nagar Haveli 396230</p>"
+          }
+        },
         "social_links": {
           "type": "social",
           "settings": {
             "heading": "Social"
+          }
+        },
+        "trust_secure": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "lock",
+            "label": "Secured by Razorpay"
+          }
+        },
+        "trust_returns": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "return",
+            "label": "7-day easy returns"
+          }
+        },
+        "trust_material": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "leaf",
+            "label": "Handmade, natural materials"
           }
         }
       },
@@ -80,7 +108,11 @@
         "link_list_support",
         "link_list_category",
         "link_list_policy",
-        "social_links"
+        "address",
+        "social_links",
+        "trust_secure",
+        "trust_returns",
+        "trust_material"
       ],
       "settings": {
         "color_scheme": "scheme-4",
@@ -90,8 +122,8 @@
         "show_social": false,
         "enable_country_selector": false,
         "enable_language_selector": false,
-        "payment_enable": false,
-        "show_policy": false,
+        "payment_enable": true,
+        "show_policy": true,
         "margin_top": 0,
         "padding_top": 36,
         "padding_bottom": 36

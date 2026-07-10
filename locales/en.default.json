@@ -67,6 +67,10 @@
       "next_slide": "Slide right",
       "previous_slide": "Slide left",
       "name": "Slider"
+    },
+    "whatsapp": {
+      "chat_with_us": "Chat with us on WhatsApp",
+      "chat_about_product": "Ask about this product on WhatsApp"
     }
   },
   "newsletter": {

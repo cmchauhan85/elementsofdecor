@@ -67,6 +67,10 @@
     },
     "breadcrumbs": {
       "home": "Home"
+    },
+    "whatsapp": {
+      "chat_with_us": "Chat with us on WhatsApp",
+      "chat_about_product": "Ask about this product on WhatsApp"
     }
   },
   "newsletter": {
@@ -240,6 +244,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Stranica nije pronađena",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Nije pronađen nijedan rezultat za „{{ terms }}”. Provjerite pravopis ili upotrijebite drugu riječ ili izraz.",
       "title": "Rezultati pretraživanja",
@@ -288,10 +296,6 @@
         "error_heading": "Prilagodite sljedeće:",
         "title": "Obrazac za kontakt"
       }
-    },
-    "404": {
-      "title": "Stranica nije pronađena",
-      "subtext": "404"
     }
   },
   "sections": {
