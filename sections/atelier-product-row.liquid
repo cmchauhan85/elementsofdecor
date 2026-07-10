@@ -27,7 +27,9 @@
 
 {%- if active_coll != blank -%}
   {%- liquid
-    comment Build a comma-wrapped string of cart product IDs for O(1) membership test endcomment
+    comment
+      Build a comma-wrapped string of cart product IDs for O(1) membership test
+    endcomment
     assign cart_ids = ','
     for item in cart.items
       assign cart_ids = cart_ids | append: item.product.id | append: ','
