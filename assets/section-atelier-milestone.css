@@ -1,26 +1,38 @@
+/* Brighter, more saturated accent than the base brand ochre — this strip is
+   meant to grab the eye against the quieter palette used everywhere else. */
+.atelier-milestone {
+  --milestone-accent: #e8901a;
+  --milestone-accent-light: #ffd889;
+  padding-block: 2.4rem !important;
+}
 .atelier-milestone__head {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.atelier-milestone .a-eyebrow--ochre {
+  color: var(--milestone-accent);
 }
 .atelier-milestone__status {
   font-family: var(--font-heading-family);
   font-style: italic;
   font-weight: 300;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 }
 .atelier-milestone__rail {
   position: relative;
-  height: 2px;
+  height: 3px;
   background: var(--a-hairline-strong);
-  margin: 3.2rem 0 1.2rem;
+  border-radius: 999px;
+  margin: 2rem 0 0.8rem;
 }
 .atelier-milestone__fill {
   position: absolute;
   inset: 0 auto 0 0;
-  background: var(--a-ochre);
+  background: linear-gradient(90deg, var(--milestone-accent), var(--milestone-accent-light));
+  border-radius: 999px;
   transition: width 0.4s ease;
 }
 .atelier-milestone__dots {
@@ -31,45 +43,51 @@
   align-items: center;
 }
 .atelier-milestone__dot {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.2rem;
+  height: 1.2rem;
   border-radius: 50%;
   background: rgb(var(--color-background, 250, 247, 241));
   border: 1px solid var(--a-hairline-strong);
   display: grid;
   place-items: center;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   transform: translateX(0);
 }
 .atelier-milestone__dot.is-earned {
-  background: var(--a-ochre);
-  border-color: var(--a-ochre);
+  background: var(--milestone-accent);
+  border-color: var(--milestone-accent);
   color: #1b1916;
+  box-shadow: 0 0 0 3px rgba(232, 144, 26, 0.2);
 }
 .atelier-milestone__cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.6rem;
-  margin-top: 2.4rem;
+  gap: 1rem;
+  margin-top: 1.4rem;
 }
 .atelier-milestone__card {
-  padding: 1.8rem;
+  padding: 1.1rem 1.3rem;
   border: 1px solid var(--a-hairline);
 }
 .atelier-milestone__card.is-next {
-  border-color: var(--a-ochre);
+  border-color: var(--milestone-accent);
+  border-width: 1.5px;
+  background: rgba(232, 144, 26, 0.06);
 }
 .atelier-milestone__card.is-locked {
   opacity: 0.55;
 }
+.atelier-milestone__card .a-eyebrow {
+  color: var(--milestone-accent);
+}
 .atelier-milestone__card-label {
   font-family: var(--font-heading-family);
-  font-size: 1.8rem;
-  margin: 0.6rem 0 0.4rem;
+  font-size: 1.4rem;
+  margin: 0.4rem 0 0.2rem;
 }
 .atelier-milestone__card-hint {
   font-family: var(--font-body-family);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   color: var(--a-muted);
   margin: 0;
 }
@@ -77,17 +95,17 @@
 /* Mobile: compact horizontal scroll strip instead of stacked cards */
 @media screen and (max-width: 749px) {
   .atelier-milestone {
-    padding-top: 1.4rem !important;
-    padding-bottom: 1.4rem !important;
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.2rem !important;
   }
   .atelier-milestone__head {
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
   .atelier-milestone__status {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   .atelier-milestone__rail {
-    margin: 1.6rem 0 0.8rem;
+    margin: 1.3rem 0 0.7rem;
   }
   .atelier-milestone__cards {
     display: flex;
@@ -95,22 +113,22 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 1rem;
-    margin-top: 1.2rem;
+    gap: 0.8rem;
+    margin-top: 1rem;
     padding-bottom: 0.4rem;
   }
   .atelier-milestone__cards::-webkit-scrollbar { display: none; }
   .atelier-milestone__card {
-    flex: 0 0 72vw;
-    max-width: 280px;
-    padding: 1.2rem 1.4rem;
+    flex: 0 0 62vw;
+    max-width: 240px;
+    padding: 1rem 1.2rem;
     scroll-snap-align: start;
   }
   .atelier-milestone__card-label {
-    font-size: 1.5rem;
-    margin: 0.4rem 0 0.2rem;
+    font-size: 1.3rem;
+    margin: 0.3rem 0 0.2rem;
   }
   .atelier-milestone__card-hint {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }

@@ -47,6 +47,10 @@
             "text": "In stock · Ships in 2-4 business days"
           }
         },
+        "coupon": {
+          "type": "coupon",
+          "settings": {}
+        },
         "subtotal": {
           "type": "subtotal",
           "settings": {}
@@ -63,6 +67,7 @@
       "block_order": [
         "gift",
         "dispatch_note",
+        "coupon",
         "subtotal",
         "hold",
         "buttons"
