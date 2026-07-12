@@ -94,6 +94,41 @@
                   </label>
                 </div>
               </div>
+            {%- when 'coupon_offer' -%}
+              {%- if cart.cart_level_discount_applications.size == 0 -%}
+                {%- liquid
+                  assign min_amount = block.settings.minimum_amount
+                  assign eligible = true
+                  if min_amount > 0
+                    assign cart_total = cart.total_price | divided_by: 100.0
+                    if cart_total < min_amount
+                      assign eligible = false
+                      assign remaining = min_amount | minus: cart_total
+                      assign remaining_money = remaining | times: 100 | money
+                    endif
+                  endif
+                -%}
+                <div class="atelier-coupon-offer{% if eligible %} is-eligible{% endif %}" {{ block.shopify_attributes }}>
+                  <div class="atelier-coupon-offer__body">
+                    <p class="atelier-coupon-offer__desc">{{ block.settings.description }}</p>
+                    {%- if eligible -%}
+                      <p class="atelier-coupon-offer__hint is-eligible">{{ block.settings.eligible_label }}</p>
+                    {%- else -%}
+                      <p class="atelier-coupon-offer__hint">{{ block.settings.locked_label }} {{ remaining_money }}</p>
+                    {%- endif -%}
+                    <span class="atelier-coupon-offer__code">{{ block.settings.code }}</span>
+                  </div>
+                  <button
+                    type="button"
+                    class="atelier-coupon-offer__apply"
+                    data-atelier-coupon-offer-apply="{{ block.settings.code | escape }}"
+                    {% unless eligible %}disabled{% endunless %}
+                  >
+                    {{ block.settings.apply_label }}
+                  </button>
+                </div>
+              {%- endif -%}
+              <script src="{{ 'atelier-coupon.js' | asset_url }}" defer="defer"></script>
             {%- when 'coupon' -%}
               <div class="atelier-coupon" data-atelier-coupon {{ block.shopify_attributes }}>
                 {%- if cart.cart_level_discount_applications.size > 0 -%}
@@ -318,6 +353,48 @@
           "id": "no_prices_label",
           "label": "No-prices checkbox label",
           "default": "Please leave prices off the packing slip"
+        }
+      ]
+    },
+    {
+      "type": "coupon_offer",
+      "name": "Coupon offer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Discount code",
+          "info": "Must match a real active discount code in Shopify admin"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "70% off up to ₹140"
+        },
+        {
+          "type": "number",
+          "id": "minimum_amount",
+          "label": "Minimum cart value to unlock (₹)",
+          "info": "Leave blank or 0 for no minimum"
+        },
+        {
+          "type": "text",
+          "id": "eligible_label",
+          "label": "Eligible message",
+          "default": "Eligible — apply below"
+        },
+        {
+          "type": "text",
+          "id": "locked_label",
+          "label": "Locked message prefix",
+          "default": "Add items worth"
+        },
+        {
+          "type": "text",
+          "id": "apply_label",
+          "label": "Apply button label",
+          "default": "Apply"
         }
       ]
     },

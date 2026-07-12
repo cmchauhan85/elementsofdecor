@@ -268,6 +268,78 @@
 }
 .atelier-saved-item__discard:hover { color: var(--a-ink); }
 
+/* Coupon offer cards (merchant-curated, live eligibility from cart total) */
+.atelier-coupon-offer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--a-hairline-strong);
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+.atelier-coupon-offer.is-eligible {
+  opacity: 1;
+  border-color: var(--a-ochre);
+  background: rgba(184, 138, 58, 0.06);
+}
+.atelier-coupon-offer__desc {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.atelier-coupon-offer__hint {
+  margin: 0 0 0.6rem;
+  font-size: 1.15rem;
+  color: var(--a-muted);
+}
+.atelier-coupon-offer__hint.is-eligible {
+  color: #5c7a5c;
+  font-weight: 600;
+}
+.atelier-coupon-offer__code {
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  border: 1px dashed var(--a-hairline-strong);
+  padding: 0.2rem 0.7rem;
+  color: var(--a-muted);
+}
+.atelier-coupon-offer__apply {
+  flex-shrink: 0;
+  border: 1px solid var(--a-ink);
+  background: none;
+  color: var(--a-ink);
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.atelier-coupon-offer__apply:hover:not(:disabled) {
+  background: var(--a-ink);
+  color: var(--a-paper);
+}
+.atelier-coupon-offer__apply:disabled {
+  opacity: 0.4;
+  cursor: default;
+  border-color: var(--a-hairline-strong);
+  color: var(--a-muted);
+}
+@media screen and (max-width: 480px) {
+  .atelier-coupon-offer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .atelier-coupon-offer__apply {
+    width: 100%;
+  }
+}
+
 /* Coupon / discount code apply */
 .atelier-coupon {
   margin: 0 0 1.6rem;

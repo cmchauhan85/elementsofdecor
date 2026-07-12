@@ -67,8 +67,8 @@
       "block_order": [
         "gift",
         "dispatch_note",
-        "coupon",
         "subtotal",
+        "coupon",
         "hold",
         "buttons"
       ]
