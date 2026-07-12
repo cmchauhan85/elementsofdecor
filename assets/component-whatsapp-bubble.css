@@ -36,6 +36,13 @@
     bottom: 1.5rem;
     width: 5rem;
     height: 5rem;
+    transition: bottom 0.2s ease;
+  }
+
+  /* Clear the mobile sticky add-to-bag bar on the product page so the two
+     fixed-position elements don't overlap. */
+  body.has-sticky-add-to-bag .whatsapp-bubble {
+    bottom: calc(1.5rem + 6.2rem + env(safe-area-inset-bottom));
   }
 }
 

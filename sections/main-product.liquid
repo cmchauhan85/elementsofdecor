@@ -847,6 +847,22 @@
     <script type="application/ld+json">
       {{ product | structured_data }}
     </script>
+
+    <div class="atelier-pdp-sticky" data-section="{{ section.id }}">
+      <div class="price atelier-pdp-sticky__price"></div>
+      <button
+        type="submit"
+        name="add"
+        form="{{ product_form_id }}"
+        class="atelier-pdp-sticky__submit"
+        {% if product.selected_or_first_available_variant.available == false or product.selected_or_first_available_variant == null %}
+          disabled
+        {% endif %}
+      >
+        {{ 'products.product.add_to_cart' | t }}
+      </button>
+    </div>
+    <script src="{{ 'atelier-pdp-sticky.js' | asset_url }}" defer="defer"></script>
   </div>
 </product-info>
 
