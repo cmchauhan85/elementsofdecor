@@ -1,17 +1,19 @@
 /**
- * Converts colour/finish pill buttons into coloured circular swatches.
+ * Converts colour/finish pill buttons into swatches showing a small photo of
+ * the product in that variant (falls back to a flat colour dot when no
+ * variant image is available).
  *
  * Resolution order:
- *  1. variant.metafields.atelier.swatch_color  (exact override)
- *  2. First colour keyword found in the option value name  (e.g. "Black & Gold" → black)
- *  3. Canvas extraction via fetch + blob URL  (avoids CORS tainting)
- *  4. Neutral fallback
+ *  1. Variant's own image (from AtelierVariantImages, keyed by variant title)
+ *  2. variant.metafields.atelier.swatch_color  (exact override)
+ *  3. First colour keyword found in the option value name  (e.g. "Black & Gold" → black)
+ *  4. Neutral fallback colour
  */
 (function () {
   var COLOR_OPTION_RE = /colou?r|finish|shade|tone/i;
   var FALLBACK = '#C4B49A';
 
-  /* ── Named colour map ─────────────────────────────────────────────────── */
+  /* ── Named colour map (fallback only, when no variant image exists) ────── */
   var NAMED = {
     black: '#1B1916', ebony: '#2A1F1A', charcoal: '#3C3A36', dark: '#3A3530',
     gold: '#C8A850', golden: '#C8A850', brass: '#B5943C', bronze: '#8B6B35',
@@ -68,23 +70,18 @@
         }
       });
 
-      /* Resolution order */
-      if (manualColor) {
-        applyDot(label, manualColor, title);
+      /* Prefer the variant's own product photo; fall back to a flat colour. */
+      if (imgSrc) {
+        applySwatch(label, { image: imgSrc }, title);
+      } else if (manualColor) {
+        applySwatch(label, { color: manualColor }, title);
       } else {
-        var named = colorFromName(input.value);
-        if (named) {
-          applyDot(label, named, title);
-        } else if (imgSrc) {
-          fetchAndExtract(imgSrc, function (color) { applyDot(label, color, title); });
-        } else {
-          applyDot(label, FALLBACK, title);
-        }
+        applySwatch(label, { color: colorFromName(input.value) || FALLBACK }, title);
       }
     });
   }
 
-  function applyDot(label, color, title) {
+  function applySwatch(label, fill, title) {
     /* Strip trailing SKU in parens: "Black & Gold (EDTLCS001)" → "Black & Gold" */
     var displayName = title.replace(/\s*\([^)]*\)\s*$/, '').trim() || title;
     label.setAttribute('title', title);
@@ -93,51 +90,11 @@
       '<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">' + title + '</span>' +
       '<span class="atelier-swatch-dot__name" aria-hidden="true">' + displayName + '</span>';
     label.classList.add('atelier-swatch-dot');
-    label.style.setProperty('--dot-color', color);
-  }
-
-  /* ── Canvas extraction (fallback for unknown colour names) ────────────── */
-  function fetchAndExtract(src, cb) {
-    var url = src.indexOf('//') === 0 ? 'https:' + src : src;
-    url += (url.indexOf('?') !== -1 ? '&' : '?') + 'width=80';
-    fetch(url)
-      .then(function (r) { return r.blob(); })
-      .then(function (blob) {
-        var blobUrl = URL.createObjectURL(blob);
-        var img = new Image();
-        img.onload = function () {
-          var color = sampleColor(img);
-          URL.revokeObjectURL(blobUrl);
-          cb(color);
-        };
-        img.onerror = function () { URL.revokeObjectURL(blobUrl); cb(FALLBACK); };
-        img.src = blobUrl;
-      })
-      .catch(function () { cb(FALLBACK); });
-  }
-
-  function sampleColor(img) {
-    try {
-      var SIZE = 80, c = document.createElement('canvas');
-      c.width = c.height = SIZE;
-      var ctx = c.getContext('2d');
-      ctx.drawImage(img, 0, 0, SIZE, SIZE);
-      var px = ctx.getImageData(0, 0, SIZE, SIZE).data;
-      var r = 0, g = 0, b = 0, n = 0;
-      for (var i = 0; i < px.length; i += 4) {
-        if (px[i + 3] < 100) continue;
-        var lum = (px[i] + px[i + 1] + px[i + 2]) / 3;
-        if (lum > 240) continue;
-        var max = Math.max(px[i], px[i + 1], px[i + 2]);
-        var min = Math.min(px[i], px[i + 1], px[i + 2]);
-        var sat = max > 0 ? (max - min) / max : 0;
-        var w = 0.1 + sat * 4;
-        r += px[i] * w; g += px[i + 1] * w; b += px[i + 2] * w; n += w;
-      }
-      return n > 0
-        ? 'rgb(' + Math.round(r / n) + ',' + Math.round(g / n) + ',' + Math.round(b / n) + ')'
-        : FALLBACK;
-    } catch (e) { return FALLBACK; }
+    if (fill.image) {
+      label.style.setProperty('--dot-image', 'url(' + fill.image + ')');
+    } else {
+      label.style.setProperty('--dot-color', fill.color);
+    }
   }
 
   function run() {

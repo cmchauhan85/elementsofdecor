@@ -1,0 +1,61 @@
+{% comment %}
+  Renders a "Design" swatch row linking between sibling products that share
+  the same shape/size options but differ by design (e.g. the six Urli
+  products: Ruffle, Lotus, Flower, Scalloped, Padma, Rounded Lotus).
+
+  These are separate Shopify products, not variants of one product — each
+  swatch navigates to that product's own page. Reuses the same photo-swatch
+  look as the colour selector (.atelier-swatch-dot).
+
+  Accepts:
+  - product: {Object} the current product object.
+
+  Usage:
+  {% render 'atelier-design-selector', product: product %}
+{% endcomment %}
+{%- liquid
+  assign design_group = product.metafields.atelier.design_group.value
+-%}
+{%- if design_group and design_group.size > 1 -%}
+  <fieldset class="js product-form__input product-form__input--pill atelier-design-selector">
+    <legend class="form__label">Design</legend>
+    <div class="product-form__radio-group">
+      {%- for sibling in design_group -%}
+        {%- liquid
+          assign design_label = sibling.metafields.atelier.design_name.value | default: sibling.title
+          assign is_current = false
+          if sibling.id == product.id
+            assign is_current = true
+          endif
+        -%}
+        {%- if is_current -%}
+          <span
+            class="atelier-swatch-dot is-current"
+            title="{{ design_label }}"
+            aria-current="true"
+          >
+            <span
+              class="atelier-swatch-dot__circle"
+              aria-hidden="true"
+              style="--dot-image: url('{{ sibling.featured_image | image_url: width: 120 }}');"
+            ></span>
+            <span class="atelier-swatch-dot__name">{{ design_label }}</span>
+          </span>
+        {%- else -%}
+          <a
+            href="{{ sibling.url }}"
+            class="atelier-swatch-dot"
+            title="{{ design_label }}"
+          >
+            <span
+              class="atelier-swatch-dot__circle"
+              aria-hidden="true"
+              style="--dot-image: url('{{ sibling.featured_image | image_url: width: 120 }}');"
+            ></span>
+            <span class="atelier-swatch-dot__name">{{ design_label }}</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </fieldset>
+{%- endif -%}

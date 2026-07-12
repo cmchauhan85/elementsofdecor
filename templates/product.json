@@ -81,6 +81,12 @@
             "packing_note": "Carefully packed and cushioned for transit."
           }
         },
+        "delivery_estimate": {
+          "type": "delivery_estimate",
+          "settings": {
+            "label": "Check delivery estimate"
+          }
+        },
         "description": {
           "type": "description",
           "settings": {}
@@ -120,6 +126,7 @@
         "buy_buttons",
         "whatsapp_button",
         "dispatch",
+        "delivery_estimate",
         "description",
         "care",
         "shipping",

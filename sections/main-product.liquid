@@ -92,7 +92,7 @@
             {%- assign vi_parts = '' -%}
             {%- for variant in product.variants -%}
               {%- if variant.featured_media != blank -%}
-                {%- capture vi_entry -%}{{ variant.title | json }}:{"src":"{{ variant.featured_media | image_url: width: 80 }}","color":{{ variant.metafields.atelier.swatch_color.value | json }}}{%- endcapture -%}
+                {%- capture vi_entry -%}{{ variant.title | json }}:{"src":"{{ variant.featured_media | image_url: width: 120 }}","color":{{ variant.metafields.atelier.swatch_color.value | json }}}{%- endcapture -%}
                 {%- unless forloop.first -%}{%- assign vi_parts = vi_parts | append: ',' -%}{%- endunless -%}
                 {%- assign vi_parts = vi_parts | append: vi_entry -%}
               {%- endif -%}
@@ -494,6 +494,7 @@
 
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+                {% render 'atelier-design-selector', product: product %}
               {%- when 'buy_buttons' -%}
                 {%- liquid
                   assign variant_unavailable = false
@@ -557,6 +558,14 @@
                     </div>
                   {%- endform -%}
                 </product-form>
+
+                {%- if variant_unavailable -%}
+                  {%- render 'atelier-notify-me',
+                    product: product,
+                    current_variant: product.selected_or_first_available_variant,
+                    form_id: section.id
+                  -%}
+                {%- endif -%}
 
                 <p class="product__microcopy">
                   Hand-finished. Each piece is uniquely textured.
@@ -786,6 +795,26 @@
                     {%- endif -%}
                   </div>
                 {%- endif -%}
+              {%- when 'delivery_estimate' -%}
+                <div class="atelier-delivery-estimate" {{ block.shopify_attributes }}>
+                  <label class="atelier-delivery-estimate__label" for="DeliveryPin-{{ section.id }}">
+                    {{ block.settings.label | default: 'Check delivery estimate' }}
+                  </label>
+                  <div class="atelier-delivery-estimate__row">
+                    <input
+                      type="text"
+                      inputmode="numeric"
+                      pattern="[0-9]*"
+                      maxlength="6"
+                      id="DeliveryPin-{{ section.id }}"
+                      class="atelier-delivery-estimate__input"
+                      placeholder="6-digit PIN code"
+                    >
+                    <button type="button" class="atelier-delivery-estimate__submit">Check</button>
+                  </div>
+                  <p class="atelier-delivery-estimate__result" role="status"></p>
+                </div>
+                <script src="{{ 'atelier-delivery-estimate.js' | asset_url }}" defer="defer"></script>
             {%- endcase -%}
           {%- endfor -%}
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -2232,6 +2261,20 @@
           "id": "packing_note",
           "label": "Packing note",
           "default": "Delivered in a cotton-lined pine box."
+        }
+      ]
+    },
+    {
+      "type": "delivery_estimate",
+      "name": "Delivery estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Field label",
+          "default": "Check delivery estimate",
+          "info": "A rough estimate by postal-circle prefix, not a live courier lookup."
         }
       ]
     },

@@ -30,6 +30,10 @@
 
 /* Variant options as square tiles (size) — Dawn pill inputs squared off */
 .product-form__input--pill input[type='radio'] + label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
   border-radius: 0;
   border: 1px solid var(--a-hairline-strong);
   padding: 1.2rem 1.8rem;
@@ -39,6 +43,16 @@
   border-color: var(--a-ochre);
   background: var(--a-stone);
   box-shadow: none;
+}
+/* Per-size price (p3 polish) */
+.product-option__price {
+  font-size: 1.1rem;
+  color: var(--a-muted);
+  font-variant-numeric: tabular-nums;
+}
+.product-form__input--pill input[type='radio']:checked + label .product-option__price {
+  color: inherit;
+  opacity: 0.75;
 }
 
 /* Finish swatches: circular with ochre active ring */
@@ -117,6 +131,134 @@
   .atelier-pdp-sticky__submit[disabled] {
     opacity: 0.5;
   }
+}
+
+/* Back-in-stock notify-me */
+.atelier-notify-me {
+  margin-top: 1.2rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid var(--a-hairline-strong);
+  background: var(--a-stone);
+}
+.atelier-notify-me__label {
+  display: block;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.8rem;
+}
+.atelier-notify-me__row {
+  display: flex;
+  gap: 0.8rem;
+}
+.atelier-notify-me__input {
+  flex: 1;
+  border: 1px solid var(--a-hairline-strong);
+  background: var(--a-paper);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: inherit;
+}
+.atelier-notify-me__input:focus {
+  outline: 1px solid var(--a-ochre);
+}
+.atelier-notify-me__submit {
+  border: none;
+  background: rgb(var(--color-foreground, 27, 25, 22));
+  color: rgb(var(--color-background, 250, 247, 241));
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0 1.6rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.atelier-notify-me__success {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+}
+.atelier-notify-me__success .svg-wrapper {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--a-ochre);
+  flex-shrink: 0;
+}
+.atelier-notify-me__error {
+  display: block;
+  margin-top: 0.6rem;
+  color: #9e2b18;
+  font-size: 1.2rem;
+}
+@media screen and (max-width: 480px) {
+  .atelier-notify-me__row {
+    flex-direction: column;
+  }
+  .atelier-notify-me__submit {
+    padding: 0.9rem 1.6rem;
+  }
+}
+
+/* Delivery estimate by PIN code */
+.atelier-delivery-estimate {
+  margin-top: 1.2rem;
+}
+.atelier-delivery-estimate__label {
+  display: block;
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  margin-bottom: 0.7rem;
+}
+.atelier-delivery-estimate__row {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 32rem;
+}
+.atelier-delivery-estimate__input {
+  flex: 1;
+  border: 1px solid var(--a-hairline-strong);
+  background: var(--a-paper);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: inherit;
+  min-width: 0;
+}
+.atelier-delivery-estimate__input:focus {
+  outline: 1px solid var(--a-ochre);
+}
+.atelier-delivery-estimate__submit {
+  border: 1px solid var(--a-ink);
+  background: none;
+  color: var(--a-ink);
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0 1.6rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.atelier-delivery-estimate__submit:hover {
+  background: var(--a-ink);
+  color: var(--a-paper);
+}
+.atelier-delivery-estimate__result {
+  margin: 0.8rem 0 0;
+  font-size: 1.2rem;
+  color: var(--a-muted);
+  min-height: 1.6em;
+}
+.atelier-delivery-estimate__result.is-error {
+  color: #9e2b18;
 }
 
 /* Breadcrumb (p3) */
@@ -287,7 +429,10 @@
   width: 3.6rem;
   height: 3.6rem;
   border-radius: 50%;
-  background: var(--dot-color, #C4B49A);
+  background-color: var(--dot-color, #C4B49A);
+  background-image: var(--dot-image, none);
+  background-size: cover;
+  background-position: center;
   border: 1.5px solid rgba(27, 25, 22, 0.12);
   display: block;
   flex-shrink: 0;
@@ -313,6 +458,26 @@ input[type='radio']:hover + .atelier-swatch-dot .atelier-swatch-dot__circle {
   letter-spacing: 0.02em;
 }
 input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__name {
+  color: var(--a-ink);
+}
+/* Design selector — links between sibling products, not radio inputs */
+.atelier-design-selector {
+  margin-top: 1.6rem;
+}
+a.atelier-swatch-dot {
+  text-decoration: none;
+  color: inherit;
+}
+a.atelier-swatch-dot:hover .atelier-swatch-dot__circle {
+  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline-offset: 2px;
+}
+.atelier-swatch-dot.is-current .atelier-swatch-dot__circle {
+  outline: 2px solid var(--a-ochre);
+  outline-offset: 3px;
+  border-color: transparent;
+}
+.atelier-swatch-dot.is-current .atelier-swatch-dot__name {
   color: var(--a-ink);
 }
 /* Swatch container: horizontal row */
