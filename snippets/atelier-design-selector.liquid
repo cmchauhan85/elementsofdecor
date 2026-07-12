@@ -15,10 +15,14 @@
 {% endcomment %}
 {%- liquid
   assign design_group = product.metafields.atelier.design_group.value
+  assign current_design = product.metafields.atelier.design_name.value | default: product.title
 -%}
 {%- if design_group and design_group.size > 1 -%}
   <fieldset class="js product-form__input product-form__input--pill atelier-design-selector">
-    <legend class="form__label">Design</legend>
+    <legend class="form__label">
+      Design:
+      <span>{{ current_design }}</span>
+    </legend>
     <div class="product-form__radio-group">
       {%- for sibling in design_group -%}
         {%- liquid

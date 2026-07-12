@@ -460,9 +460,32 @@ input[type='radio']:hover + .atelier-swatch-dot .atelier-swatch-dot__circle {
 input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__name {
   color: var(--a-ink);
 }
-/* Design selector — links between sibling products, not radio inputs */
+/* Design selector — links between sibling products, not radio inputs.
+   Sized up from the colour dots: this is the primary shape decision on
+   Urli PDPs, not a secondary attribute, so it gets a bigger, squarer tile
+   (square = the theme's product-tile convention) that actually shows the
+   rim/pattern detail that differentiates each design. */
 .atelier-design-selector {
-  margin-top: 1.6rem;
+  margin-top: 2rem;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--a-hairline);
+}
+.atelier-design-selector .form__label {
+  margin-bottom: 1.2rem;
+}
+.atelier-design-selector .product-form__radio-group {
+  gap: 1.8rem 2.2rem !important;
+}
+.atelier-design-selector .atelier-swatch-dot__circle {
+  width: 7.2rem;
+  height: 7.2rem;
+  border-radius: 6px;
+}
+.atelier-design-selector .atelier-swatch-dot__name {
+  font-size: 1.2rem;
+  white-space: normal;
+  max-width: 8rem;
+  line-height: 1.3;
 }
 a.atelier-swatch-dot {
   text-decoration: none;
@@ -479,6 +502,7 @@ a.atelier-swatch-dot:hover .atelier-swatch-dot__circle {
 }
 .atelier-swatch-dot.is-current .atelier-swatch-dot__name {
   color: var(--a-ink);
+  font-weight: 600;
 }
 /* Swatch container: horizontal row */
 .product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group {
