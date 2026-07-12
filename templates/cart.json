@@ -81,6 +81,7 @@
       "block_order": ["step1", "step2", "step3", "step4", "badge1", "badge2"],
       "settings": {
         "color_scheme": "scheme-2",
+        "show_next_steps": false,
         "show_material_notice": true,
         "material_notice": "<p>Handmade from natural materials — wood grain, stone veining, and finish vary slightly, piece to piece.</p>"
       }
