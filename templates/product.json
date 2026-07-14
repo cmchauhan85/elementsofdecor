@@ -23,9 +23,32 @@
           "type": "title",
           "settings": {}
         },
+        "rating": {
+          "type": "rating",
+          "settings": {}
+        },
         "price": {
           "type": "price",
           "settings": {}
+        },
+        "trust_badges": {
+          "type": "icon-with-text",
+          "settings": {
+            "layout": "horizontal",
+            "icon_1": "truck",
+            "heading_1": "Free shipping",
+            "icon_2": "return",
+            "heading_2": "Easy returns",
+            "icon_3": "lock",
+            "heading_3": "Secured by Razorpay"
+          }
+        },
+        "material_notice": {
+          "type": "text",
+          "settings": {
+            "text": "Handmade from natural materials — wood grain, stone veining, and finish can vary slightly from piece to piece. This is a mark of genuine craftsmanship, not a flaw.",
+            "text_style": "subtitle"
+          }
         },
         "variant_picker": {
           "type": "variant_picker",
@@ -45,10 +68,23 @@
             "show_gift_card_recipient": true
           }
         },
+        "whatsapp_button": {
+          "type": "whatsapp_button",
+          "settings": {
+            "label": "Chat with us on WhatsApp",
+            "message": "Hi! I'm interested in"
+          }
+        },
         "dispatch": {
           "type": "dispatch",
           "settings": {
             "packing_note": "Carefully packed and cushioned for transit."
+          }
+        },
+        "delivery_estimate": {
+          "type": "delivery_estimate",
+          "settings": {
+            "label": "Check delivery estimate"
           }
         },
         "description": {
@@ -81,11 +117,16 @@
       "block_order": [
         "vendor",
         "title",
+        "rating",
         "price",
+        "trust_badges",
+        "material_notice",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
+        "whatsapp_button",
         "dispatch",
+        "delivery_estimate",
         "description",
         "care",
         "shipping",

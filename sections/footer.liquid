@@ -67,6 +67,9 @@
             {% endif %}
           >
             {%- for block in section.blocks -%}
+              {%- if block.type == 'trust_badge' -%}
+                {%- continue -%}
+              {%- endif -%}
               <div
                 class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                 {{ block.shopify_attributes }}
@@ -285,6 +288,27 @@
         {%- endif -%}
       </div>
       <div class="footer__column footer__column--info">
+        {%- liquid
+          assign has_trust_badges = false
+          for block in section.blocks
+            if block.type == 'trust_badge'
+              assign has_trust_badges = true
+              break
+            endif
+          endfor
+        -%}
+        {%- if has_trust_badges -%}
+          <ul class="footer__trust-badges list-unstyled" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'trust_badge' -%}
+                <li class="footer__trust-badge" {{ block.shopify_attributes }}>
+                  {%- render 'icon-accordion', icon: block.settings.icon -%}
+                  <span>{{ block.settings.label }}</span>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
         {%- if section.settings.payment_enable -%}
           <div class="footer__payment">
             <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
@@ -433,6 +457,32 @@
             }
           ],
           "default": "center"
+        }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "lock", "label": "Lock" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "return", "label": "Return" },
+            { "value": "check_mark", "label": "Checkmark" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" }
+          ],
+          "default": "lock"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Secured by Razorpay"
         }
       ]
     }

@@ -18,6 +18,7 @@
 }
 .atelier-season__nav {
   display: none;
+  gap: 0.8rem;
 }
 .atelier-season__btn {
   width: 4.4rem;
@@ -36,14 +37,49 @@
   border-color: var(--a-ochre);
   color: #1b1916;
 }
-
-.atelier-season__rail {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.6rem;
+.atelier-season__btn:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
+.atelier-season__btn:disabled:hover {
+  background: transparent;
+  border-color: var(--a-hairline-strong);
+  color: inherit;
+}
+
+/* Desktop: horizontal scroll carousel */
+@media screen and (min-width: 990px) {
+  .atelier-season__nav {
+    display: flex;
+  }
+  .atelier-season__rail {
+    display: flex;
+    gap: 1.6rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .atelier-season__rail::-webkit-scrollbar {
+    display: none;
+  }
+  .atelier-season__rail .atelier-pcard,
+  .atelier-season__rail > div {
+    flex: 0 0 calc(20% - 1.3rem);
+    min-width: 200px;
+    scroll-snap-align: start;
+  }
+  .atelier-season__all {
+    flex: 0 0 calc(20% - 1.3rem);
+    min-width: 200px;
+    scroll-snap-align: start;
+  }
+}
+
+/* Mobile: 2-column grid */
 @media screen and (max-width: 989px) {
   .atelier-season__rail {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.2rem;
     justify-items: center;

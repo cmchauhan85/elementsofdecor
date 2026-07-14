@@ -92,7 +92,7 @@
             {%- assign vi_parts = '' -%}
             {%- for variant in product.variants -%}
               {%- if variant.featured_media != blank -%}
-                {%- capture vi_entry -%}{{ variant.title | json }}:{"src":"{{ variant.featured_media | image_url: width: 80 }}","color":{{ variant.metafields.atelier.swatch_color.value | json }}}{%- endcapture -%}
+                {%- capture vi_entry -%}{{ variant.title | json }}:{"src":"{{ variant.featured_media | image_url: width: 120 }}","color":{{ variant.metafields.atelier.swatch_color.value | json }}}{%- endcapture -%}
                 {%- unless forloop.first -%}{%- assign vi_parts = vi_parts | append: ',' -%}{%- endunless -%}
                 {%- assign vi_parts = vi_parts | append: vi_entry -%}
               {%- endif -%}
@@ -131,15 +131,12 @@
                     price_class: 'price--large'
                   -%}
                 </div>
-                <div class="product__trust">
-                  ⭐ 4.8 | Free Shipping | 7-Day Easy Returns
-</div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
                 {%- endif -%}
-                {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+                {%- if cart.taxes_included or cart.duties_included -%}
                   <div class="product__tax caption rte">
                     {%- if cart.duties_included and cart.taxes_included -%}
                       {{ 'products.product.duties_and_taxes_included' | t }}
@@ -147,9 +144,6 @@
                       {{ 'products.product.taxes_included' | t }}
                     {%- elsif cart.duties_included -%}
                       {{ 'products.product.duties_included' | t }}
-                    {%- endif -%}
-                    {%- if shop.shipping_policy.body != blank -%}
-                      {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
                     {%- endif -%}
                   </div>
                 {%- endif -%}
@@ -497,6 +491,7 @@
 
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+                {% render 'atelier-design-selector', product: product %}
               {%- when 'buy_buttons' -%}
                 {%- liquid
                   assign variant_unavailable = false
@@ -560,6 +555,14 @@
                     </div>
                   {%- endform -%}
                 </product-form>
+
+                {%- if variant_unavailable -%}
+                  {%- render 'atelier-notify-me',
+                    product: product,
+                    current_variant: product.selected_or_first_available_variant,
+                    form_id: section.id
+                  -%}
+                {%- endif -%}
 
                 <p class="product__microcopy">
                   Hand-finished. Each piece is uniquely textured.
@@ -753,6 +756,28 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
+              {%- when 'whatsapp_button' -%}
+                {%- liquid
+                  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-'
+                  assign wa_message = block.settings.message
+                  if wa_message == blank
+                    assign wa_message = 'general.whatsapp.chat_about_product' | t
+                  endif
+                  assign wa_message = wa_message | append: ' ' | append: product.title | append: ' - ' | append: shop.url | append: product.url
+                -%}
+                {%- if settings.whatsapp_enable and wa_number != blank -%}
+                  {{ 'component-whatsapp-bubble.css' | asset_url | stylesheet_tag }}
+                  <a
+                    href="https://wa.me/{{ wa_number }}?text={{ wa_message | url_encode }}"
+                    class="product__whatsapp-button button button--secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    {{ block.shopify_attributes }}
+                  >
+                    <span class="svg-wrapper">{{- 'icon-whatsapp.svg' | inline_asset_content -}}</span>
+                    {{- block.settings.label -}}
+                  </a>
+                {%- endif -%}
               {%- when 'dispatch' -%}
                 {%- if block.settings.shipping_note != blank or block.settings.packing_note != blank -%}
                   <div class="atelier-pdp-dispatch" {{ block.shopify_attributes }}>
@@ -767,6 +792,26 @@
                     {%- endif -%}
                   </div>
                 {%- endif -%}
+              {%- when 'delivery_estimate' -%}
+                <div class="atelier-delivery-estimate" {{ block.shopify_attributes }}>
+                  <label class="atelier-delivery-estimate__label" for="DeliveryPin-{{ section.id }}">
+                    {{ block.settings.label | default: 'Check delivery estimate' }}
+                  </label>
+                  <div class="atelier-delivery-estimate__row">
+                    <input
+                      type="text"
+                      inputmode="numeric"
+                      pattern="[0-9]*"
+                      maxlength="6"
+                      id="DeliveryPin-{{ section.id }}"
+                      class="atelier-delivery-estimate__input"
+                      placeholder="6-digit PIN code"
+                    >
+                    <button type="button" class="atelier-delivery-estimate__submit">Check</button>
+                  </div>
+                  <p class="atelier-delivery-estimate__result" role="status"></p>
+                </div>
+                <script src="{{ 'atelier-delivery-estimate.js' | asset_url }}" defer="defer"></script>
             {%- endcase -%}
           {%- endfor -%}
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -828,6 +873,22 @@
     <script type="application/ld+json">
       {{ product | structured_data }}
     </script>
+
+    <div class="atelier-pdp-sticky" data-section="{{ section.id }}">
+      <div class="price atelier-pdp-sticky__price"></div>
+      <button
+        type="submit"
+        name="add"
+        form="{{ product_form_id }}"
+        class="atelier-pdp-sticky__submit"
+        {% if product.selected_or_first_available_variant.available == false or product.selected_or_first_available_variant == null %}
+          disabled
+        {% endif %}
+      >
+        {{ 'products.product.add_to_cart' | t }}
+      </button>
+    </div>
+    <script src="{{ 'atelier-pdp-sticky.js' | asset_url }}" defer="defer"></script>
   </div>
 </product-info>
 
@@ -2197,6 +2258,40 @@
           "id": "packing_note",
           "label": "Packing note",
           "default": "Delivered in a cotton-lined pine box."
+        }
+      ]
+    },
+    {
+      "type": "delivery_estimate",
+      "name": "Delivery estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Field label",
+          "default": "Check delivery estimate",
+          "info": "A rough estimate by postal-circle prefix, not a live courier lookup."
+        }
+      ]
+    },
+    {
+      "type": "whatsapp_button",
+      "name": "WhatsApp button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button label",
+          "default": "Chat with us on WhatsApp"
+        },
+        {
+          "type": "text",
+          "id": "message",
+          "label": "Message prefix",
+          "info": "The product name and link are appended automatically. Leave blank to use the default.",
+          "default": "Hi! I'm interested in"
         }
       ]
     }

@@ -67,6 +67,10 @@
     },
     "breadcrumbs": {
       "home": "Home"
+    },
+    "whatsapp": {
+      "chat_with_us": "Chat with us on WhatsApp",
+      "chat_about_product": "Ask about this product on WhatsApp"
     }
   },
   "newsletter": {
@@ -236,6 +240,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Sivua ei löytynyt",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Ei tuloksia haulla \"{{ terms }}\". Tarkista oikeinkirjoitus tai kokeile toista sanaa tai ilmaisua.",
       "results_with_count": {
@@ -279,10 +287,6 @@
         "error_heading": "Mukauta seuraavat:",
         "title": "Yhteydenottolomake"
       }
-    },
-    "404": {
-      "title": "Sivua ei löytynyt",
-      "subtext": "404"
     }
   },
   "sections": {

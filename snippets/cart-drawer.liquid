@@ -9,6 +9,7 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'atelier-hold-timer.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <style>
@@ -558,6 +559,17 @@
             {%- endif -%}
           </small>
         </div>
+
+        <!-- Hold timer (c2) -->
+        {%- if cart != empty -%}
+          <div class="atelier-hold atelier-hold--drawer" aria-live="polite">
+            <span class="atelier-hold__icon" aria-hidden="true">◷</span>
+            <div class="atelier-hold__body">
+              <span class="atelier-hold__label">Items reserved for</span>
+              <strong class="atelier-hold__time">—:——</strong>
+            </div>
+          </div>
+        {%- endif -%}
 
         <!-- CTAs -->
 

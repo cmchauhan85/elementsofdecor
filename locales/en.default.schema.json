@@ -249,6 +249,25 @@
         }
       }
     },
+    "whatsapp_chat": {
+      "name": "WhatsApp chat",
+      "settings": {
+        "whatsapp_enable": {
+          "label": "Enable WhatsApp chat"
+        },
+        "whatsapp_number": {
+          "label": "WhatsApp number",
+          "info": "Include country code, digits only, no + or spaces (e.g. 916353052025)"
+        },
+        "whatsapp_message": {
+          "label": "Default message"
+        },
+        "whatsapp_show_bubble": {
+          "label": "Show floating chat bubble",
+          "info": "Shows a WhatsApp button in the corner of every page"
+        }
+      }
+    },
     "social-media": {
       "name": "Social media",
       "settings": {

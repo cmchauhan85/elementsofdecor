@@ -297,6 +297,41 @@
   }
 }
 
+.footer__trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__trust-badges {
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+}
+
+.footer__trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.2rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.footer__trust-badge .svg-wrapper {
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.footer__trust-badge .svg-wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
 .footer__content-bottom-wrapper--center {
   justify-content: center;
 }

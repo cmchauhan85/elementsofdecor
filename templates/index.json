@@ -22,6 +22,19 @@
         "color_scheme": "scheme-1"
       }
     },
+    "trust_bar": {
+      "type": "atelier-trust-bar",
+      "blocks": {
+        "b1": { "type": "badge", "settings": { "icon": "truck", "label": "Free shipping", "subtext": "On every order" } },
+        "b2": { "type": "badge", "settings": { "icon": "return", "label": "Easy 7-day returns", "subtext": "No questions asked" } },
+        "b3": { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments" } },
+        "b4": { "type": "badge", "settings": { "icon": "leaf", "label": "Handmade, naturally varied", "subtext": "Wood grain, stone veining, and finish differ slightly piece to piece" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"],
+      "settings": {
+        "color_scheme": "scheme-1"
+      }
+    },
     "browse": {
       "type": "atelier-browse",
       "blocks": {
@@ -159,5 +172,5 @@
       }
     }
   },
-  "order": ["hero", "browse", "philosophy", "this_season", "atelier_this_season_r8jXX7", "open_box_sale", "tool_teaser", "notes", "gratitude", "open_box_sale_LDqbeT"]
+  "order": ["hero", "trust_bar", "browse", "philosophy", "this_season", "atelier_this_season_r8jXX7", "open_box_sale", "tool_teaser", "notes", "gratitude", "open_box_sale_LDqbeT"]
 }

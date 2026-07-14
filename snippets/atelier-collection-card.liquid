@@ -7,10 +7,11 @@
     element      (single line text) — shown bottom-right in Object mode
 
   Accepts:
-    collection    {collection} - the collection to render (required)
-    number        {string}     - the "01" index label
-    show_element  {boolean}     - show the element tag bottom-right (object mode)
-    coming_label  {string}     - text for the coming-soon pill (already translated)
+    collection      {collection} - the collection to render (required)
+    number          {string}     - the "01" index label
+    show_element    {boolean}    - show the element tag bottom-right (object mode)
+    coming_label    {string}     - text for the coming-soon pill (already translated)
+    title_override  {string}     - optional display name override (falls back to collection.title)
 {% endcomment %}
 
 {%- liquid
@@ -26,6 +27,7 @@
     assign card_image = col.products.first.featured_image
   endif
   assign coming = coming_label | default: 'Coming soon'
+  assign display_name = title_override | default: col.title
 -%}
 
 <a
@@ -42,7 +44,7 @@
           loading: 'lazy',
           sizes: '(min-width: 990px) 18vw, 45vw',
           widths: '275, 400, 550, 800',
-          alt: col.title | escape
+          alt: display_name | escape
       }}
     {%- endif -%}
     {%- if number != blank -%}<span class="atelier-card__n">{{ number }}</span>{%- endif -%}
@@ -53,7 +55,7 @@
     {%- endif -%}
   </div>
 
-  {% render 'atelier-eyebrow', text: col.title, tag: 'span', class: 'atelier-card__name' %}
+  {% render 'atelier-eyebrow', text: display_name, tag: 'span', class: 'atelier-card__name' %}
   {%- if descriptor != blank -%}
     <p class="atelier-card__desc">{{ descriptor }}</p>
   {%- endif -%}

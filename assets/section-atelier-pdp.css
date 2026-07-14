@@ -30,6 +30,10 @@
 
 /* Variant options as square tiles (size) — Dawn pill inputs squared off */
 .product-form__input--pill input[type='radio'] + label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
   border-radius: 0;
   border: 1px solid var(--a-hairline-strong);
   padding: 1.2rem 1.8rem;
@@ -39,6 +43,16 @@
   border-color: var(--a-ochre);
   background: var(--a-stone);
   box-shadow: none;
+}
+/* Per-size price (p3 polish) */
+.product-option__price {
+  font-size: 1.1rem;
+  color: var(--a-muted);
+  font-variant-numeric: tabular-nums;
+}
+.product-form__input--pill input[type='radio']:checked + label .product-option__price {
+  color: inherit;
+  opacity: 0.75;
 }
 
 /* Finish swatches: circular with ochre active ring */
@@ -85,12 +99,16 @@
 }
 
 /* Mobile sticky Add-to-bag bar */
+.atelier-pdp-sticky {
+  display: none;
+}
 @media screen and (max-width: 749px) {
-  .atelier-pdp-sticky {
+  .atelier-pdp-sticky.is-visible {
     position: fixed;
     inset: auto 0 0 0;
     z-index: 5;
     display: flex;
+    align-items: center;
     gap: 1rem;
     padding: 1rem 1.6rem calc(1rem + env(safe-area-inset-bottom));
     background: rgb(var(--color-background, 250, 247, 241));
@@ -100,12 +118,402 @@
     font-size: 1.8rem;
     align-self: center;
   }
-  .atelier-pdp-sticky button {
+  .atelier-pdp-sticky__submit {
     flex: 1;
     border-radius: 0;
     background: rgb(var(--color-foreground, 27, 25, 22));
     color: rgb(var(--color-background, 250, 247, 241));
     border: none;
     font-family: var(--font-body-family);
+    font-size: 1.4rem;
+    padding: 1.1rem 1.6rem;
   }
+  .atelier-pdp-sticky__submit[disabled] {
+    opacity: 0.5;
+  }
+}
+
+/* Back-in-stock notify-me */
+.atelier-notify-me {
+  margin-top: 1.2rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid var(--a-hairline-strong);
+  background: var(--a-stone);
+}
+.atelier-notify-me__label {
+  display: block;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.8rem;
+}
+.atelier-notify-me__row {
+  display: flex;
+  gap: 0.8rem;
+}
+.atelier-notify-me__input {
+  flex: 1;
+  border: 1px solid var(--a-hairline-strong);
+  background: var(--a-paper);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: inherit;
+}
+.atelier-notify-me__input:focus {
+  outline: 1px solid var(--a-ochre);
+}
+.atelier-notify-me__submit {
+  border: none;
+  background: rgb(var(--color-foreground, 27, 25, 22));
+  color: rgb(var(--color-background, 250, 247, 241));
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0 1.6rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.atelier-notify-me__success {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+}
+.atelier-notify-me__success .svg-wrapper {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--a-ochre);
+  flex-shrink: 0;
+}
+.atelier-notify-me__error {
+  display: block;
+  margin-top: 0.6rem;
+  color: #9e2b18;
+  font-size: 1.2rem;
+}
+@media screen and (max-width: 480px) {
+  .atelier-notify-me__row {
+    flex-direction: column;
+  }
+  .atelier-notify-me__submit {
+    padding: 0.9rem 1.6rem;
+  }
+}
+
+/* Delivery estimate by PIN code */
+.atelier-delivery-estimate {
+  margin-top: 1.2rem;
+}
+.atelier-delivery-estimate__label {
+  display: block;
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  margin-bottom: 0.7rem;
+}
+.atelier-delivery-estimate__row {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 32rem;
+}
+.atelier-delivery-estimate__input {
+  flex: 1;
+  border: 1px solid var(--a-hairline-strong);
+  background: var(--a-paper);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: inherit;
+  min-width: 0;
+}
+.atelier-delivery-estimate__input:focus {
+  outline: 1px solid var(--a-ochre);
+}
+.atelier-delivery-estimate__submit {
+  border: 1px solid var(--a-ink);
+  background: none;
+  color: var(--a-ink);
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0 1.6rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.atelier-delivery-estimate__submit:hover {
+  background: var(--a-ink);
+  color: var(--a-paper);
+}
+.atelier-delivery-estimate__result {
+  margin: 0.8rem 0 0;
+  font-size: 1.2rem;
+  color: var(--a-muted);
+  min-height: 1.6em;
+}
+.atelier-delivery-estimate__result.is-error {
+  color: #9e2b18;
+}
+
+/* Breadcrumb (p3) */
+.atelier-pdp-crumb {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.6rem;
+  font-family: var(--font-body-family);
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  color: var(--a-muted);
+}
+.atelier-pdp-crumb__el {
+  color: var(--a-ochre);
+}
+.atelier-pdp-crumb__sep {
+  color: var(--a-hairline-strong);
+}
+.atelier-pdp-crumb__link {
+  color: var(--a-muted);
+  text-decoration: none;
+}
+.atelier-pdp-crumb__link:hover {
+  color: var(--a-ink);
+}
+
+/* ── Split layout (p1) — sticky left panel, scrollable right ── */
+@media screen and (min-width: 990px) {
+  /* Wrapper: stretch both columns full viewport height */
+  .product .product__media-wrapper {
+    align-self: flex-start;
+    position: sticky;
+    top: 0;
+  }
+
+  /* Main gallery fills the sticky panel height */
+  .product--large .product__media-wrapper media-gallery,
+  .product--large .product__media-wrapper .slider-mobile-gutter {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* Constrain the main image to remaining height above thumbnails */
+  .product--large .product__media-list {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* Info column: start from top, scroll naturally */
+  .product .product__info-wrapper {
+    align-self: flex-start;
+  }
+  .product .product__column-sticky {
+    position: static !important;
+    top: auto !important;
+  }
+}
+
+/* ── Thumbnail strip (p2) — horizontal, always-visible arrows ── */
+.thumbnail-slider {
+  position: relative;
+}
+
+/* Always show prev/next on desktop regardless of count */
+@media screen and (min-width: 990px) {
+  .product__media-wrapper .slider-button.medium-hide {
+    display: flex !important;
+  }
+  .product__media-wrapper .slider-button.large-up-hide {
+    display: flex !important;
+  }
+}
+
+/* Atelier thumbnail styling: square active border */
+.thumbnail {
+  border-radius: 0;
+  border: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+.thumbnail:hover {
+  border-color: var(--a-hairline-strong);
+}
+.thumbnail[aria-current="true"],
+.thumbnail.active {
+  border: 1px solid var(--a-ochre) !important;
+}
+
+/* Thumbnail nav arrows: position left/right of strip */
+.thumbnail-slider .slider-button--prev,
+.thumbnail-slider .slider-button--next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: rgba(250,247,241,0.9);
+  border: 1px solid var(--a-hairline-strong);
+  border-radius: 0;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumbnail-slider .slider-button--prev { left: 0; }
+.thumbnail-slider .slider-button--next { right: 0; }
+.thumbnail-slider .slider-button:hover {
+  background: var(--a-ochre);
+  border-color: var(--a-ochre);
+}
+.thumbnail-slider .slider-button svg {
+  fill: currentColor;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Dispatch estimate block */
+.atelier-pdp-dispatch {
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--a-hairline);
+  border-bottom: 1px solid var(--a-hairline);
+  margin: 0.4rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.atelier-pdp-dispatch__line {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: var(--a-muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 1.4;
+}
+.atelier-pdp-dispatch__icon {
+  color: var(--a-ochre);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.atelier-pdp-dispatch__packing {
+  font-size: 1.2rem;
+  padding-left: 2.1rem; /* indent to align with text after icon */
+}
+
+/* Colour swatch dots (auto-extracted from variant images) */
+/* Swatch dot: label is a flex column wrapper, not the circle itself */
+.atelier-swatch-dot {
+  position: relative;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  text-align: center !important;
+}
+.atelier-swatch-dot__circle {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background-color: var(--dot-color, #C4B49A);
+  background-image: var(--dot-image, none);
+  background-size: cover;
+  background-position: center;
+  border: 1.5px solid rgba(27, 25, 22, 0.12);
+  display: block;
+  flex-shrink: 0;
+  transition: outline 0.1s ease, border-color 0.1s ease;
+}
+input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__circle {
+  outline: 2px solid var(--a-ochre);
+  outline-offset: 3px;
+  border-color: transparent;
+  box-shadow: none;
+}
+input[type='radio']:hover + .atelier-swatch-dot .atelier-swatch-dot__circle {
+  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline-offset: 2px;
+}
+.atelier-swatch-dot__name {
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  color: var(--a-muted);
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__name {
+  color: var(--a-ink);
+}
+/* Design selector — links between sibling products, not radio inputs.
+   Sized up from the colour dots: this is the primary shape decision on
+   Urli PDPs, not a secondary attribute, so it gets a bigger, squarer tile
+   (square = the theme's product-tile convention) that actually shows the
+   rim/pattern detail that differentiates each design. */
+.atelier-design-selector {
+  margin-top: 2rem;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--a-hairline);
+}
+.atelier-design-selector .form__label {
+  margin-bottom: 1.2rem;
+}
+.atelier-design-selector .product-form__radio-group {
+  gap: 1.8rem 2.2rem !important;
+}
+.atelier-design-selector .atelier-swatch-dot__circle {
+  width: 7.2rem;
+  height: 7.2rem;
+  border-radius: 6px;
+}
+.atelier-design-selector .atelier-swatch-dot__name {
+  font-size: 1.2rem;
+  white-space: normal;
+  max-width: 8rem;
+  line-height: 1.3;
+}
+a.atelier-swatch-dot {
+  text-decoration: none;
+  color: inherit;
+}
+a.atelier-swatch-dot:hover .atelier-swatch-dot__circle {
+  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline-offset: 2px;
+}
+.atelier-swatch-dot.is-current .atelier-swatch-dot__circle {
+  outline: 2px solid var(--a-ochre);
+  outline-offset: 3px;
+  border-color: transparent;
+}
+.atelier-swatch-dot.is-current .atelier-swatch-dot__name {
+  color: var(--a-ink);
+  font-weight: 600;
+}
+/* Swatch container: horizontal row */
+.product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 1.2rem 1.6rem !important;
+  align-items: flex-start !important;
+}
+/* Hide Dawn's sold-out sibling text elements — accessibility text is already in the sr-only span inside the dot */
+.product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group > p,
+.product-form__input--pill:has(.atelier-swatch-dot) .product-form__radio-group > span:not([style]) {
+  display: none !important;
 }

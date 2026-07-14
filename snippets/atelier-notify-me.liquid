@@ -1,0 +1,51 @@
+{% comment %}
+  Back-in-stock notify-me capture. No app — submits through Shopify's native
+  contact form, so submissions land as an email to the store's contact address
+  (Admin → Settings → Notifications → Customer contact) with the product and
+  variant context in the message body. Merchant follows up manually.
+
+  Accepts:
+  - product: {Object} product object.
+  - current_variant: {Object} the unavailable variant.
+  - form_id: {String} unique id suffix for the form/fields.
+
+  Usage:
+  {% render 'atelier-notify-me', product: product, current_variant: current_variant, form_id: section.id %}
+{% endcomment %}
+{%- liquid
+  assign notify_message = 'Notify me when back in stock: ' | append: product.title
+  if current_variant.title != 'Default Title'
+    assign notify_message = notify_message | append: ' — ' | append: current_variant.title
+  endif
+  assign notify_message = notify_message | append: ' (' | append: shop.url | append: product.url | append: ')'
+-%}
+<div class="atelier-notify-me" data-notify-me>
+  {%- form 'contact', id: 'NotifyMe-' | append: form_id, class: 'atelier-notify-me__form' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="atelier-notify-me__success">
+        <span class="svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>
+        We'll email you when this is back.
+      </p>
+    {%- else -%}
+      <input type="hidden" name="contact[Product]" value="{{ notify_message }}">
+      <label class="atelier-notify-me__label" for="NotifyMeEmail-{{ form_id }}">
+        Notify me when back in stock
+      </label>
+      <div class="atelier-notify-me__row">
+        <input
+          type="email"
+          id="NotifyMeEmail-{{ form_id }}"
+          class="atelier-notify-me__input"
+          name="contact[email]"
+          placeholder="Your email"
+          autocomplete="email"
+          required
+        >
+        <button type="submit" class="atelier-notify-me__submit">Notify me</button>
+      </div>
+      {%- if form.errors -%}
+        <small class="atelier-notify-me__error">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</small>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endform -%}
+</div>

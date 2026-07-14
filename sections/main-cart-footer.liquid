@@ -94,6 +94,81 @@
                   </label>
                 </div>
               </div>
+            {%- when 'coupon_offer' -%}
+              {%- if cart.cart_level_discount_applications.size == 0 -%}
+                {%- liquid
+                  assign min_amount = block.settings.minimum_amount
+                  assign eligible = true
+                  if min_amount > 0
+                    assign cart_total = cart.total_price | divided_by: 100.0
+                    if cart_total < min_amount
+                      assign eligible = false
+                      assign remaining = min_amount | minus: cart_total
+                      assign remaining_money = remaining | times: 100 | money
+                    endif
+                  endif
+                -%}
+                <div class="atelier-coupon-offer{% if eligible %} is-eligible{% endif %}" {{ block.shopify_attributes }}>
+                  <div class="atelier-coupon-offer__body">
+                    <p class="atelier-coupon-offer__desc">{{ block.settings.description }}</p>
+                    {%- if eligible -%}
+                      <p class="atelier-coupon-offer__hint is-eligible">{{ block.settings.eligible_label }}</p>
+                    {%- else -%}
+                      <p class="atelier-coupon-offer__hint">{{ block.settings.locked_label }} {{ remaining_money }}</p>
+                    {%- endif -%}
+                    <span class="atelier-coupon-offer__code">{{ block.settings.code }}</span>
+                  </div>
+                  <button
+                    type="button"
+                    class="atelier-coupon-offer__apply"
+                    data-atelier-coupon-offer-apply="{{ block.settings.code | escape }}"
+                    {% unless eligible %}disabled{% endunless %}
+                  >
+                    {{ block.settings.apply_label }}
+                  </button>
+                </div>
+              {%- endif -%}
+              <script src="{{ 'atelier-coupon.js' | asset_url }}" defer="defer"></script>
+            {%- when 'coupon' -%}
+              <div class="atelier-coupon" data-atelier-coupon {{ block.shopify_attributes }}>
+                {%- if cart.cart_level_discount_applications.size > 0 -%}
+                  <ul class="atelier-coupon__applied list-unstyled" role="list">
+                    {%- for discount in cart.cart_level_discount_applications -%}
+                      <li class="atelier-coupon__applied-item">
+                        {{- 'icon-discount.svg' | inline_asset_content -}}
+                        <span>{{ discount.title | escape }} applied (-{{ discount.total_allocated_amount | money }})</span>
+                        <a href="{{ routes.root_url }}discount/?redirect={{ routes.cart_url | url_encode }}" class="atelier-coupon__remove">
+                          {{ block.settings.remove_label }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- else -%}
+                  <label class="atelier-coupon__label" for="CouponCode-{{ section.id }}">
+                    {{ block.settings.label }}
+                  </label>
+                  <div class="atelier-coupon__row">
+                    <input
+                      type="text"
+                      id="CouponCode-{{ section.id }}"
+                      class="atelier-coupon__input"
+                      placeholder="{{ block.settings.placeholder }}"
+                      autocapitalize="characters"
+                      data-atelier-coupon-input
+                    >
+                    <button type="button" class="atelier-coupon__submit" data-atelier-coupon-submit>
+                      {{ block.settings.apply_label }}
+                    </button>
+                  </div>
+                  <small class="atelier-coupon__error" data-atelier-coupon-error hidden>{{ block.settings.error_label }}</small>
+                {%- endif -%}
+              </div>
+              <script src="{{ 'atelier-coupon.js' | asset_url }}" defer="defer"></script>
+            {%- when 'dispatch_note' -%}
+              <p class="cart-dispatch-note caption-large rte" {{ block.shopify_attributes }}>
+                <span class="svg-wrapper">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                {{ block.settings.text }}
+              </p>
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
                 <div>
@@ -278,6 +353,98 @@
           "id": "no_prices_label",
           "label": "No-prices checkbox label",
           "default": "Please leave prices off the packing slip"
+        }
+      ]
+    },
+    {
+      "type": "coupon_offer",
+      "name": "Coupon offer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Discount code",
+          "info": "Must match a real active discount code in Shopify admin"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "70% off up to ₹140"
+        },
+        {
+          "type": "number",
+          "id": "minimum_amount",
+          "label": "Minimum cart value to unlock (₹)",
+          "info": "Leave blank or 0 for no minimum"
+        },
+        {
+          "type": "text",
+          "id": "eligible_label",
+          "label": "Eligible message",
+          "default": "Eligible — apply below"
+        },
+        {
+          "type": "text",
+          "id": "locked_label",
+          "label": "Locked message prefix",
+          "default": "Add items worth"
+        },
+        {
+          "type": "text",
+          "id": "apply_label",
+          "label": "Apply button label",
+          "default": "Apply"
+        }
+      ]
+    },
+    {
+      "type": "coupon",
+      "name": "Coupon code",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Field label",
+          "default": "Have a discount code?"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Input placeholder",
+          "default": "Enter code"
+        },
+        {
+          "type": "text",
+          "id": "apply_label",
+          "label": "Apply button label",
+          "default": "Apply"
+        },
+        {
+          "type": "text",
+          "id": "remove_label",
+          "label": "Remove link label",
+          "default": "Remove"
+        },
+        {
+          "type": "text",
+          "id": "error_label",
+          "label": "Invalid code message",
+          "default": "That code didn't apply — check the spelling and try again."
+        }
+      ]
+    },
+    {
+      "type": "dispatch_note",
+      "name": "Delivery estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Delivery estimate text",
+          "default": "In stock · Ships in 2-4 business days"
         }
       ]
     },

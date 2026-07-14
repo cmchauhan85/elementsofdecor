@@ -30,6 +30,8 @@
   /* --- Accent (the only accent; tunable via theme settings) ----------- */
   /* settings_schema.json "Atelier accent" group writes these via theme.liquid;
      the values below are fallbacks matching the handoff. */
+  --a-ink: #1b1916;
+  --a-paper: #faf7f1;
   --a-ochre: #b88a3a;
   --a-ochre-light: #e8c89a;
   --a-muted: #7a766e;
