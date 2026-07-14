@@ -8,15 +8,15 @@
   max-width: 90rem;
 }
 .atelier-philosophy__eyebrow {
-  margin-bottom: 3rem;
+  margin-bottom: 1.6rem;
 }
 .atelier-philosophy__quote {
   margin: 0;
   font-family: var(--font-heading-family);
   font-weight: 300;
   letter-spacing: var(--a-display-tracking);
-  line-height: 1.18;
-  font-size: clamp(2.8rem, 5vw, 6.4rem);
+  line-height: 1.22;
+  font-size: clamp(2.2rem, 3.6vw, 4.4rem);
 }
 .atelier-philosophy__quote .a-mark {
   color: var(--a-ochre-light);
@@ -25,10 +25,10 @@
   font-style: italic;
 }
 .atelier-philosophy__rule {
-  width: 6rem;
+  width: 5rem;
   height: 1px;
   background: var(--a-ochre);
-  margin: 3.6rem 0 2rem;
+  margin: 2rem 0 1.2rem;
 }
 .atelier-philosophy__attr {
   font-family: var(--font-body-family);
