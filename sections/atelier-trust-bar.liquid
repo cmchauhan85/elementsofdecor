@@ -16,7 +16,10 @@
     <ul class="atelier-trust-bar__grid list-unstyled" role="list">
       {%- for block in section.blocks -%}
         {%- if block.type == 'badge' -%}
-          <li class="atelier-trust-bar__item" {{ block.shopify_attributes }}>
+          <li
+            class="atelier-trust-bar__item{% if block.settings.hide_on_mobile %} atelier-trust-bar__item--desktop-only{% endif %}"
+            {{ block.shopify_attributes }}
+          >
             {%- render 'icon-accordion', icon: block.settings.icon -%}
             <div class="atelier-trust-bar__copy">
               <strong class="atelier-trust-bar__label">{{ block.settings.label }}</strong>
@@ -93,6 +96,13 @@
           "id": "subtext",
           "label": "Subtext",
           "info": "Optional, shown beneath the label"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_on_mobile",
+          "label": "Hide on mobile",
+          "info": "Use for the least essential badge(s) so the mobile strip fits without scrolling",
+          "default": false
         }
       ]
     }
@@ -103,7 +113,7 @@
       "blocks": [
         { "type": "badge", "settings": { "icon": "truck", "label": "Free shipping", "subtext": "On every order" } },
         { "type": "badge", "settings": { "icon": "return", "label": "Easy 7-day returns", "subtext": "No questions asked" } },
-        { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments" } },
+        { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments", "hide_on_mobile": true } },
         { "type": "badge", "settings": { "icon": "leaf", "label": "Handmade, naturally varied", "subtext": "Wood grain, stone veining, and finish differ slightly piece to piece" } }
       ]
     }

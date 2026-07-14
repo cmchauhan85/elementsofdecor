@@ -27,7 +27,7 @@
       "blocks": {
         "b1": { "type": "badge", "settings": { "icon": "truck", "label": "Free shipping", "subtext": "On every order" } },
         "b2": { "type": "badge", "settings": { "icon": "return", "label": "Easy 7-day returns", "subtext": "No questions asked" } },
-        "b3": { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments" } },
+        "b3": { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments", "hide_on_mobile": true } },
         "b4": { "type": "badge", "settings": { "icon": "leaf", "label": "Handmade, naturally varied", "subtext": "Wood grain, stone veining, and finish differ slightly piece to piece" } }
       },
       "block_order": ["b1", "b2", "b3", "b4"],

@@ -1,23 +1,39 @@
+/* A slim, integrated band — not a floating row of icons. Background tint +
+   hairline dividers read as one designed strip; padding is intentionally
+   tighter than the .a-section default since this isn't an editorial block. */
+.atelier-trust-bar {
+  padding-block: 2rem !important;
+  background: var(--a-stone);
+}
+
 .atelier-trust-bar__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2.4rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
   padding: 0;
   margin: 0;
-  border-top: 1px solid var(--a-hairline);
-  padding-top: 2.8rem;
 }
 
 .atelier-trust-bar__item {
   display: flex;
-  align-items: flex-start;
-  gap: 1.2rem;
+  align-items: center;
+  gap: 1rem;
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  padding: 0 2rem;
+  border-left: 1px solid var(--a-hairline-strong);
+}
+
+.atelier-trust-bar__item:first-child {
+  border-left: none;
 }
 
 .atelier-trust-bar__item .svg-wrapper {
   flex-shrink: 0;
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 2.2rem;
+  height: 2.2rem;
   color: var(--a-ochre);
 }
 
@@ -29,71 +45,60 @@
 .atelier-trust-bar__copy {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.2rem;
+  min-width: 0;
 }
 
 .atelier-trust-bar__label {
   font-family: var(--font-body-family);
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   line-height: 1.3;
 }
 
 .atelier-trust-bar__subtext {
   font-family: var(--font-body-family);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: var(--a-muted);
   line-height: 1.4;
 }
 
-@media screen and (min-width: 750px) and (max-width: 989px) {
-  .atelier-trust-bar__grid {
-    grid-template-columns: repeat(2, 1fr);
+@media screen and (max-width: 989px) {
+  .atelier-trust-bar__subtext {
+    display: none;
   }
 }
 
-/* Mobile: horizontal scroll strip instead of stacked rows, to keep this
-   from eating vertical space above the fold. */
+/* Mobile: tight single-row band, no scroll. Badges flagged hide_on_mobile
+   (least essential — e.g. payment security, already reinforced at cart)
+   drop out so the remaining ones fit comfortably. */
 @media screen and (max-width: 749px) {
-  .atelier-trust-bar__grid {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 2rem;
-    padding-top: 1.6rem;
+  .atelier-trust-bar {
+    padding-block: 1.4rem !important;
   }
-  .atelier-trust-bar__grid::-webkit-scrollbar {
-    display: none;
+
+  .atelier-trust-bar__grid {
+    gap: 0;
   }
 
   .atelier-trust-bar__item {
-    flex: 0 0 auto;
-    align-items: center;
-    gap: 0.7rem;
-    scroll-snap-align: start;
+    gap: 0.6rem;
+    padding: 0 1rem;
+  }
+
+  .atelier-trust-bar__item--desktop-only {
+    display: none;
   }
 
   .atelier-trust-bar__item .svg-wrapper {
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .atelier-trust-bar__copy {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 0.5rem;
-    white-space: nowrap;
+    width: 1.8rem;
+    height: 1.8rem;
   }
 
   .atelier-trust-bar__label {
-    font-size: 1.15rem;
-  }
-
-  .atelier-trust-bar__subtext {
-    display: none;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
   }
 }
