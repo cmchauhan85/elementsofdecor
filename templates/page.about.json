@@ -57,9 +57,9 @@
       "blocks": {
         "st1": { "type": "studio", "settings": { "element": "Stone", "city": "Jaipur", "meta": "Marble carvers · 12 craftsmen" } },
         "st2": { "type": "studio", "settings": { "element": "Metal", "city": "Moradabad", "meta": "Brass & iron · 18 craftsmen" } },
-        "st3": { "type": "studio", "settings": { "element": "Wood", "city": "Saharanpur", "meta": "Joiners · Coming spring" } },
+        "st3": { "type": "studio", "settings": { "element": "Wood", "city": "Saharanpur", "meta": "Joiners" } },
         "st4": { "type": "studio", "settings": { "element": "Ceramic", "city": "Khurja", "meta": "Wheel & mould · 9 craftsmen" } },
-        "st5": { "type": "studio", "settings": { "element": "Fabric", "city": "Kutch", "meta": "Hand-block · Coming spring" } }
+        "st5": { "type": "studio", "settings": { "element": "Fabric", "city": "Kutch", "meta": "Hand-block" } }
       },
       "block_order": ["st1", "st2", "st3", "st4", "st5"],
       "settings": { "color_scheme": "scheme-3" }
