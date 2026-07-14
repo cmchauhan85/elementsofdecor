@@ -133,6 +133,34 @@
   }
 }
 
+/* Milestone incentive (mirrors the cart ribbon for Buy Now shoppers, who
+   skip the cart page entirely) */
+.atelier-pdp-milestone {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1.2rem 0 0;
+  padding: 1rem 1.2rem;
+  background: rgba(184, 138, 58, 0.08);
+  border: 1px solid rgba(184, 138, 58, 0.3);
+  font-family: var(--font-body-family);
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+.atelier-pdp-milestone.is-earned {
+  background: rgba(92, 122, 92, 0.08);
+  border-color: rgba(92, 122, 92, 0.3);
+}
+.atelier-pdp-milestone .svg-wrapper {
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--a-ochre);
+}
+.atelier-pdp-milestone.is-earned .svg-wrapper {
+  color: #5c7a5c;
+}
+
 /* Back-in-stock notify-me */
 .atelier-notify-me {
   margin-top: 1.2rem;

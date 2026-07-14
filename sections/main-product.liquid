@@ -556,6 +556,8 @@
                   {%- endform -%}
                 </product-form>
 
+                {%- render 'atelier-pdp-milestone', product: product -%}
+
                 {%- if variant_unavailable -%}
                   {%- render 'atelier-notify-me',
                     product: product,
