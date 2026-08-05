@@ -1,0 +1,57 @@
+{% comment %}
+  Compact milestone-incentive line for the PDP, shown near the buy buttons
+  so Buy Now shoppers (who skip the cart page entirely) still see the same
+  gift-tier incentive as the cart's milestone ribbon.
+
+  Reads the shared `reward_tier` metaobject (single source of truth with
+  the cart ribbon and the Complete-the-Look tool) — no data duplicated
+  here. Renders nothing if the metaobject doesn't exist yet.
+
+  Estimates "if you buy this now": cart total + this product's current
+  variant price, at page load. Doesn't live-recompute on quantity/variant
+  change (would need JS) — directionally correct for the common qty-1 case.
+
+  Accepts:
+  - product: {Object} the current product.
+
+  Usage:
+  {% render 'atelier-pdp-milestone', product: product %}
+{% endcomment %}
+{%- liquid
+  assign meta_tiers = shop.metaobjects.reward_tier.values
+  if meta_tiers.size == 0
+    assign skip = true
+  endif
+-%}
+{%- unless skip -%}
+  {%- liquid
+    assign sorted = meta_tiers | sort: 'threshold'
+    assign variant_price = product.selected_or_first_available_variant.price | default: 0
+    assign projected_total = cart.total_price | plus: variant_price | divided_by: 100.0
+
+    assign next_threshold = 0
+    assign next_label = ''
+    for t in sorted
+      assign th = t.threshold.value
+      if projected_total < th and next_threshold == 0
+        assign next_threshold = th
+        assign next_label = t.label.value
+      endif
+    endfor
+  -%}
+  {%- if next_threshold > 0 -%}
+    {%- liquid
+      assign remaining = next_threshold | minus: projected_total
+      assign remaining_money = remaining | times: 100 | money
+    -%}
+    <p class="atelier-pdp-milestone">
+      <span class="svg-wrapper">{{- 'icon-discount.svg' | inline_asset_content -}}</span>
+      Add {{ remaining_money }} more (with this item) to unlock <strong>{{ next_label }}</strong>
+    </p>
+  {%- else -%}
+    <p class="atelier-pdp-milestone is-earned">
+      <span class="svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>
+      With this item, you've unlocked every order gift.
+    </p>
+  {%- endif -%}
+{%- endunless -%}
