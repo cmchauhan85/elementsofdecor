@@ -148,6 +148,13 @@
 .atelier-season__grid-item .atelier-pcard__title {
   font-size: 1.6rem;
   margin-top: 1rem;
+  /* Clamp to 2 lines and reserve that height so meta/price stay aligned
+     across cards in the same row regardless of title length. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 3.52rem;
 }
 .atelier-season__grid-item .atelier-pcard__meta {
   font-size: 1.15rem;
