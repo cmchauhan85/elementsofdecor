@@ -10,9 +10,10 @@
 .product__title h2 {
   font-family: var(--font-heading-family);
   font-weight: 300;
-  letter-spacing: var(--a-display-tracking);
-  font-size: clamp(3rem, 4vw, 4.4rem);
-  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
 }
 .product__text.caption-with-letter-spacing,
 .product .product-form__input .form__label {
@@ -25,23 +26,35 @@
 .product .price {
   font-family: var(--font-heading-family);
   font-weight: 300;
-  font-size: 2.8rem;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
 }
 
-/* Variant options as square tiles (size) — Dawn pill inputs squared off */
+/* Variant options as compact chips (size) — column layout kept only to fit
+   the optional per-size price on a second line (p3 polish, not in the
+   static prototype but worth keeping). */
 .product-form__input--pill input[type='radio'] + label {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.2rem;
   border-radius: 0;
   border: 1px solid var(--a-hairline-strong);
-  padding: 1.2rem 1.8rem;
+  padding: 0.8rem 1.4rem;
   font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--a-muted);
+  transition: border-color 0.2s, color 0.2s;
+}
+.product-form__input--pill label:hover {
+  border-color: var(--a-ochre);
+  color: var(--a-ochre);
 }
 .product-form__input--pill input[type='radio']:checked + label {
-  border-color: var(--a-ochre);
-  background: var(--a-stone);
+  border-color: var(--a-ink);
+  color: var(--a-ink);
+  background: none;
   box-shadow: none;
 }
 /* Per-size price (p3 polish) */
@@ -93,9 +106,11 @@
   border-top: none;
 }
 .product .accordion__title {
-  font-family: var(--font-heading-family);
-  font-weight: 300;
-  font-size: 1.8rem;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Mobile sticky Add-to-bag bar */
