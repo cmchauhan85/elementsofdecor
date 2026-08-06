@@ -14,7 +14,7 @@
       "settings": {
         "image": "shopify://shop_images/ChatGPT_Image_May_13_2026_10_23_54_AM.png",
         "height": "split",
-        "split_image_caption": "Atelier · Mumbai",
+        "split_image_caption": "Workshop · Mumbai",
         "eyebrow": "Manifesto · No. 01",
         "heading_line_1": "Home is not styled.",
         "heading_line_2": "It is felt.",
@@ -139,7 +139,7 @@
       "type": "atelier-notes",
       "settings": {
         "eyebrow": "Stories",
-        "title": "Notes from the Atelier",
+        "title": "Notes from the Workshop",
         "blog": "news",
         "posts_to_show": 3,
         "color_scheme": "scheme-1"
