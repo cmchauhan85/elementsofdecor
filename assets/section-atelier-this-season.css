@@ -174,8 +174,13 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
   }
+  /* Featured also goes full-width here so the two plain cards pair up
+     in their own row instead of leaving a dangling empty cell (1 + 1 + 1
+     + 2 = 5 column-units, an odd number that can't tile a 2-col grid
+     unless featured joins wide as a full-width row). */
   .atelier-season__grid-item--featured {
     grid-row: span 1;
+    grid-column: span 2;
   }
   .atelier-season__grid-item--featured .atelier-pcard__media {
     aspect-ratio: 4 / 3;
@@ -188,6 +193,9 @@
 @media screen and (max-width: 540px) {
   .atelier-season__grid {
     grid-template-columns: 1fr;
+  }
+  .atelier-season__grid-item--featured {
+    grid-column: span 1;
   }
   .atelier-season__grid-item--wide {
     grid-column: span 1;
