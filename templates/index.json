@@ -13,10 +13,12 @@
       "type": "atelier-hero",
       "settings": {
         "image": "shopify://shop_images/ChatGPT_Image_May_13_2026_10_23_54_AM.png",
-        "height": "medium",
+        "height": "split",
+        "split_image_caption": "Atelier · Mumbai",
         "eyebrow": "Manifesto · No. 01",
         "heading_line_1": "Home is not styled.",
         "heading_line_2": "It is felt.",
+        "subtext": "Objects in natural materials — chosen for how they settle into a room, not how they look on a shelf.",
         "cta_label": "Check our latest designs",
         "cta_link": "shopify://collections/urlis-bowls",
         "color_scheme": "scheme-1"
@@ -32,6 +34,7 @@
       },
       "block_order": ["b1", "b2", "b3", "b4"],
       "settings": {
+        "style": "marquee",
         "color_scheme": "scheme-1"
       }
     },
@@ -76,6 +79,7 @@
     "this_season": {
       "type": "atelier-this-season",
       "settings": {
+        "layout": "grid",
         "eyebrow": "Best Sellers",
         "title": "Considered, <em>not collected.</em>",
         "best_sellers": ["gid://shopify/Product/9477182619873", "gid://shopify/Product/9479391150305", "gid://shopify/Product/9485966541025", "gid://shopify/Product/9485889339617", "gid://shopify/Product/9477421990113"],

@@ -116,3 +116,126 @@
   max-width: 54ch;
   font-style: italic;
 }
+
+/* Split layout — text left, image right, no scrim (image isn't behind type) */
+.atelier-hero--split {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  align-items: stretch;
+  min-height: min(88vh, 820px);
+  background: rgb(var(--color-background, 250, 247, 241));
+}
+
+.atelier-hero__split-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(2.5rem, 6vw, 6rem) clamp(1.5rem, 4vw, 4.5rem);
+}
+
+.atelier-hero__split-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.atelier-hero__split-eyebrow::after {
+  content: '';
+  flex: 0 0 2.5rem;
+  height: 1px;
+  background: var(--a-hairline-strong);
+}
+
+.atelier-hero__split-heading {
+  margin: 0 0 2rem;
+  font-family: var(--font-heading-family);
+  font-weight: 300;
+  letter-spacing: var(--a-display-tracking);
+  line-height: 1;
+  font-size: clamp(3.2rem, 7vw, 7.5rem);
+}
+.atelier-hero__split-heading em {
+  display: block;
+  font-style: italic;
+  color: var(--a-ochre);
+}
+
+.atelier-hero__split-subtext {
+  margin: 0 0 3rem;
+  color: var(--a-muted);
+  font-family: var(--font-body-family);
+  font-size: 1.6rem;
+  line-height: 1.7;
+  font-style: italic;
+  max-width: 38ch;
+}
+
+.atelier-hero__split-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: fit-content;
+  text-decoration: none;
+  color: inherit;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: gap 0.25s ease;
+}
+.atelier-hero__split-cta:hover {
+  gap: 1.75rem;
+}
+.atelier-hero__split-cta-arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border: 1px solid var(--a-hairline-strong);
+  font-size: 1.6rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.atelier-hero__split-cta:hover .atelier-hero__split-cta-arrow {
+  background: var(--a-ochre);
+  border-color: var(--a-ochre);
+  color: rgb(var(--color-background, 250, 247, 241));
+}
+
+.atelier-hero__split-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--a-stone);
+}
+.atelier-hero__split-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.atelier-hero__split-caption {
+  position: absolute;
+  z-index: 1;
+  bottom: 1.25rem;
+  left: 1.5rem;
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(250, 247, 241, 0.65);
+}
+
+@media screen and (max-width: 749px) {
+  .atelier-hero--split {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .atelier-hero__split-media {
+    aspect-ratio: 4 / 3;
+  }
+  .atelier-hero__split-text {
+    padding: 2.5rem 2.2rem 3rem;
+  }
+}

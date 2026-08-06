@@ -111,3 +111,85 @@
   font-size: 2rem;
   color: var(--a-ochre-light);
 }
+
+/* Editorial grid layout — asymmetric magazine-style, hairline-separated
+   cells instead of gapped cards. Exactly 4 products: featured (tall,
+   spans 2 rows) + 2 regular + 1 wide (spans 2 columns). */
+.atelier-season__view-all {
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.atelier-season__view-all:hover {
+  color: var(--a-ochre);
+}
+
+.atelier-season__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1px;
+  background: var(--a-hairline);
+  border: 1px solid var(--a-hairline);
+}
+.atelier-season__grid-item {
+  background: rgb(var(--color-background, 250, 247, 241));
+}
+.atelier-season__grid-item .atelier-pcard {
+  height: 100%;
+}
+.atelier-season__grid-item .atelier-pcard__media {
+  aspect-ratio: 4 / 3;
+}
+.atelier-season__grid-item .atelier-pcard__title {
+  font-size: 1.6rem;
+  margin-top: 1rem;
+}
+.atelier-season__grid-item .atelier-pcard__meta {
+  font-size: 1.15rem;
+}
+.atelier-season__grid-item .atelier-pcard__price {
+  font-size: 1.4rem;
+}
+.atelier-season__grid-item--featured {
+  grid-row: span 2;
+}
+.atelier-season__grid-item--featured .atelier-pcard__media {
+  aspect-ratio: 2 / 3;
+  flex: 1;
+}
+.atelier-season__grid-item--wide {
+  grid-column: span 2;
+}
+.atelier-season__grid-item--wide .atelier-pcard__media {
+  aspect-ratio: 16 / 7;
+}
+
+@media screen and (max-width: 900px) {
+  .atelier-season__grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+  }
+  .atelier-season__grid-item--featured {
+    grid-row: span 1;
+  }
+  .atelier-season__grid-item--featured .atelier-pcard__media {
+    aspect-ratio: 4 / 3;
+  }
+  .atelier-season__grid-item--wide {
+    grid-column: span 2;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .atelier-season__grid {
+    grid-template-columns: 1fr;
+  }
+  .atelier-season__grid-item--wide {
+    grid-column: span 1;
+  }
+}
