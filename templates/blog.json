@@ -10,15 +10,14 @@
 {
   "sections": {
     "main": {
-      "type": "main-blog",
+      "type": "atelier-blog",
       "settings": {
-        "layout": "collage",
-        "show_image": true,
-        "image_height": "medium",
-        "show_date": true,
-        "show_author": false,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "eyebrow": "Stories",
+        "title": "Stories from <em>the Atelier</em>",
+        "show_tag_filter": true,
+        "read_more_label": "Read the note",
+        "posts_per_page": 9,
+        "color_scheme": "scheme-1"
       }
     }
   },
