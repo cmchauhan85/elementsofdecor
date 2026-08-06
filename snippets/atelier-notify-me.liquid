@@ -18,9 +18,10 @@
     assign notify_message = notify_message | append: ' — ' | append: current_variant.title
   endif
   assign notify_message = notify_message | append: ' (' | append: shop.url | append: product.url | append: ')'
+  assign notify_form_id = 'NotifyMe-' | append: form_id
 -%}
 <div class="atelier-notify-me" data-notify-me>
-  {%- form 'contact', id: 'NotifyMe-' | append: form_id, class: 'atelier-notify-me__form' -%}
+  {%- form 'contact', id: notify_form_id, class: 'atelier-notify-me__form' -%}
     {%- if form.posted_successfully? -%}
       <p class="atelier-notify-me__success">
         <span class="svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>

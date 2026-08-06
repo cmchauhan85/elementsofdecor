@@ -7,17 +7,29 @@
   if pairs == blank and section.settings.fallback_collection != blank
     assign pairs = section.settings.fallback_collection.products
   endif
+
+  assign shown = 0
+  for p in pairs
+    if p.id != product.id and shown < limit
+      assign shown = shown | plus: 1
+    endif
+  endfor
+
+  assign grid_cols = shown
+  if grid_cols > 4
+    assign grid_cols = 4
+  endif
 -%}
 
-{%- if pairs != blank -%}
+{%- if shown > 0 -%}
   <div class="atelier-pairs color-{{ section.settings.color_scheme }} a-section">
     <div class="page-width">
       <h2 class="atelier-pairs__title">{{ section.settings.title }}</h2>
-      <div class="atelier-pairs__grid">
-        {%- assign shown = 0 -%}
+      <div class="atelier-pairs__grid" style="--atelier-pairs-cols: {{ grid_cols }};">
+        {%- assign rendered = 0 -%}
         {%- for p in pairs -%}
-          {%- if p.id != product.id and shown < limit -%}
-            {%- assign shown = shown | plus: 1 -%}
+          {%- if p.id != product.id and rendered < limit -%}
+            {%- assign rendered = rendered | plus: 1 -%}
             {% render 'atelier-product-card', product: p %}
           {%- endif -%}
         {%- endfor -%}

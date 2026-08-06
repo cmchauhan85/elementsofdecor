@@ -107,8 +107,15 @@
 }
 .atelier-pairs__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2.4rem 1.4rem;
+  grid-template-columns: repeat(var(--atelier-pairs-cols, 4), 1fr);
+  gap: 1px;
+  background: var(--a-hairline);
+  border: 1px solid var(--a-hairline);
+}
+.atelier-pairs__grid .atelier-pcard {
+  background: rgb(var(--color-background, 250, 247, 241));
+  height: 100%;
+  padding-bottom: 1.2rem;
 }
 @media screen and (max-width: 749px) {
   .atelier-pairs__grid {
