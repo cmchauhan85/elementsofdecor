@@ -32,30 +32,40 @@
 
 /* Variant options as compact chips (size) — column layout kept only to fit
    the optional per-size price on a second line (p3 polish, not in the
-   static prototype but worth keeping). */
+   static prototype but worth keeping).
+
+   !important throughout: component-product-variant-picker.css (Dawn's
+   native stylesheet) is loaded *after* this file in main-product.liquid
+   and shares the exact same selector, so at equal specificity it wins
+   the cascade property-by-property. This file's whole purpose is to
+   override that stock look (square, zero-radius chips, not Dawn's
+   rounded pills) — !important is the deliberate, minimal way to make
+   that override actually win without reordering <link> tags sitewide. */
 .product-form__input--pill input[type='radio'] + label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-  border-radius: 0;
-  border: 1px solid var(--a-hairline-strong);
-  padding: 0.8rem 1.4rem;
-  font-family: var(--font-body-family);
-  font-size: 1.3rem;
-  font-weight: 500;
-  color: var(--a-muted);
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.2rem !important;
+  border-radius: 0 !important;
+  border: 1px solid var(--a-hairline-strong) !important;
+  padding: 0.8rem 1.4rem !important;
+  margin: 0 0.8rem 0.8rem 0 !important;
+  font-family: var(--font-body-family) !important;
+  font-size: 1.3rem !important;
+  font-weight: 500 !important;
+  letter-spacing: normal !important;
+  color: var(--a-muted) !important;
   transition: border-color 0.2s, color 0.2s;
 }
 .product-form__input--pill label:hover {
-  border-color: var(--a-ochre);
-  color: var(--a-ochre);
+  border-color: var(--a-ochre) !important;
+  color: var(--a-ochre) !important;
 }
 .product-form__input--pill input[type='radio']:checked + label {
-  border-color: var(--a-ink);
-  color: var(--a-ink);
-  background: none;
-  box-shadow: none;
+  border-color: var(--a-ink) !important;
+  background: var(--a-ink) !important;
+  color: var(--a-paper) !important;
+  box-shadow: none !important;
 }
 /* Per-size price (p3 polish) */
 .product-option__price {
