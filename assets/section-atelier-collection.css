@@ -52,7 +52,7 @@
   gap: 1.6rem 3rem;
   padding: 2rem;
   margin-bottom: 2.4rem;
-  background: rgb(var(--color-foreground, 27, 25, 22) / 0.04);
+  background: rgb(var(--color-foreground, 20, 33, 61) / 0.04);
   border: 1px solid var(--a-hairline);
 }
 .atelier-plp__band-left {
@@ -130,8 +130,8 @@
   align-items: center;
 }
 .atelier-chip.is-active {
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-foreground, 20, 33, 61));
+  color: rgb(var(--color-background, 255, 255, 255));
   border-color: transparent;
 }
 .atelier-chip.is-soon {
@@ -294,7 +294,7 @@
     width: min(80vw, 36rem);
     height: 100dvh;
     overflow-y: auto;
-    background: rgb(var(--color-background, 250, 247, 241));
+    background: rgb(var(--color-background, 255, 255, 255));
     z-index: 300;
     padding: 2.4rem;
     transform: translateX(-110%);
@@ -315,7 +315,7 @@
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(27, 25, 22, 0.5);
+  background: rgba(20, 33, 61, 0.5);
   z-index: 299;
 }
 .atelier-plp__overlay.is-open {
@@ -439,7 +439,7 @@
   border: 1px solid var(--a-hairline);
 }
 .atelier-plp__grid .atelier-pcard {
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
   height: 100%;
   padding-bottom: 1.2rem;
 }

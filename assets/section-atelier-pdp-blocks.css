@@ -113,7 +113,7 @@
   border: 1px solid var(--a-hairline);
 }
 .atelier-pairs__grid .atelier-pcard {
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
   height: 100%;
   padding-bottom: 1.2rem;
 }

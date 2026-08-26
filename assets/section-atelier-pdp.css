@@ -78,13 +78,25 @@
 }
 
 /* Primary "Add to the bag" button — Ink, square, full width */
+/* Primary action — the one coral element on the PDP. */
 .product-form__buttons .product-form__submit {
   border-radius: 0;
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: var(--a-ochre);
+  color: #ffffff;
   font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight-bold);
   letter-spacing: 0.04em;
   min-height: 5.4rem;
+  border-color: var(--a-ochre);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.product-form__buttons .product-form__submit:hover {
+  background: var(--a-ochre-light);
+  border-color: var(--a-ochre-light);
+}
+.product-form__buttons .product-form__submit:active {
+  background: var(--a-ochre-deep);
+  border-color: var(--a-ochre-deep);
 }
 
 /* Gallery: square, active thumbnail gets ochre border */
@@ -126,7 +138,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.6rem calc(1rem + env(safe-area-inset-bottom));
-    background: rgb(var(--color-background, 250, 247, 241));
+    background: rgb(var(--color-background, 255, 255, 255));
     border-top: 1px solid var(--a-hairline);
   }
   .atelier-pdp-sticky .price {
@@ -136,10 +148,11 @@
   .atelier-pdp-sticky__submit {
     flex: 1;
     border-radius: 0;
-    background: rgb(var(--color-foreground, 27, 25, 22));
-    color: rgb(var(--color-background, 250, 247, 241));
+    background: var(--a-ochre);
+    color: #ffffff;
     border: none;
     font-family: var(--font-body-family);
+    font-weight: var(--font-body-weight-bold);
     font-size: 1.4rem;
     padding: 1.1rem 1.6rem;
   }
@@ -156,8 +169,8 @@
   gap: 0.8rem;
   margin: 1.2rem 0 0;
   padding: 1rem 1.2rem;
-  background: rgba(184, 138, 58, 0.08);
-  border: 1px solid rgba(184, 138, 58, 0.3);
+  background: rgba(207, 74, 37, 0.08);
+  border: 1px solid rgba(207, 74, 37, 0.3);
   font-family: var(--font-body-family);
   font-size: 1.25rem;
   line-height: 1.4;
@@ -209,11 +222,11 @@
 }
 .atelier-notify-me__submit {
   border: none;
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: var(--a-ochre);
+  color: #ffffff;
   font-family: var(--font-body-family);
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: var(--font-body-weight-bold);
   padding: 0 1.6rem;
   white-space: nowrap;
   cursor: pointer;
@@ -398,7 +411,7 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  background: rgba(250,247,241,0.9);
+  background: rgba(255,255,255,0.9);
   border: 1px solid var(--a-hairline-strong);
   border-radius: 0;
   width: 3.2rem;
@@ -476,7 +489,7 @@
   background-image: var(--dot-image, none);
   background-size: cover;
   background-position: center;
-  border: 1.5px solid rgba(27, 25, 22, 0.12);
+  border: 1.5px solid rgba(20, 33, 61, 0.12);
   display: block;
   flex-shrink: 0;
   transition: outline 0.1s ease, border-color 0.1s ease;
@@ -488,7 +501,7 @@ input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__circle {
   box-shadow: none;
 }
 input[type='radio']:hover + .atelier-swatch-dot .atelier-swatch-dot__circle {
-  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline: 2px solid rgba(20, 33, 61, 0.3);
   outline-offset: 2px;
 }
 .atelier-swatch-dot__name {
@@ -535,7 +548,7 @@ a.atelier-swatch-dot {
   color: inherit;
 }
 a.atelier-swatch-dot:hover .atelier-swatch-dot__circle {
-  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline: 2px solid rgba(20, 33, 61, 0.3);
   outline-offset: 2px;
 }
 .atelier-swatch-dot.is-current .atelier-swatch-dot__circle {

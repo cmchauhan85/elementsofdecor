@@ -67,7 +67,7 @@
   position: absolute;
   top: 1.2rem;
   left: 1.2rem;
-  color: #faf7f1;
+  color: #ffffff;
   mix-blend-mode: difference;
   font-family: var(--font-body-family);
   font-size: 1.1rem;
@@ -77,7 +77,7 @@
   position: absolute;
   bottom: 1.2rem;
   right: 1.2rem;
-  color: #faf7f1;
+  color: #ffffff;
   mix-blend-mode: difference;
 }
 .atelier-card__soon {
@@ -85,8 +85,8 @@
   top: 1.2rem;
   right: 1.2rem;
   padding: 0.5rem 1rem;
-  background: rgba(27, 25, 22, 0.7);
-  color: #faf7f1;
+  background: rgba(20, 33, 61, 0.7);
+  color: #ffffff;
   font-family: var(--font-body-family);
   font-size: 1rem;
   letter-spacing: 0.2em;

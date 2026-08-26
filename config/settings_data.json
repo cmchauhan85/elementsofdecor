@@ -149,46 +149,46 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#faf7f1",
+          "background": "#ffffff",
           "background_gradient": "",
-          "text": "#1b1916",
-          "button": "#1b1916",
-          "button_label": "#faf7f1",
-          "secondary_button_label": "#1b1916",
-          "shadow": "#1b1916"
+          "text": "#14213d",
+          "button": "#14213d",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#14213d",
+          "shadow": "#14213d"
         }
       },
       "scheme-2": {
         "settings": {
-          "background": "#ebe5d9",
+          "background": "#f4f5f7",
           "background_gradient": "",
-          "text": "#1b1916",
-          "button": "#1b1916",
-          "button_label": "#ebe5d9",
-          "secondary_button_label": "#1b1916",
-          "shadow": "#1b1916"
+          "text": "#14213d",
+          "button": "#14213d",
+          "button_label": "#f4f5f7",
+          "secondary_button_label": "#14213d",
+          "shadow": "#14213d"
         }
       },
       "scheme-3": {
         "settings": {
-          "background": "#1b1916",
+          "background": "#14213d",
           "background_gradient": "",
-          "text": "#faf7f1",
-          "button": "#faf7f1",
-          "button_label": "#1b1916",
-          "secondary_button_label": "#e8c89a",
+          "text": "#ffffff",
+          "button": "#ffffff",
+          "button_label": "#14213d",
+          "secondary_button_label": "#e8613c",
           "shadow": "#000000"
         }
       },
       "scheme-4": {
         "settings": {
-          "background": "#d4ccbe",
+          "background": "#f4f5f7",
           "background_gradient": "",
-          "text": "#1b1916",
-          "button": "#1b1916",
-          "button_label": "#faf7f1",
-          "secondary_button_label": "#1b1916",
-          "shadow": "#1b1916"
+          "text": "#14213d",
+          "button": "#14213d",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#14213d",
+          "shadow": "#14213d"
         }
       },
       "scheme-5": {

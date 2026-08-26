@@ -38,8 +38,8 @@
   align-items: center;
 }
 .atelier-blog .atelier-chip.is-active {
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-foreground, 20, 33, 61));
+  color: rgb(var(--color-background, 255, 255, 255));
   border-color: transparent;
 }
 
@@ -56,7 +56,7 @@
 .atelier-blog__feat-main {
   position: relative;
   overflow: hidden;
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
   display: block;
   color: inherit;
   text-decoration: none;
@@ -131,7 +131,7 @@
   flex: 1;
   display: block;
   border-bottom: 1px solid var(--a-hairline);
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
   color: inherit;
   text-decoration: none;
 }
@@ -187,7 +187,7 @@
 }
 .atelier-blog__card {
   display: block;
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
   color: inherit;
   text-decoration: none;
 }

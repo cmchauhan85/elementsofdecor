@@ -35,7 +35,7 @@
 .atelier-season__btn:hover {
   background: var(--a-ochre);
   border-color: var(--a-ochre);
-  color: #1b1916;
+  color: #ffffff;
 }
 .atelier-season__btn:disabled {
   opacity: 0.3;
@@ -96,8 +96,8 @@
   justify-content: space-between;
   padding: 2.8rem;
   text-decoration: none;
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-foreground, 20, 33, 61));
+  color: rgb(var(--color-background, 255, 255, 255));
 }
 .atelier-season__all-title {
   font-family: var(--font-heading-family);
@@ -137,7 +137,7 @@
   border: 1px solid var(--a-hairline);
 }
 .atelier-season__grid-item {
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
 }
 .atelier-season__grid-item .atelier-pcard {
   height: 100%;

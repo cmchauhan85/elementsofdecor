@@ -37,16 +37,27 @@
   font-weight: 300;
 }
 
-/* Checkout button — ink, square */
+/* Checkout button — the one coral action on the cart page, square. */
 .cart__ctas .cart__checkout-button,
 .cart__dynamic-checkout-buttons {
   border-radius: 0;
 }
 .cart__ctas .cart__checkout-button {
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: var(--a-ochre);
+  color: #ffffff;
+  border-color: var(--a-ochre);
   font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight-bold);
   letter-spacing: 0.04em;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.cart__ctas .cart__checkout-button:hover {
+  background: var(--a-ochre-light);
+  border-color: var(--a-ochre-light);
+}
+.cart__ctas .cart__checkout-button:active {
+  background: var(--a-ochre-deep);
+  border-color: var(--a-ochre-deep);
 }
 
 /* Element tag on cart line items */
@@ -282,7 +293,7 @@
 .atelier-coupon-offer.is-eligible {
   opacity: 1;
   border-color: var(--a-ochre);
-  background: rgba(184, 138, 58, 0.06);
+  background: rgba(207, 74, 37, 0.06);
 }
 .atelier-coupon-offer__desc {
   margin: 0 0 0.3rem;

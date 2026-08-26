@@ -95,7 +95,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 2.4rem;
-  border-top: 1px solid rgba(250, 247, 241, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: 2.8rem;
 }
 @media screen and (max-width: 989px) {
@@ -118,7 +118,7 @@
 .atelier-studio__meta {
   font-family: var(--font-body-family);
   font-size: 1.3rem;
-  color: rgba(250, 247, 241, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
 }
 
