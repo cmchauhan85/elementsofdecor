@@ -95,7 +95,11 @@
       {{ input_dataset }}
     >
     <label for="{{ input_id }}">
-      {{ value -}}
+      {%- if value == 'Set of 2' -%}
+        6"+9" set
+      {%- else -%}
+        {{ value -}}
+      {%- endif -%}
       {%- if option.name == 'Size' and value.variant -%}
         <span class="product-option__price">{{ value.variant.price | money }}</span>
       {%- endif -%}
@@ -118,6 +122,8 @@
     >
       {% if option_disabled -%}
         {{- 'products.product.value_unavailable' | t: option_value: value -}}
+      {%- elsif value == 'Set of 2' -%}
+        6"+9" set
       {%- else -%}
         {{- value -}}
       {%- endif %}
