@@ -41,7 +41,7 @@
           {%- endif -%}
           <h3 class="atelier-note__title">{{ article.title }}</h3>
           <p class="atelier-note__meta">
-            {{ article.published_at | date: format: 'month_day_year' }}
+            {{ article.published_at | date: 'month_day_year' }}
             {%- if article.author != blank %} · {{ article.author }}{% endif -%}
           </p>
         </a>
@@ -72,7 +72,7 @@
       "type": "text",
       "id": "title",
       "label": "Title",
-      "default": "Notes from the Atelier"
+      "default": "Notes from the Workshop"
     },
     {
       "type": "blog",

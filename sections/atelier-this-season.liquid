@@ -1,10 +1,20 @@
 {{ 'section-atelier-this-season.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign limit        = section.settings.products_to_show
-  assign coll         = section.settings.collection
-  assign picked       = section.settings.best_sellers
-  assign n            = 0
+  assign is_grid = false
+  if section.settings.layout == 'grid'
+    assign is_grid = true
+  endif
+
+  assign limit = section.settings.products_to_show
+  if is_grid
+    assign limit = 4
+  endif
+
+  assign coll   = section.settings.collection
+  assign picked = section.settings.best_sellers
+  assign n      = 0
+  assign included_ids = ','
 -%}
 
 <div class="atelier-season color-{{ section.settings.color_scheme }} a-section" id="AtelierSeason-{{ section.id }}">
@@ -16,20 +26,43 @@
         {%- endif -%}
         <h2 class="atelier-season__title">{{ section.settings.title }}</h2>
       </div>
-      <nav class="atelier-season__nav" aria-label="{{ 'sections.featured_collection.see_all' | t }}">
-        <button class="atelier-season__btn" id="SeasonPrev-{{ section.id }}" aria-label="Previous">←</button>
-        <button class="atelier-season__btn" id="SeasonNext-{{ section.id }}" aria-label="Next">→</button>
-      </nav>
+      {%- unless is_grid -%}
+        <nav class="atelier-season__nav" aria-label="{{ 'sections.featured_collection.see_all' | t }}">
+          <button class="atelier-season__btn" id="SeasonPrev-{{ section.id }}" aria-label="Previous">←</button>
+          <button class="atelier-season__btn" id="SeasonNext-{{ section.id }}" aria-label="Next">→</button>
+        </nav>
+      {%- else -%}
+        {%- if section.settings.show_all_tile -%}
+          <a href="{{ coll.url | default: routes.all_products_collection_url }}" class="atelier-season__view-all">
+            {{ section.settings.all_title | default: 'View all →' }}
+          </a>
+        {%- endif -%}
+      {%- endunless -%}
     </div>
 
-    <div class="atelier-season__rail" id="SeasonRail-{{ section.id }}">
+    <div class="{% if is_grid %}atelier-season__grid{% else %}atelier-season__rail{% endif %}" id="SeasonRail-{{ section.id }}">
 
       {%- if picked.count > 0 -%}
         {%- comment %} Source 1: explicit picks from the Theme Editor product_list setting {%- endcomment -%}
         {%- for product in picked limit: limit -%}
           {%- assign n = n | plus: 1 -%}
           {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
-          {% render 'atelier-product-card', product: product, number: num %}
+          {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+          {%- if is_grid -%}
+            {%- liquid
+              assign grid_class = ''
+              if n == 1
+                assign grid_class = 'atelier-season__grid-item--featured'
+              elsif n == limit
+                assign grid_class = 'atelier-season__grid-item--wide'
+              endif
+            -%}
+            <div class="atelier-season__grid-item {{ grid_class }}">
+              {% render 'atelier-product-card', product: product %}
+            </div>
+          {%- else -%}
+            {% render 'atelier-product-card', product: product, number: num %}
+          {%- endif -%}
         {%- endfor -%}
 
       {%- else -%}
@@ -38,7 +71,22 @@
           {%- if product.metafields.custom.best_seller.value == true -%}
             {%- assign n = n | plus: 1 -%}
             {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
-            {% render 'atelier-product-card', product: product, number: num %}
+            {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+            {%- if is_grid -%}
+              {%- liquid
+                assign grid_class = ''
+                if n == 1
+                  assign grid_class = 'atelier-season__grid-item--featured'
+                elsif n == limit
+                  assign grid_class = 'atelier-season__grid-item--wide'
+                endif
+              -%}
+              <div class="atelier-season__grid-item {{ grid_class }}">
+                {% render 'atelier-product-card', product: product %}
+              </div>
+            {%- else -%}
+              {% render 'atelier-product-card', product: product, number: num %}
+            {%- endif -%}
             {%- if n >= limit -%}{%- break -%}{%- endif -%}
           {%- endif -%}
         {%- endfor -%}
@@ -47,18 +95,61 @@
       {%- if n == 0 -%}
         {%- comment %} Source 3: fall back to the collection setting {%- endcomment -%}
         {%- for product in coll.products limit: limit -%}
+          {%- assign n = n | plus: 1 -%}
           {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
-          {% render 'atelier-product-card', product: product, number: num %}
-        {%- else -%}
-          {%- for i in (1..5) -%}
-            <div class="atelier-pcard">
-              <div class="atelier-pcard__media">{{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}</div>
+          {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+          {%- if is_grid -%}
+            {%- liquid
+              assign grid_class = ''
+              if forloop.index == 1
+                assign grid_class = 'atelier-season__grid-item--featured'
+              elsif forloop.index == limit
+                assign grid_class = 'atelier-season__grid-item--wide'
+              endif
+            -%}
+            <div class="atelier-season__grid-item {{ grid_class }}">
+              {% render 'atelier-product-card', product: product %}
             </div>
-          {%- endfor -%}
+          {%- else -%}
+            {% render 'atelier-product-card', product: product, number: num %}
+          {%- endif -%}
+        {%- else -%}
+          {%- unless is_grid -%}
+            {%- for i in (1..5) -%}
+              <div class="atelier-pcard">
+                <div class="atelier-pcard__media">{{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
         {%- endfor -%}
       {%- endif -%}
 
-      {%- if section.settings.show_all_tile -%}
+      {%- if is_grid and n < limit -%}
+        {%- comment %} Editorial grid always needs exactly 4 products — top up from the
+           full catalog (skipping anything already shown above) so the grid never shows
+           empty cells when picks/best-seller flags/fallback collection fall short. {%- endcomment -%}
+        {%- for product in collections.all.products -%}
+          {%- if n >= limit -%}{%- break -%}{%- endif -%}
+          {%- assign pid_token = product.id | prepend: ',' | append: ',' -%}
+          {%- unless included_ids contains pid_token -%}
+            {%- assign n = n | plus: 1 -%}
+            {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+            {%- liquid
+              assign grid_class = ''
+              if n == 1
+                assign grid_class = 'atelier-season__grid-item--featured'
+              elsif n == limit
+                assign grid_class = 'atelier-season__grid-item--wide'
+              endif
+            -%}
+            <div class="atelier-season__grid-item {{ grid_class }}">
+              {% render 'atelier-product-card', product: product %}
+            </div>
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if section.settings.show_all_tile and is_grid == false -%}
         <a href="{{ coll.url | default: routes.all_products_collection_url }}" class="atelier-season__all a-anim">
           {% render 'atelier-eyebrow', text: section.settings.all_eyebrow %}
           <h3 class="atelier-season__all-title">{{ section.settings.all_title }}</h3>
@@ -70,33 +161,46 @@
   </div>
 </div>
 
-<script>
-(function(){
-  var rail = document.getElementById('SeasonRail-{{ section.id }}');
-  var prev = document.getElementById('SeasonPrev-{{ section.id }}');
-  var next = document.getElementById('SeasonNext-{{ section.id }}');
-  if (!rail || !prev || !next) return;
-  function getStep() {
-    var card = rail.querySelector('.atelier-pcard');
-    if (!card) return rail.offsetWidth * 0.8;
-    return card.offsetWidth + parseInt(getComputedStyle(rail).columnGap || 0, 10);
-  }
-  prev.addEventListener('click', function() { rail.scrollBy({ left: -getStep(), behavior: 'smooth' }); });
-  next.addEventListener('click', function() { rail.scrollBy({ left:  getStep(), behavior: 'smooth' }); });
-  function updateButtons() {
-    prev.disabled = rail.scrollLeft <= 4;
-    next.disabled = rail.scrollLeft + rail.offsetWidth >= rail.scrollWidth - 4;
-  }
-  rail.addEventListener('scroll', updateButtons, { passive: true });
-  updateButtons();
-})();
-</script>
+{%- unless is_grid -%}
+  <script>
+  (function(){
+    var rail = document.getElementById('SeasonRail-{{ section.id }}');
+    var prev = document.getElementById('SeasonPrev-{{ section.id }}');
+    var next = document.getElementById('SeasonNext-{{ section.id }}');
+    if (!rail || !prev || !next) return;
+    function getStep() {
+      var card = rail.querySelector('.atelier-pcard');
+      if (!card) return rail.offsetWidth * 0.8;
+      return card.offsetWidth + parseInt(getComputedStyle(rail).columnGap || 0, 10);
+    }
+    prev.addEventListener('click', function() { rail.scrollBy({ left: -getStep(), behavior: 'smooth' }); });
+    next.addEventListener('click', function() { rail.scrollBy({ left:  getStep(), behavior: 'smooth' }); });
+    function updateButtons() {
+      prev.disabled = rail.scrollLeft <= 4;
+      next.disabled = rail.scrollLeft + rail.offsetWidth >= rail.scrollWidth - 4;
+    }
+    rail.addEventListener('scroll', updateButtons, { passive: true });
+    updateButtons();
+  })();
+  </script>
+{%- endunless -%}
 
 {% schema %}
 {
   "name": "Atelier This Season",
   "tag": "section",
   "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "rail", "label": "Horizontal scroll rail" },
+        { "value": "grid", "label": "Editorial grid" }
+      ],
+      "default": "rail",
+      "info": "Editorial grid always shows exactly 4 products, ignoring Max products to show."
+    },
     {
       "type": "text",
       "id": "eyebrow",

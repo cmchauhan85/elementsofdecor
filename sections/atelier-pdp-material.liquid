@@ -3,7 +3,7 @@
 {%- liquid
   assign mat_title = product.metafields.atelier.material_title.value | default: section.settings.default_title
   assign mat_issue = section.settings.issue
-  assign mat_body  = product.metafields.atelier.material_body.value | default: section.settings.default_body
+  assign mat_body_metafield = product.metafields.atelier.material_body
   assign mat_image = section.settings.image
   assign mat_stat1_n = section.settings.stat1_number
   assign mat_stat1_l = section.settings.stat1_label
@@ -21,8 +21,10 @@
         {%- endif -%}
       </div>
       <h2 class="atelier-pdp-mat__title">{{ mat_title }}</h2>
-      {%- if mat_body != blank -%}
-        <div class="atelier-pdp-mat__body rte">{{ mat_body }}</div>
+      {%- if mat_body_metafield != blank -%}
+        <div class="atelier-pdp-mat__body rte">{{ mat_body_metafield | metafield_tag }}</div>
+      {%- elsif section.settings.default_body != blank -%}
+        <div class="atelier-pdp-mat__body rte">{{ section.settings.default_body }}</div>
       {%- endif -%}
       {%- if mat_stat1_n != blank or mat_stat2_n != blank -%}
         <dl class="atelier-pdp-mat__stats">

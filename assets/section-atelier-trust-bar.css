@@ -102,3 +102,60 @@
     letter-spacing: 0.06em;
   }
 }
+
+/* Marquee style — continuous scrolling text strip, no background tint,
+   just top/bottom hairlines (deliberately quieter than the badges style). */
+.atelier-trust-bar--marquee {
+  border-block: 1px solid var(--a-hairline);
+  overflow: hidden;
+  padding-block: 1.4rem;
+}
+.atelier-trust-bar--marquee .atelier-block__head {
+  margin-bottom: 1.6rem;
+}
+.atelier-trust-bar__marquee-wrap {
+  overflow: hidden;
+}
+.atelier-trust-bar__track {
+  display: flex;
+  gap: 4rem;
+  width: max-content;
+  animation: atelier-trust-marquee 34s linear infinite;
+}
+.atelier-trust-bar__marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--a-muted);
+  white-space: nowrap;
+}
+.atelier-trust-bar__marquee-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--a-ochre);
+  flex-shrink: 0;
+}
+@keyframes atelier-trust-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atelier-trust-bar__track {
+    animation: none;
+  }
+}
+@media screen and (max-width: 749px) {
+  .atelier-trust-bar__marquee-item {
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+  }
+  .atelier-trust-bar__track {
+    gap: 2.4rem;
+  }
+}

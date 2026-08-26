@@ -39,7 +39,7 @@
   aspect-ratio: 4 / 3;
   border: 1px solid var(--a-hairline-strong);
   position: relative;
-  background: rgba(27, 25, 22, 0.02);
+  background: rgba(20, 33, 61, 0.02);
 }
 .atelier-teaser__mock::before,
 .atelier-teaser__mock::after {

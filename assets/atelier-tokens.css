@@ -1,49 +1,64 @@
 /*
-  Atelier design system — foundation tokens.
-  Loaded after base.css in layout/theme.liquid so it overrides Dawn's defaults.
+  Ink & Coral design system — foundation tokens (v1.0, per the EOD Web Design
+  System handoff). Loaded after base.css in layout/theme.liquid so it
+  overrides Dawn's defaults.
 
-  Scope (Phase 0): typography families, the single ochre accent, the eyebrow
-  ("aCaps") utility, the square aesthetic, the mandala motif, and the section
-  spacing rhythm. Layout/component styling lives with each Atelier section.
+  Token names keep the legacy "--a-*" prefix from the original Atelier system
+  (ochre/ink/paper/muted/stone/hairline) so every existing component that
+  already references them repaints automatically — only the *values* below
+  changed, not the names. New concepts the old system didn't have (slate-60,
+  mist, rule/border split, coral-deep, status colors) are added alongside.
 
   Palette reference (also seeded as color schemes in settings_data.json):
-    Paper #faf7f1 · Dust #ebe5d9 · Stone #d4ccbe · Ink #1b1916
-    Ochre #b88a3a · Ochre light #e8c89a · Muted #7a766e
+    Page white #ffffff · Ink #14213d · Coral (action) #cf4a25
+    Coral bright (hover) #e8613c · Coral deep (pressed) #a8371a
+    Slate #55607a · Slate 60 #8a93a8 · Mist #f4f5f7 · Rule #eaeaea · Border #dcdde2
 */
 
 :root {
   /* --- Typography ----------------------------------------------------- */
-  /* Newsreader (serif) for all display/headings, weight 300, tight tracking.
-     Manrope (sans) for all UI/body. Devanagari fallback for Hindi glyphs. */
-  --font-heading-family: "Newsreader", Georgia, "Times New Roman", serif;
+  /* Instrument Serif (display) — regular + italic only, never below 20px,
+     never all-caps, never for UI labels. Karla (UI/body) for everything a
+     customer must read to act: buttons, chips, prices, form labels. */
+  --font-heading-family: "Instrument Serif", Georgia, "Times New Roman", serif;
   --font-heading-style: normal;
-  --font-heading-weight: 300;
+  --font-heading-weight: 400;
 
-  --font-body-family: "Manrope", "Noto Sans Devanagari", system-ui, -apple-system,
+  --font-body-family: "Karla", "Noto Sans Devanagari", system-ui, -apple-system,
     "Segoe UI", Roboto, sans-serif;
   --font-body-style: normal;
   --font-body-weight: 400;
-  --font-body-weight-bold: 600;
+  --font-body-weight-bold: 700;
 
   --a-display-tracking: -0.015em;
 
   /* --- Accent (the only accent; tunable via theme settings) ----------- */
   /* settings_schema.json "Atelier accent" group writes these via theme.liquid;
      the values below are fallbacks matching the handoff. */
-  --a-ink: #1b1916;
-  --a-paper: #faf7f1;
-  --a-ochre: #b88a3a;
-  --a-ochre-light: #e8c89a;
-  --a-muted: #7a766e;
-  --a-stone: #d4ccbe;
+  --a-ink: #14213d;
+  --a-paper: #ffffff;
+  --a-ochre: #cf4a25;       /* "action" — coral. Legacy name, new role. */
+  --a-ochre-light: #e8613c; /* hover fill / image-overlay tags only */
+  --a-ochre-deep: #a8371a;  /* pressed state; coral text on white */
+  --a-muted: #55607a;       /* slate — secondary text, italic sub-heads */
+  --a-muted-60: #8a93a8;    /* slate 60 — labels, meta, placeholders */
+  --a-stone: #f4f5f7;       /* mist — inset panels, table stripes */
 
-  /* Hairline borders: ink/ochre at low opacity (the spec's #1b191610 rule). */
-  --a-hairline: rgba(27, 25, 22, 0.1);
-  --a-hairline-strong: rgba(27, 25, 22, 0.25);
+  /* Hairlines: Rule for dividers, Border for inputs/chips/outline buttons. */
+  --a-hairline: #eaeaea;
+  --a-hairline-strong: #dcdde2;
 
-  /* --- Section spacing rhythm ----------------------------------------- */
-  --a-section-y: 6rem;   /* desktop vertical padding (≈96px), see utility */
+  /* --- Status --------------------------------------------------------- */
+  --a-status-in-stock: #1f6b4a;
+  --a-status-low-stock: #a5760a;
+  --a-status-error: #a8371a;
+  --a-status-info: #14213d;
+
+  /* --- Section spacing rhythm ------------------------------------------ */
+  /* 4px base scale: 8 12 16 24 32 48 72 96. */
+  --a-section-y: 6rem;   /* desktop vertical padding (96px), see utility */
   --a-section-x: 6rem;   /* desktop horizontal padding (60px) */
+  --a-page-max-width: 124rem; /* 1240px */
 }
 
 /* Display type: serif, light, tight. Dawn heading vars already drive h1–h5;
@@ -60,11 +75,12 @@ h1, h2, h3, h4, h5,
 }
 
 /* --- Eyebrow / label ("aCaps") --------------------------------------- */
+/* Matches the spec's "label" token: Karla 700 · 11/11 · +0.2em. */
 .a-eyebrow {
   font-family: var(--font-body-family);
-  font-size: 1rem; /* 10px */
-  font-weight: 600;
-  letter-spacing: 0.32em;
+  font-size: 1.1rem; /* 11px */
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   line-height: 1;
   color: var(--a-muted);
@@ -156,7 +172,7 @@ h1, h2, h3, h4, h5,
 .a-shopby__track {
   display: inline-flex;
   padding: 0.3rem;
-  background: rgba(27, 25, 22, 0.05);
+  background: rgba(20, 33, 61, 0.05);
   border: 1px solid var(--a-hairline);
 }
 .a-shopby__opt {
@@ -172,8 +188,8 @@ h1, h2, h3, h4, h5,
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 .a-shopby__opt.is-active {
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-foreground, 20, 33, 61));
+  color: rgb(var(--color-background, 255, 255, 255));
   font-style: normal;
 }
 .a-shopby--sm .a-shopby__opt {

@@ -18,51 +18,97 @@
   endcase
 -%}
 
-<div
-  class="atelier-hero color-{{ section.settings.color_scheme }}{% if section.settings.height == 'full' %} atelier-hero--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
-  {% unless section.settings.height == 'full' %}style="height: min(80vh, {{ h_desktop }}px);"{% endunless %}
->
-  {%- if section.settings.image != blank -%}
-    <div class="atelier-hero__media">
-      {{
-        section.settings.image
-        | image_url: width: 3000
-        | image_tag:
-          loading: 'eager',
-          fetchpriority: fetch_priority,
-          sizes: '100vw',
-          widths: '550, 750, 1100, 1500, 2000, 3000',
-          alt: section.settings.image.alt | default: section.settings.heading_line_1
-      }}
-    </div>
-  {%- endif -%}
-
-  <div class="atelier-hero__scrim"></div>
-
-  <div class="atelier-hero__inner page-width">
-    <div class="atelier-hero__copy">
+{%- if section.settings.height == 'split' -%}
+  <div
+    class="atelier-hero atelier-hero--split color-{{ section.settings.color_scheme }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  >
+    <div class="atelier-hero__split-text">
       {%- if section.settings.eyebrow != blank -%}
-        {% render 'atelier-eyebrow', text: section.settings.eyebrow, class: 'atelier-hero__eyebrow' %}
+        <div class="atelier-hero__split-eyebrow">
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+        </div>
       {%- endif -%}
-      <h1 class="atelier-hero__heading">
+      <h1 class="atelier-hero__split-heading">
         {{ section.settings.heading_line_1 }}
         {%- if section.settings.heading_line_2 != blank -%}
           <em>{{ section.settings.heading_line_2 }}</em>
         {%- endif -%}
       </h1>
       {%- if section.settings.subtext != blank -%}
-        <p class="atelier-hero__subtext">{{ section.settings.subtext }}</p>
+        <p class="atelier-hero__split-subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank -%}
+        <a href="{{ section.settings.cta_link | default: '#' }}" class="atelier-hero__split-cta a-anim">
+          <span>{{ section.settings.cta_label }}</span>
+          <span class="atelier-hero__split-cta-arrow" aria-hidden="true">→</span>
+        </a>
       {%- endif -%}
     </div>
-
-    {%- if section.settings.cta_label != blank -%}
-      <a href="{{ section.settings.cta_link | default: '#' }}" class="atelier-hero__cta a-anim">
-        <span>{{ section.settings.cta_label }}</span>
-        <span class="atelier-hero__arrow a-round" aria-hidden="true">→</span>
-      </a>
-    {%- endif -%}
+    <div class="atelier-hero__split-media" aria-hidden="true">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: fetch_priority,
+            sizes: '(min-width: 750px) 45vw, 100vw',
+            widths: '550, 750, 1100, 1500, 2000',
+            alt: section.settings.image.alt | default: section.settings.heading_line_1
+        }}
+      {%- endif -%}
+      {%- if section.settings.split_image_caption != blank -%}
+        <span class="atelier-hero__split-caption">{{ section.settings.split_image_caption }}</span>
+      {%- endif -%}
+    </div>
   </div>
-</div>
+{%- else -%}
+  <div
+    class="atelier-hero color-{{ section.settings.color_scheme }}{% if section.settings.height == 'full' %} atelier-hero--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+    {% unless section.settings.height == 'full' %}style="height: min(80vh, {{ h_desktop }}px);"{% endunless %}
+  >
+    {%- if section.settings.image != blank -%}
+      <div class="atelier-hero__media">
+        {{
+          section.settings.image
+          | image_url: width: 3000
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: fetch_priority,
+            sizes: '100vw',
+            widths: '550, 750, 1100, 1500, 2000, 3000',
+            alt: section.settings.image.alt | default: section.settings.heading_line_1
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="atelier-hero__scrim"></div>
+
+    <div class="atelier-hero__inner page-width">
+      <div class="atelier-hero__copy">
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow, class: 'atelier-hero__eyebrow' %}
+        {%- endif -%}
+        <h1 class="atelier-hero__heading">
+          {{ section.settings.heading_line_1 }}
+          {%- if section.settings.heading_line_2 != blank -%}
+            <em>{{ section.settings.heading_line_2 }}</em>
+          {%- endif -%}
+        </h1>
+        {%- if section.settings.subtext != blank -%}
+          <p class="atelier-hero__subtext">{{ section.settings.subtext }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.cta_label != blank -%}
+        <a href="{{ section.settings.cta_link | default: '#' }}" class="atelier-hero__cta a-anim">
+          <span>{{ section.settings.cta_label }}</span>
+          <span class="atelier-hero__arrow a-round" aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
 
 {% schema %}
 {
@@ -83,9 +129,17 @@
         { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },
         { "value": "large", "label": "Large" },
-        { "value": "full", "label": "Full screen" }
+        { "value": "full", "label": "Full screen" },
+        { "value": "split", "label": "Split (text left, image right)" }
       ],
       "default": "medium"
+    },
+    {
+      "type": "text",
+      "id": "split_image_caption",
+      "label": "Split layout — image caption",
+      "info": "Optional caption over the image, e.g. \"Workshop · Mumbai\". Only used in Split layout. Leave blank to hide.",
+      "default": "Workshop · Mumbai"
     },
     {
       "type": "text",

@@ -4,7 +4,7 @@
   max-width: 96rem;
   margin: 0 auto;
   border: 1px solid var(--a-hairline);
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
 }
 @media screen and (max-width: 749px) {
   .atelier-gratitude__card {
@@ -12,8 +12,8 @@
   }
 }
 .atelier-gratitude__panel {
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-foreground, 20, 33, 61));
+  color: rgb(var(--color-background, 255, 255, 255));
   padding: 3.6rem;
   display: flex;
   flex-direction: column;

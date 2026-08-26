@@ -10,9 +10,10 @@
 .product__title h2 {
   font-family: var(--font-heading-family);
   font-weight: 300;
-  letter-spacing: var(--a-display-tracking);
-  font-size: clamp(3rem, 4vw, 4.4rem);
-  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
 }
 .product__text.caption-with-letter-spacing,
 .product .product-form__input .form__label {
@@ -25,24 +26,46 @@
 .product .price {
   font-family: var(--font-heading-family);
   font-weight: 300;
-  font-size: 2.8rem;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
 }
 
-/* Variant options as square tiles (size) — Dawn pill inputs squared off */
+/* Variant options as compact chips (size) — column layout kept only to fit
+   the optional per-size price on a second line (p3 polish, not in the
+   static prototype but worth keeping).
+
+   !important throughout: component-product-variant-picker.css (Dawn's
+   native stylesheet) is loaded *after* this file in main-product.liquid
+   and shares the exact same selector, so at equal specificity it wins
+   the cascade property-by-property. This file's whole purpose is to
+   override that stock look (square, zero-radius chips, not Dawn's
+   rounded pills) — !important is the deliberate, minimal way to make
+   that override actually win without reordering <link> tags sitewide. */
 .product-form__input--pill input[type='radio'] + label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  border-radius: 0;
-  border: 1px solid var(--a-hairline-strong);
-  padding: 1.2rem 1.8rem;
-  font-family: var(--font-body-family);
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.2rem !important;
+  border-radius: 0 !important;
+  border: 1px solid var(--a-hairline-strong) !important;
+  padding: 0.8rem 1.4rem !important;
+  margin: 0 0.8rem 0.8rem 0 !important;
+  font-family: var(--font-body-family) !important;
+  font-size: 1.3rem !important;
+  font-weight: 500 !important;
+  letter-spacing: normal !important;
+  color: var(--a-muted) !important;
+  transition: border-color 0.2s, color 0.2s;
+}
+.product-form__input--pill label:hover {
+  border-color: var(--a-ochre) !important;
+  color: var(--a-ochre) !important;
 }
 .product-form__input--pill input[type='radio']:checked + label {
-  border-color: var(--a-ochre);
-  background: var(--a-stone);
-  box-shadow: none;
+  border-color: var(--a-ink) !important;
+  background: var(--a-ink) !important;
+  color: var(--a-paper) !important;
+  box-shadow: none !important;
 }
 /* Per-size price (p3 polish) */
 .product-option__price {
@@ -65,13 +88,25 @@
 }
 
 /* Primary "Add to the bag" button — Ink, square, full width */
+/* Primary action — the one coral element on the PDP. */
 .product-form__buttons .product-form__submit {
   border-radius: 0;
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: var(--a-ochre);
+  color: #ffffff;
   font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight-bold);
   letter-spacing: 0.04em;
   min-height: 5.4rem;
+  border-color: var(--a-ochre);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.product-form__buttons .product-form__submit:hover {
+  background: var(--a-ochre-light);
+  border-color: var(--a-ochre-light);
+}
+.product-form__buttons .product-form__submit:active {
+  background: var(--a-ochre-deep);
+  border-color: var(--a-ochre-deep);
 }
 
 /* Gallery: square, active thumbnail gets ochre border */
@@ -93,9 +128,11 @@
   border-top: none;
 }
 .product .accordion__title {
-  font-family: var(--font-heading-family);
-  font-weight: 300;
-  font-size: 1.8rem;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Mobile sticky Add-to-bag bar */
@@ -111,7 +148,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.6rem calc(1rem + env(safe-area-inset-bottom));
-    background: rgb(var(--color-background, 250, 247, 241));
+    background: rgb(var(--color-background, 255, 255, 255));
     border-top: 1px solid var(--a-hairline);
   }
   .atelier-pdp-sticky .price {
@@ -121,10 +158,11 @@
   .atelier-pdp-sticky__submit {
     flex: 1;
     border-radius: 0;
-    background: rgb(var(--color-foreground, 27, 25, 22));
-    color: rgb(var(--color-background, 250, 247, 241));
+    background: var(--a-ochre);
+    color: #ffffff;
     border: none;
     font-family: var(--font-body-family);
+    font-weight: var(--font-body-weight-bold);
     font-size: 1.4rem;
     padding: 1.1rem 1.6rem;
   }
@@ -141,8 +179,8 @@
   gap: 0.8rem;
   margin: 1.2rem 0 0;
   padding: 1rem 1.2rem;
-  background: rgba(184, 138, 58, 0.08);
-  border: 1px solid rgba(184, 138, 58, 0.3);
+  background: rgba(207, 74, 37, 0.08);
+  border: 1px solid rgba(207, 74, 37, 0.3);
   font-family: var(--font-body-family);
   font-size: 1.25rem;
   line-height: 1.4;
@@ -194,11 +232,11 @@
 }
 .atelier-notify-me__submit {
   border: none;
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: var(--a-ochre);
+  color: #ffffff;
   font-family: var(--font-body-family);
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: var(--font-body-weight-bold);
   padding: 0 1.6rem;
   white-space: nowrap;
   cursor: pointer;
@@ -383,7 +421,7 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  background: rgba(250,247,241,0.9);
+  background: rgba(255,255,255,0.9);
   border: 1px solid var(--a-hairline-strong);
   border-radius: 0;
   width: 3.2rem;
@@ -461,7 +499,7 @@
   background-image: var(--dot-image, none);
   background-size: cover;
   background-position: center;
-  border: 1.5px solid rgba(27, 25, 22, 0.12);
+  border: 1.5px solid rgba(20, 33, 61, 0.12);
   display: block;
   flex-shrink: 0;
   transition: outline 0.1s ease, border-color 0.1s ease;
@@ -473,7 +511,7 @@ input[type='radio']:checked + .atelier-swatch-dot .atelier-swatch-dot__circle {
   box-shadow: none;
 }
 input[type='radio']:hover + .atelier-swatch-dot .atelier-swatch-dot__circle {
-  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline: 2px solid rgba(20, 33, 61, 0.3);
   outline-offset: 2px;
 }
 .atelier-swatch-dot__name {
@@ -520,7 +558,7 @@ a.atelier-swatch-dot {
   color: inherit;
 }
 a.atelier-swatch-dot:hover .atelier-swatch-dot__circle {
-  outline: 2px solid rgba(27, 25, 22, 0.3);
+  outline: 2px solid rgba(20, 33, 61, 0.3);
   outline-offset: 2px;
 }
 .atelier-swatch-dot.is-current .atelier-swatch-dot__circle {
