@@ -13,7 +13,7 @@
       "type": "atelier-hero",
       "settings": {
         "image": "shopify://shop_images/ChatGPT_Image_May_13_2026_10_23_54_AM.png",
-        "height": "split",
+        "height": "full",
         "split_image_caption": "Workshop · Mumbai",
         "eyebrow": "Manifesto · No. 01",
         "heading_line_1": "Home is not styled.",
