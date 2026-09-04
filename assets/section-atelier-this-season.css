@@ -142,8 +142,15 @@
 .atelier-season__grid-item .atelier-pcard {
   height: 100%;
 }
+/* aspect-ratio sets the preferred shape, but flex-grow lets the image
+   absorb any extra height the row ends up with (rows are sized by the
+   tall featured cell spanning both of them) — otherwise that leftover
+   space shows up as dead whitespace below the text instead of more
+   photo, and the grid stops reading as one seamless surface. */
 .atelier-season__grid-item .atelier-pcard__media {
   aspect-ratio: 4 / 3;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 .atelier-season__grid-item .atelier-pcard__title {
   font-size: 1.6rem;
@@ -167,13 +174,16 @@
 }
 .atelier-season__grid-item--featured .atelier-pcard__media {
   aspect-ratio: 2 / 3;
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 .atelier-season__grid-item--wide {
   grid-column: span 2;
 }
 .atelier-season__grid-item--wide .atelier-pcard__media {
   aspect-ratio: 16 / 7;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 @media screen and (max-width: 900px) {
