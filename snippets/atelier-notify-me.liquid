@@ -20,7 +20,7 @@
   assign notify_message = notify_message | append: ' (' | append: shop.url | append: product.url | append: ')'
 -%}
 <div class="atelier-notify-me" data-notify-me>
-  {%- form 'contact', id: 'NotifyMe-' | append: form_id, class: 'atelier-notify-me__form' -%}
+  {%- form form_id, class: 'atelier-notify-me__form' -%}
     {%- if form.posted_successfully? -%}
       <p class="atelier-notify-me__success">
         <span class="svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>
@@ -49,3 +49,14 @@
     {%- endif -%}
   {%- endform -%}
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- form 'contact', id: 'NotifyMe-' | append: form_id, class: 'atelier-notify-me__form'
+    -%}"
+  to: "{%- form form_id, class: 'atelier-notify-me__form' -%}"
+  position: 1019..1073
+{% endcomment %}
