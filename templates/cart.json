@@ -102,8 +102,8 @@
   "order": [
     "milestone",
     "cart-items",
-    "continue",
     "cart-footer",
+    "continue",
     "trust"
   ]
 }

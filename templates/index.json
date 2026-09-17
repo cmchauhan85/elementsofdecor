@@ -19,7 +19,7 @@
         "heading_line_1": "Home is not styled.",
         "heading_line_2": "It is felt.",
         "subtext": "Objects in natural materials — chosen for how they settle into a room, not how they look on a shelf.",
-        "cta_label": "Check our latest designs",
+        "cta_label": "Shop New Arrivals",
         "cta_link": "shopify://collections/urlis-bowls",
         "color_scheme": "scheme-1"
       }
@@ -85,7 +85,7 @@
         "best_sellers": ["gid://shopify/Product/9477182619873", "gid://shopify/Product/9479391150305", "gid://shopify/Product/9485966541025", "gid://shopify/Product/9485889339617", "gid://shopify/Product/9477421990113"],
         "collection": "best-sellers",
         "products_to_show": 10,
-        "show_all_tile": false,
+        "show_all_tile": true,
         "all_eyebrow": "Everything",
         "all_title": "The full shop →",
         "color_scheme": "scheme-1"
@@ -99,7 +99,7 @@
         "best_sellers": ["gid://shopify/Product/9484720996577", "gid://shopify/Product/9536126648545", "gid://shopify/Product/9536126615777", "gid://shopify/Product/9536126714081", "gid://shopify/Product/9479407698145", "gid://shopify/Product/9486089486561", "gid://shopify/Product/9423365996769", "gid://shopify/Product/9423034745057"],
         "collection": "gifting-edit",
         "products_to_show": 10,
-        "show_all_tile": false,
+        "show_all_tile": true,
         "all_eyebrow": "Everything",
         "all_title": "The full shop →",
         "color_scheme": "scheme-1"

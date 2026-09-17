@@ -61,9 +61,20 @@
   background-color: rgb(var(--color-background));
 }
 
+/* Give the submit affordance real visibility instead of blending into
+   the input (was background-color: inherit at rest — invisible until
+   focused). This is a genuine form submit, so it gets the one coral
+   accent like other primary actions. */
 .newsletter-form__button:not(:focus-visible):not(.focused) {
-  box-shadow: inherit;
-  background-color: inherit;
+  box-shadow: none;
+  background-color: var(--a-ochre, rgb(var(--color-foreground)));
+}
+.newsletter-form__button:not(:focus-visible):not(.focused) .icon {
+  color: #ffffff;
+  fill: #ffffff;
+}
+.newsletter-form__button:hover {
+  background-color: var(--a-ochre-light, rgb(var(--color-foreground)));
 }
 
 .newsletter-form__button .icon {
