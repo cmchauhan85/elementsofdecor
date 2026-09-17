@@ -7,6 +7,7 @@
   assign off_label = 'sections.open_box_sale.percent_off' | t
 -%}
 
+{%- if coll.products.size > 0 -%}
 <div class="openbox color-{{ section.settings.color_scheme }} a-section">
   <div class="page-width">
     <div class="openbox__head">
@@ -45,8 +46,6 @@
           endif
         -%}
         {% render 'atelier-product-card', product: product, badge_override: badge_override %}
-      {%- else -%}
-        <p class="openbox__empty">{{ 'sections.open_box_sale.no_products' | t }}</p>
       {%- endfor -%}
     </div>
 
@@ -58,6 +57,7 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {
