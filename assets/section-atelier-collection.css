@@ -1,3 +1,22 @@
+/* ── Banner image (optional) ── */
+.atelier-plp__banner {
+  margin-bottom: 2.4rem;
+  aspect-ratio: 21 / 6;
+  overflow: hidden;
+}
+.atelier-plp__banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media screen and (max-width: 749px) {
+  .atelier-plp__banner {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 1.8rem;
+  }
+}
+
 /* ── Breadcrumb ── */
 .atelier-plp__crumb {
   font-family: var(--font-body-family);
@@ -257,8 +276,8 @@
 /* ── Body: sidebar column + grid ── */
 .atelier-plp__body {
   display: grid;
-  grid-template-columns: 24rem 1fr;
-  gap: 4rem;
+  grid-template-columns: 20rem 1fr;
+  gap: 3.2rem;
 }
 @media screen and (max-width: 989px) {
   .atelier-plp__body {

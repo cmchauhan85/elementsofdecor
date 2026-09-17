@@ -246,6 +246,17 @@
                 </button>
               </div>
 
+              {%- liquid
+                assign trust_lines = block.settings.checkout_trust_1 | append: '|' | append: block.settings.checkout_trust_2 | append: '|' | append: block.settings.checkout_trust_3 | split: '|'
+              -%}
+              {%- if block.settings.checkout_trust_1 != blank or block.settings.checkout_trust_2 != blank or block.settings.checkout_trust_3 != blank -%}
+                <ul class="cart__checkout-trust list-unstyled" role="list">
+                  {%- for line in trust_lines -%}
+                    {%- if line != blank -%}<li>{{ line }}</li>{%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
               {%- if additional_checkout_buttons -%}
                 <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
                   {{ content_for_additional_checkout_buttons }}
@@ -456,7 +467,31 @@
     {
       "type": "buttons",
       "name": "t:sections.main-cart-footer.blocks.buttons.name",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Trust signals near checkout"
+        },
+        {
+          "type": "text",
+          "id": "checkout_trust_1",
+          "label": "Trust line 1",
+          "default": "Secure payment"
+        },
+        {
+          "type": "text",
+          "id": "checkout_trust_2",
+          "label": "Trust line 2",
+          "default": "Easy 7-day returns"
+        },
+        {
+          "type": "text",
+          "id": "checkout_trust_3",
+          "label": "Trust line 3",
+          "default": "Ships in 2-4 days"
+        }
+      ]
     },
     {
       "type": "@app"

@@ -504,3 +504,39 @@
   color: var(--a-ink);
   min-width: 3.2ch;
 }
+
+/* Trust signals directly under the checkout button — reassurance right
+   where purchase hesitation happens, not several sections down the page. */
+.cart__checkout-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.15rem;
+  color: var(--a-muted);
+}
+.cart__checkout-trust li {
+  position: relative;
+  padding-left: 1.2rem;
+}
+.cart__checkout-trust li:first-child {
+  padding-left: 0;
+}
+.cart__checkout-trust li:first-child::before {
+  content: none;
+}
+.cart__checkout-trust li::before {
+  content: '';
+  position: absolute;
+  left: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--a-ochre);
+}
