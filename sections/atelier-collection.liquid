@@ -49,6 +49,7 @@
   <div class="page-width">
 
     {%- if section.settings.banner_image != blank -%}
+      {%- assign banner_alt = section.settings.heading | strip_html | default: collection.title | escape -%}
       <div class="atelier-plp__banner">
         {{
           section.settings.banner_image
@@ -57,7 +58,7 @@
             loading: 'eager',
             sizes: '100vw',
             widths: '750, 1100, 1500, 2000',
-            alt: section.settings.heading | strip_html | default: collection.title | escape
+            alt: banner_alt
         }}
       </div>
     {%- endif -%}

@@ -16,6 +16,8 @@
     else
       assign h_desktop = 740
   endcase
+
+  assign hero_alt = section.settings.image.alt | default: section.settings.heading_line_1
 -%}
 
 {%- if section.settings.height == 'split' -%}
@@ -57,7 +59,7 @@
             fetchpriority: fetch_priority,
             sizes: '(min-width: 750px) 45vw, 100vw',
             widths: '550, 750, 1100, 1500, 2000',
-            alt: section.settings.image.alt | default: section.settings.heading_line_1
+            alt: hero_alt
         }}
       {%- endif -%}
       {%- if section.settings.split_image_caption != blank -%}
@@ -80,7 +82,7 @@
             fetchpriority: fetch_priority,
             sizes: '100vw',
             widths: '550, 750, 1100, 1500, 2000, 3000',
-            alt: section.settings.image.alt | default: section.settings.heading_line_1
+            alt: hero_alt
         }}
       </div>
     {%- endif -%}

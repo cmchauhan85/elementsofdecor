@@ -12,6 +12,7 @@
     "atelier-collection": {
       "type": "atelier-collection",
       "settings": {
+        "banner_image": "shopify://shop_images/ChatGPT_Image_Jul_5_2026_03_06_46_PM.png",
         "show_breadcrumb": true,
         "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
         "object_status_text": "FOUR OF SIX LIVE · TWO COMING SOON",
