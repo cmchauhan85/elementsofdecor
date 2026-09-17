@@ -12,7 +12,8 @@
   Palette reference (also seeded as color schemes in settings_data.json):
     Page white #ffffff · Ink #14213d · Coral (action) #cf4a25
     Coral bright (hover) #e8613c · Coral deep (pressed) #a8371a
-    Slate #55607a · Slate 60 #8a93a8 · Mist #f4f5f7 · Rule #eaeaea · Border #dcdde2
+    Slate #55607a · Slate 60 #8a93a8
+    Mist #f5f2eb · Rule #e8e3da · Border #d9d0c3 (warm taupe, not cool grey)
 */
 
 :root {
@@ -42,17 +43,29 @@
   --a-ochre-deep: #a8371a;  /* pressed state; coral text on white */
   --a-muted: #55607a;       /* slate — secondary text, italic sub-heads */
   --a-muted-60: #8a93a8;    /* slate 60 — labels, meta, placeholders */
-  --a-stone: #f4f5f7;       /* mist — inset panels, table stripes */
+  --a-stone: #f5f2eb;       /* mist — inset panels, table stripes (warm parchment, not cool grey) */
 
-  /* Hairlines: Rule for dividers, Border for inputs/chips/outline buttons. */
-  --a-hairline: #eaeaea;
-  --a-hairline-strong: #dcdde2;
+  /* Hairlines: Rule for dividers, Border for inputs/chips/outline buttons.
+     Warmed from neutral/cool greys (#eaeaea / #dcdde2) toward a taupe
+     undertone — the site's zero-radius, hairline-everywhere structure
+     reads as precise and machined, which sits oddly against a brand
+     built on handmade material irregularity. This alone doesn't fix
+     that tension, but a cold grid of cold lines makes it worse. */
+  --a-hairline: #e8e3da;
+  --a-hairline-strong: #d9d0c3;
 
   /* --- Status --------------------------------------------------------- */
   --a-status-in-stock: #1f6b4a;
   --a-status-low-stock: #a5760a;
   --a-status-error: #a8371a;
   --a-status-info: #14213d;
+
+  /* A small, deliberate softening on photography only — buttons, inputs
+     and chips stay hard-edged (the "coral = act here" precision reads
+     correctly on controls). Product/content images get a touch of
+     radius so the site's hard-edge structural language doesn't fight
+     the handmade, materials-vary-piece-to-piece brand story. */
+  --a-radius-image: 0.6rem;
 
   /* --- Section spacing rhythm ------------------------------------------ */
   /* 4px base scale: 8 12 16 24 32 48 72 96. */
@@ -97,9 +110,11 @@ h1, h2, h3, h4, h5,
   display: none !important;
 }
 
-/* --- Square aesthetic ------------------------------------------------- */
-/* Cards, images and product tiles are square. Radius is reserved for pills,
-   round number-pins and steppers, which opt in explicitly. */
+/* --- Square aesthetic (structural elements) --------------------------- */
+/* Dawn's native card/media system stays hard-edged — buttons, inputs, and
+   any remaining stock Dawn card usage. Product/content photography styled
+   through the Atelier card components (atelier-pcard, atelier-card) gets
+   --a-radius-image instead; see above. */
 .card-wrapper,
 .card,
 .card__inner,

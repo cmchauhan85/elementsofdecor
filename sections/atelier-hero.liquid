@@ -34,6 +34,9 @@
           <em>{{ section.settings.heading_line_2 }}</em>
         {%- endif -%}
       </h1>
+      {%- if section.settings.materials_line != blank -%}
+        <p class="atelier-hero__split-materials">{{ section.settings.materials_line }}</p>
+      {%- endif -%}
       {%- if section.settings.subtext != blank -%}
         <p class="atelier-hero__split-subtext">{{ section.settings.subtext }}</p>
       {%- endif -%}
@@ -95,6 +98,9 @@
             <em>{{ section.settings.heading_line_2 }}</em>
           {%- endif -%}
         </h1>
+        {%- if section.settings.materials_line != blank -%}
+          <p class="atelier-hero__materials">{{ section.settings.materials_line }}</p>
+        {%- endif -%}
         {%- if section.settings.subtext != blank -%}
           <p class="atelier-hero__subtext">{{ section.settings.subtext }}</p>
         {%- endif -%}
@@ -158,6 +164,13 @@
       "id": "heading_line_2",
       "label": "Heading — second line (italic accent)",
       "default": "It is felt."
+    },
+    {
+      "type": "text",
+      "id": "materials_line",
+      "label": "Materials line",
+      "info": "Short list of what you make, shown between the heading and subtext so visitors see what's sold at a glance. Leave blank to hide.",
+      "default": "Stone · Metal · Wood · Ceramic · Fabric · Wax"
     },
     {
       "type": "textarea",

@@ -462,6 +462,9 @@
   height: 100%;
   padding-bottom: 1.2rem;
 }
+.atelier-plp__grid .atelier-pcard__media {
+  border-radius: 0; /* flush hairline grid — keep the seamless tile seam */
+}
 @media screen and (max-width: 989px) {
   .atelier-plp__grid {
     grid-template-columns: repeat(3, 1fr);

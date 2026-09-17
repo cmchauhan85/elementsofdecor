@@ -58,6 +58,18 @@
   color: var(--a-ochre-light);
 }
 
+/* What we sell, in one scannable line — the headline stays poetic, this
+   answers "what do you actually make" in under a second. */
+.atelier-hero__materials {
+  margin: 1.6rem 0 0;
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
 .atelier-hero__cta {
   display: inline-flex;
   align-items: center;
@@ -73,15 +85,15 @@
   place-items: center;
   width: 4.8rem;
   height: 4.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--a-ochre);
+  background: var(--a-ochre);
   color: #ffffff;
   font-size: 1.8rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .atelier-hero__cta:hover .atelier-hero__arrow {
-  background: var(--a-ochre);
-  border-color: var(--a-ochre);
-  color: #ffffff;
+  background: var(--a-ochre-light);
+  border-color: var(--a-ochre-light);
 }
 
 @media screen and (max-width: 749px) {
@@ -158,6 +170,16 @@
   display: block;
   font-style: italic;
   color: var(--a-ochre);
+}
+
+.atelier-hero__split-materials {
+  margin: 1.6rem 0 0;
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--a-muted);
 }
 
 .atelier-hero__split-subtext {

@@ -150,6 +150,8 @@
   aspect-ratio: 4 / 3;
   flex: 1 1 auto;
   min-height: 0;
+  border-radius: 0; /* flush hairline grid — a rounded corner here would
+    break the seamless-tile seam against the 1px grid lines */
 }
 .atelier-season__grid-item .atelier-pcard__title {
   font-size: 1.6rem;

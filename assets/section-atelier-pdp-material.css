@@ -78,4 +78,5 @@
   display: block;
   aspect-ratio: 4/5;
   object-fit: cover;
+  border-radius: var(--a-radius-image);
 }

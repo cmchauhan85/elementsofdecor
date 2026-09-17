@@ -53,6 +53,7 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--a-stone);
+  border-radius: var(--a-radius-image);
 }
 .atelier-card__media img {
   width: 100%;
