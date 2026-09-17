@@ -64,16 +64,6 @@
 .atelier-card:hover .atelier-card__media img {
   transform: scale(1.03);
 }
-.atelier-card__n {
-  position: absolute;
-  top: 1.2rem;
-  left: 1.2rem;
-  color: #ffffff;
-  mix-blend-mode: difference;
-  font-family: var(--font-body-family);
-  font-size: 1.1rem;
-  letter-spacing: 0.1em;
-}
 .atelier-card__el {
   position: absolute;
   bottom: 1.2rem;

@@ -46,7 +46,6 @@
         {%- comment %} Source 1: explicit picks from the Theme Editor product_list setting {%- endcomment -%}
         {%- for product in picked limit: limit -%}
           {%- assign n = n | plus: 1 -%}
-          {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
           {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
           {%- if is_grid -%}
             {%- liquid
@@ -61,7 +60,7 @@
               {% render 'atelier-product-card', product: product %}
             </div>
           {%- else -%}
-            {% render 'atelier-product-card', product: product, number: num %}
+            {% render 'atelier-product-card', product: product %}
           {%- endif -%}
         {%- endfor -%}
 
@@ -70,7 +69,6 @@
         {%- for product in collections.all.products -%}
           {%- if product.metafields.custom.best_seller.value == true -%}
             {%- assign n = n | plus: 1 -%}
-            {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
             {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
             {%- if is_grid -%}
               {%- liquid
@@ -85,7 +83,7 @@
                 {% render 'atelier-product-card', product: product %}
               </div>
             {%- else -%}
-              {% render 'atelier-product-card', product: product, number: num %}
+              {% render 'atelier-product-card', product: product %}
             {%- endif -%}
             {%- if n >= limit -%}{%- break -%}{%- endif -%}
           {%- endif -%}
@@ -96,7 +94,6 @@
         {%- comment %} Source 3: fall back to the collection setting {%- endcomment -%}
         {%- for product in coll.products limit: limit -%}
           {%- assign n = n | plus: 1 -%}
-          {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
           {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
           {%- if is_grid -%}
             {%- liquid
@@ -111,7 +108,7 @@
               {% render 'atelier-product-card', product: product %}
             </div>
           {%- else -%}
-            {% render 'atelier-product-card', product: product, number: num %}
+            {% render 'atelier-product-card', product: product %}
           {%- endif -%}
         {%- else -%}
           {%- unless is_grid -%}

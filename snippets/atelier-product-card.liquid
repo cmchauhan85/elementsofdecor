@@ -8,7 +8,6 @@
 
   Accepts:
     product       {product} - required
-    number        {string}  - "01" index label (optional)
     show_element  {boolean} - show element tag top-right (default true)
     badge_override {string} - replaces the metafield tag pill, styled as a
                               sale badge (e.g. "Open Box" or "30% Off")
@@ -46,7 +45,6 @@
       {{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}
     {%- endif -%}
 
-    {%- if number != blank -%}<span class="atelier-pcard__n">{{ number }}</span>{%- endif -%}
     {%- if show_el and el != blank -%}
       <span class="atelier-pcard__el">{{ el }}</span>
     {%- endif -%}

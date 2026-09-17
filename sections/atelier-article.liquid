@@ -126,8 +126,7 @@
             <h2 class="atelier-article__shop-title">{{ section.settings.shop_title }}</h2>
             <div class="atelier-article__shop-rail">
               {%- for product in shop_products limit: 4 -%}
-                {%- assign n = forloop.index | prepend: '0' | slice: -2, 2 -%}
-                {% render 'atelier-product-card', product: product, number: n %}
+                {% render 'atelier-product-card', product: product %}
               {%- endfor -%}
             </div>
           </div>

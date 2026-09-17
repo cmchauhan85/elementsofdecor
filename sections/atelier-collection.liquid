@@ -321,8 +321,7 @@
 
           <div class="atelier-plp__grid">
             {%- for product in collection.products -%}
-              {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
-              {% render 'atelier-product-card', product: product, number: num %}
+              {% render 'atelier-product-card', product: product %}
 
               {%- if section.settings.editorial_after > 0 and forloop.index == section.settings.editorial_after and section.settings.editorial_title != blank -%}
                 <div class="atelier-plp__editorial">
