@@ -1,0 +1,89 @@
+{%- comment -%}
+  Quick-add row at the bottom of the cart. Replaces 'Continue collecting'.
+  Title adapts to the bundle tier. Only pieces priced Rs. 500+ are suggested.
+  Re-rendered by the script in atelier-milestone-ribbon when the cart changes.
+{%- endcomment -%}
+{%- liquid
+  assign n = 0
+  assign in_cart = ','
+  for item in cart.items
+    assign in_cart = in_cart | append: item.product.id | append: ','
+    if item.original_price >= 50000
+      assign n = n | plus: item.quantity
+    endif
+  endfor
+  assign shown = 0
+  assign seen = in_cart
+-%}
+<div class="atl-am-wrap" data-bs-wrap data-bs-section="{{ section.id }}">
+{%- if cart.item_count > 0 -%}
+  {%- capture pool_ids -%}{%- for item in cart.items -%}{%- for pp in item.product.metafields.atelier.pairs_with.value -%}{{ pp.handle }},{%- endfor -%}{%- endfor -%}{%- endcapture -%}
+  {%- capture am_cards -%}
+    {%- for pass in (1..2) -%}
+      {%- if pass == 1 -%}
+        {%- assign pool = pool_ids | split: ',' -%}
+      {%- else -%}
+        {%- assign pool = collections['all'].products | map: 'handle' -%}
+      {%- endif -%}
+      {%- for h in pool -%}
+        {%- assign p = all_products[h] -%}
+        {%- assign key = ',' | append: p.id | append: ',' -%}
+        {%- unless seen contains key -%}
+          {%- if p.id and p.available and shown < section.settings.count -%}
+            {%- assign v = p.selected_or_first_available_variant -%}
+            {%- if v.price >= 50000 -%}
+              {%- assign shown = shown | plus: 1 -%}
+              {%- assign seen = seen | append: p.id | append: ',' -%}
+<div class="atl-am__item">
+  <a class="atl-am__img" href="{{ p.url }}" aria-label="{{ p.title | escape }}">{%- if p.featured_media != blank -%}{{ p.featured_media | image_url: width: 320 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 14vw, 38vw', widths: '160, 240, 320', alt: p.title | escape }}{%- endif -%}</a>
+  <div class="atl-am__body">
+    <a class="atl-am__name" href="{{ p.url }}">{{ p.title }}</a>
+    <div class="atl-am__foot"><span class="atl-am__price">{{ v.price | money_without_trailing_zeros }}</span><button type="button" class="atl-am__add" data-am-add="{{ v.id }}">+ Add</button></div>
+  </div>
+</div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if shown > 0 -%}
+  <div class="atl-am">
+    <div class="page-width">
+      <h2 class="atl-am__h">
+        {%- if n >= 3 -%}Continue collecting.
+        {%- elsif n == 2 -%}One more piece makes it <em>10% off.</em>
+        {%- else -%}One more piece unlocks <em>5% off.</em>{%- endif -%}
+      </h2>
+      <div class="atl-am__row">{{ am_cards }}</div>
+    </div>
+  </div>
+  {%- endif -%}
+{%- endif -%}
+</div>
+<style>
+.atl-am{padding:3.6rem 0 3.4rem;background:#fff;color:#14213d}
+.atl-am__h{margin:0 0 2rem;font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.4rem,3vw,3rem);line-height:1.15}
+.atl-am__h em{color:#cf4a25;font-style:italic}
+.atl-am__row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4rem}
+.atl-am__item{display:flex;flex-direction:column;background:transparent;border:1px solid #d9d0c3;border-radius:1rem;padding:.7rem;min-width:0}
+.atl-am__img{display:block;aspect-ratio:1/1;overflow:hidden;border-radius:.6rem;background:#f5f2eb}
+.atl-am__img img{width:100%;height:100%;object-fit:cover;display:block}
+.atl-am__body{display:flex;flex-direction:column;gap:.8rem;padding:.9rem .3rem .2rem;flex:1}
+.atl-am__name{font-size:1.4rem;line-height:1.3;color:#14213d;text-decoration:none}
+.atl-am__foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-top:auto}
+.atl-am__price{font-weight:600;font-size:1.4rem;white-space:nowrap}
+.atl-am__add{border:1px solid #14213d;background:transparent;color:#14213d;border-radius:999px;min-height:4.4rem;min-width:7rem;padding:0 1.8rem;font:inherit;font-size:1.3rem;font-weight:600;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
+.atl-am__add:hover{background:#cf4a25;border-color:#cf4a25;color:#fff}
+.atl-am__add[disabled]{opacity:.6;cursor:default}
+@media(max-width:749px){.atl-am{padding:2.6rem 0 2.4rem}.atl-am__row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1rem;padding-bottom:.6rem}.atl-am__item{flex:0 0 52vw;scroll-snap-align:start}.atl-am__foot{flex-wrap:wrap}}
+</style>
+
+{% schema %}
+{
+  "name": "Cart add more pieces",
+  "settings": [
+    { "type": "range", "id": "count", "min": 2, "max": 8, "step": 1, "default": 4, "label": "Pieces to show" }
+  ]
+}
+{% endschema %}

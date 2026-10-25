@@ -1,0 +1,83 @@
+<style>
+.gp{padding:2.7rem 0 4rem;font-family:Assistant,sans-serif;color:#14213d}
+.gp *{box-sizing:border-box}
+.gp__in{max-width:110rem;margin:0 auto;padding:0 1.6rem}
+@media(min-width:990px){.gp__in{padding:0}.gp{padding:4rem 0 6rem}}
+.gp h1,.gp h2,.gp h3{font-family:Assistant,sans-serif;letter-spacing:0;color:#14213d;margin:0}
+.gp__eye{margin:0 0 1rem;font-size:1.2rem;letter-spacing:.14em;text-transform:uppercase;color:#cf4a25}
+.gp h1{font-weight:400;font-size:clamp(3rem,4.4vw,4.8rem);line-height:1.1}
+.gp h1 em{font-style:italic;color:#cf4a25}
+.gp__lead{margin:1.6rem 0 0;font-size:1.6rem;line-height:1.6;max-width:52ch;opacity:.85}
+.gp__act{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.4rem}
+.gp__btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 2.4rem;font-size:1.3rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border-radius:4px;border:1px solid #14213d;color:#14213d}
+.gp__btn--p{background:#cf4a25;border-color:#cf4a25;color:#fff}
+.gp__top{display:grid;gap:2.4rem}
+.gp__media{display:block;overflow:hidden;border-radius:4px;background:#ece6da;aspect-ratio:4/3}
+.gp__media img{width:100%;height:100%;object-fit:cover;display:block}
+.gp__sec{margin-top:4rem}
+.gp__sec h2{font-weight:400;font-size:clamp(2.4rem,3vw,3.2rem);margin-bottom:2rem}
+.gp__occ,.gp__steps{display:grid;gap:1.4rem}
+.gp__occ h3,.gp__steps h3{font-size:1.7rem;font-weight:600;margin:0 0 .4rem}
+.gp__occ p,.gp__steps p{margin:0;font-size:1.5rem;line-height:1.55;opacity:.85}
+.gp__num{display:block;font-size:3.2rem;line-height:1;color:#cf4a25;margin-bottom:.8rem}
+.gp__band{margin-top:4rem;border-radius:4px;padding:3.2rem 2rem;background:#14213d;color:#f5f2eb;text-align:center}
+.gp__band h2{color:#f5f2eb;font-weight:400;font-size:clamp(2.4rem,3vw,3.2rem)}
+.gp__band p{margin:1.2rem auto 0;font-size:1.6rem;line-height:1.6;max-width:56ch;opacity:.88}
+.gp__band .gp__act{justify-content:center}
+.gp__band .gp__btn{border-color:#f5f2eb;color:#f5f2eb}
+.gp__band .gp__btn--p{border-color:#cf4a25;color:#fff}
+/* Layout: split hero, tiles, columns (decided 15 Oct 2026, option A) */
+.gp__occ{grid-template-columns:1fr 1fr}.gp__occ>div{border:1px solid #d9d0c3;border-radius:4px;padding:1.6rem}
+@media(min-width:750px){.gp__top{grid-template-columns:1fr 1fr;gap:4rem;align-items:center}.gp__media{aspect-ratio:4/5}.gp__occ{grid-template-columns:repeat(4,1fr);gap:1.6rem}.gp__steps{grid-template-columns:repeat(3,1fr);gap:3rem}}
+</style>
+<div class='gp color-{{ section.settings.color_scheme }}' id='gp'>
+  <div class='gp__in'>
+    <div class='gp__grid'>
+      <div class='gp__top'>
+        <div class='gp__copy'>
+          <p class='gp__eye'>Gifting</p>
+          <h1>Gifts that <em>feel,</em> not just look.</h1>
+          <p class='gp__lead'>Handcrafted pieces in marble, brass and metal, made by artisans in India's traditional craft hubs. Each one arrives in our kraft gift box with the ED monogram, a blush thank-you card, dried baby's breath and jute twine, so it feels like a gift the moment it is opened.</p>
+          <div class='gp__act'><a class='gp__btn gp__btn--p' href='https://wa.me/916353052025' target='_blank' rel='noopener'>WhatsApp us</a><a class='gp__btn' href='mailto:support@elementsofdecor.com'>Email us</a></div>
+        </div>
+        <span class='gp__media'>{%- if section.settings.image != blank -%}{{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '600, 900, 1400', alt: 'Elements of Decor gift box' }}{%- endif -%}</span>
+      </div>
+      <div class='gp__main'>
+        <div class='gp__sec'>
+          <h2>Perfect for</h2>
+          <div class='gp__occ'>
+            <div><h3>Housewarmings and new homes</h3><p>For clients, teams and partners.</p></div>
+            <div><h3>Weddings and celebrations</h3><p>For families, guests and return gifts.</p></div>
+            <div><h3>Festive gifting</h3><p>Across Diwali and the year-end season.</p></div>
+            <div><h3>Milestones and thank-yous</h3><p>For employees and corporate clients.</p></div>
+          </div>
+        </div>
+        <div class='gp__sec'>
+          <h2>How it works</h2>
+          <div class='gp__steps'>
+            <div><span class='gp__num'>1</span><div><h3>Tell us what you need</h3><p>The quantity, your budget and the date you need the gifts by.</p></div></div>
+            <div><span class='gp__num'>2</span><div><h3>We suggest pieces</h3><p>A few pieces and combinations that suit the occasion.</p></div></div>
+            <div><span class='gp__num'>3</span><div><h3>You approve, we ship</h3><p>We pack every piece with care and send it on its way.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='gp__band'>
+      <h2>Start a conversation</h2>
+      <p>Message us on WhatsApp at +91 63530 52025 or email support@elementsofdecor.com, and tell us what you have in mind.</p>
+      <div class='gp__act'><a class='gp__btn gp__btn--p' href='https://wa.me/916353052025' target='_blank' rel='noopener'>WhatsApp us</a><a class='gp__btn' href='mailto:support@elementsofdecor.com'>Email us</a></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Gifting page",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [ { "name": "Gifting page" } ]
+}
+{% endschema %}

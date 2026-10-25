@@ -50,4 +50,24 @@
       </div>
     </div>
   {%- endfor -%}
+  {%- liquid
+    assign pn = 0
+    for it in cart.items
+      if it.original_price >= 50000
+        assign pn = pn | plus: it.quantity
+      endif
+    endfor
+  -%}
+  {%- if pn > 0 -%}
+  <p class="atl-nudge" style="margin:1.2rem 0 0;padding:1rem 1.2rem;background:#f5f2eb;border-left:3px solid #cf4a25;font-size:1.3rem;line-height:1.45;color:#14213d">
+    {%- if pn >= 3 -%}
+      <strong style="color:#a8371a">10% off</strong> is applied to your order.
+    {%- elsif pn == 2 -%}
+      <strong style="color:#a8371a">5% off</strong> unlocked. Add 1 more piece for <strong style="color:#a8371a">10% off</strong>.
+    {%- else -%}
+      Add 1 more piece to get <strong style="color:#a8371a">5% off</strong>.
+    {%- endif -%}
+    <span style="display:block;font-size:1.1rem;opacity:.65;margin-top:.2rem">On pieces priced Rs. 500 and above.</span>
+  </p>
+  {%- endif -%}
 {%- endif -%}

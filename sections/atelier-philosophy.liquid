@@ -1,65 +1,95 @@
-{{ 'section-atelier-philosophy.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  .ph-sec { position: relative; overflow: hidden; }
+  .ph-sec .ph { position: relative; display: grid; gap: 2.4rem; }
+  .ph-eyebrow { font-size: 1.2rem; letter-spacing: .22em; text-transform: uppercase; color: var(--a-ochre); margin: 0 0 1.6rem; }
+  .ph-title { font-family: var(--font-heading-family); font-weight: 300; margin: 0; line-height: 1.08; font-size: clamp(3rem, 4.6vw, 5.4rem); text-wrap: balance; }
+  .ph-title em { font-style: italic; color: var(--a-ochre); }
+  .ph-copy { font-size: 1.7rem; line-height: 1.7; opacity: .86; max-width: 62rem; }
+  .ph-copy p { margin: 0; }
+  .ph-attr { margin: 1.6rem 0 0; font-size: 1.3rem; letter-spacing: .08em; opacity: .7; }
+  .ph-pillars { display: grid; gap: 0; }
+  .ph-num { display: block; font-size: 1.2rem; letter-spacing: .14em; color: var(--a-ochre); margin-bottom: 1rem; }
+  .ph-pillar h3 { font-family: var(--font-heading-family); font-weight: 400; font-size: 2.2rem; line-height: 1.2; margin: 0 0 .8rem; }
+  .ph-pillar p { margin: 0; font-size: 1.5rem; line-height: 1.6; opacity: .8; }
+  .ph-pills { display: none; }
 
-<div class="atelier-philosophy color-{{ section.settings.color_scheme }} a-section">
-  {%- if section.settings.show_mandala -%}
-    {% render 'atelier-mandala', align: 'right' %}
-  {%- endif -%}
+  /* Mobile: centered, tabs */
+  @media screen and (max-width: 749px) {
+    .ph-sec .ph { text-align: center; justify-items: center; }
+    .ph-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-top: 2rem; }
+    .ph-pill { all: unset; cursor: pointer; font-size: 1.2rem; letter-spacing: .1em; text-transform: uppercase; padding: .8rem 1.4rem; border: 1px solid rgba(var(--color-foreground), .3); border-radius: 999px; }
+    .ph-pill[aria-pressed="true"] { background: var(--a-ochre); border-color: var(--a-ochre); color: #fff; }
+    .ph-pillar:not(.is-active) { display: none; }
+    .ph-pillar { max-width: 56rem; }
+    .ph-num { display: none; }
+    .ph-pillar h3 { font-size: 2.6rem; }
+    .ph-pillar p { font-size: 1.6rem; }
+  }
+
+  /* Desktop: editorial oversize */
+  @media screen and (min-width: 750px) {
+    .ph-sec .ph { grid-template-columns: 1fr 1fr; column-gap: 8rem; row-gap: 4rem; }
+    .ph-head { grid-column: 1 / -1; }
+    .ph-title { font-size: clamp(4rem, 7.4vw, 9rem); line-height: 1; }
+    .ph-pillar { display: grid; grid-template-columns: 4rem 1fr; column-gap: 1.2rem; padding: 1.4rem 0; border-top: 1px solid rgba(var(--color-foreground), .22); }
+    .ph-num { grid-row: span 2; margin: .4rem 0 0; }
+  }
+{%- endstyle -%}
+
+<div class="atelier-philosophy ph-sec color-{{ section.settings.color_scheme }} a-section" id="ph-{{ section.id }}">
   <div class="page-width">
-    <div class="atelier-philosophy__inner">
-      {%- if section.settings.eyebrow != blank -%}
-        {% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true, class: 'atelier-philosophy__eyebrow' %}
-      {%- endif -%}
-      <blockquote class="atelier-philosophy__quote">
-        <span class="a-mark" aria-hidden="true">“</span>{{ section.settings.quote }}<span class="a-mark" aria-hidden="true">”</span>
-      </blockquote>
-      {%- if section.settings.attribution != blank -%}
-        <div class="atelier-philosophy__rule" aria-hidden="true"></div>
-        <p class="atelier-philosophy__attr">{{ section.settings.attribution }}</p>
-      {%- endif -%}
+    <div class="ph">
+      <div class="ph-head">
+        {%- if section.settings.eyebrow != blank -%}<p class="ph-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="ph-title">{{ section.settings.headline }}</h2>
+      </div>
+      <div class="ph-body">
+        <div class="ph-copy">{{ section.settings.body }}</div>
+        {%- if section.settings.attribution != blank -%}<p class="ph-attr">{{ section.settings.attribution }}</p>{%- endif -%}
+        <div class="ph-pills">
+          <button type="button" class="ph-pill" data-i="0" aria-pressed="true">{{ section.settings.p1_title }}</button>
+          <button type="button" class="ph-pill" data-i="1" aria-pressed="false">{{ section.settings.p2_title }}</button>
+          <button type="button" class="ph-pill" data-i="2" aria-pressed="false">{{ section.settings.p3_title }}</button>
+        </div>
+      </div>
+      <div class="ph-pillars">
+        <div class="ph-pillar is-active"><span class="ph-num">01</span><h3>{{ section.settings.p1_title }}</h3><p>{{ section.settings.p1_text }}</p></div>
+        <div class="ph-pillar"><span class="ph-num">02</span><h3>{{ section.settings.p2_title }}</h3><p>{{ section.settings.p2_text }}</p></div>
+        <div class="ph-pillar"><span class="ph-num">03</span><h3>{{ section.settings.p3_title }}</h3><p>{{ section.settings.p3_text }}</p></div>
+      </div>
     </div>
   </div>
 </div>
+<script>
+(function(){
+  var root = document.getElementById('ph-{{ section.id }}');
+  if (!root) return;
+  var pills = root.querySelectorAll('.ph-pill'), pillars = root.querySelectorAll('.ph-pillar');
+  pills.forEach(function(p){ p.addEventListener('click', function(){
+    var i = +p.dataset.i;
+    pills.forEach(function(x, j){ x.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
+    pillars.forEach(function(x, j){ x.classList.toggle('is-active', j === i); });
+  }); });
+})();
+</script>
 
 {% schema %}
 {
   "name": "Atelier philosophy",
   "tag": "section",
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Our Philosophy"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "quote",
-      "label": "Quote",
-      "default": "Every material we choose — stone, wood, clay, cloth — is curated to bring balance and natural beauty into your space."
-    },
-    {
-      "type": "text",
-      "id": "attribution",
-      "label": "Attribution",
-      "default": "— The Elements of Decor family"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_mandala",
-      "label": "Show mandala motif",
-      "default": true
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-3"
-    }
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our Philosophy" },
+    { "type": "inline_richtext", "id": "headline", "label": "Headline", "default": "Some rooms just feel right. <em>There's a reason.</em>" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>We learned the reason at home, watching our mother and sister turn ordinary corners into rooms people remember. It was never about one standout piece. It was how the elements met: stone against metal, wood beside cloth, a little fragrance to finish. We gave that instinct a name, the Six Elements, and made every piece to work inside it.</p>" },
+    { "type": "text", "id": "attribution", "label": "Sign-off", "default": "— The Elements of Decor family" },
+    { "type": "text", "id": "p1_title", "label": "Point 1 - title", "default": "One formula" },
+    { "type": "textarea", "id": "p1_text", "label": "Point 1 - text", "default": "Stone, metal, wood, ceramic, fabric and fragrance. Bring a few together and a corner finds its balance." },
+    { "type": "text", "id": "p2_title", "label": "Point 2 - title", "default": "Made by hands that know the material" },
+    { "type": "textarea", "id": "p2_text", "label": "Point 2 - text", "default": "Every piece is handmade in the Indian craft hub for its material, so no two are exactly alike." },
+    { "type": "text", "id": "p3_title", "label": "Point 3 - title", "default": "Designed to sit together" },
+    { "type": "textarea", "id": "p3_text", "label": "Point 3 - text", "default": "Nothing here stands alone. Each piece is made to join the others, so a home comes together without a designer." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-3" }
   ],
-  "presets": [
-    {
-      "name": "Atelier philosophy"
-    }
-  ]
+  "presets": [ { "name": "Atelier philosophy" } ]
 }
 {% endschema %}

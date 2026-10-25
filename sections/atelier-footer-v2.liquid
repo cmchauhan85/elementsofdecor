@@ -1,0 +1,164 @@
+{%- liquid
+  assign ig = section.settings.instagram_url | default: settings.social_instagram_link
+  assign fb = section.settings.facebook_url | default: settings.social_facebook_link
+  assign wa_digits = section.settings.contact_whatsapp | replace: '+', '' | replace: ' ', '' | replace: '-', ''
+-%}
+<footer class='fx color-{{ section.settings.color_scheme }} gradient' data-fx>
+  <div class='fx__news'>
+    <div class='page-width'>
+      <h2 class='fx__title'>{{ section.settings.nl_lead | escape }} <em>{{ section.settings.nl_accent | escape }}</em></h2>
+      <span class='fx__rule'></span>
+      {%- if section.settings.nl_text != blank -%}<p class='fx__sub'>{{ section.settings.nl_text | escape }}</p>{%- endif -%}
+      {%- form 'customer', id: 'AtelierFooterNewsletterV2', class: 'fx__form' -%}
+        <input type='hidden' name='contact[tags]' value='newsletter'>
+        <label class='visually-hidden' for='FxEmail'>Email</label>
+        <input id='FxEmail' class='fx__input' type='email' name='contact[email]' autocomplete='email' placeholder='Enter your email' required value='{{ form.email }}'>
+        <button type='submit' class='fx__submit'>{{ section.settings.nl_button | default: 'Subscribe' | escape }}</button>
+        {%- if form.posted_successfully? -%}<p class='fx__msg' role='status'>Thanks for subscribing.</p>{%- elsif form.errors -%}<p class='fx__msg fx__msg--err' role='alert'>{{ form.errors.messages['email'] | default: 'Please check your email address.' }}</p>{%- endif -%}
+      {%- endform -%}
+      {%- if section.settings.nl_consent != blank -%}<p class='fx__consent'>{{ section.settings.nl_consent | escape }}</p>{%- endif -%}
+      {%- if ig != blank or fb != blank -%}
+      <div class='fx__follow'>
+        {%- if ig != blank -%}<a href='{{ ig }}' target='_blank' rel='noopener' aria-label='Instagram'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.6' aria-hidden='true'><rect x='3' y='3' width='18' height='18' rx='5'/><circle cx='12' cy='12' r='4'/><circle cx='17.3' cy='6.7' r='0.9' fill='currentColor' stroke='none'/></svg></a>{%- endif -%}
+        {%- if fb != blank -%}<a href='{{ fb }}' target='_blank' rel='noopener' aria-label='Facebook'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.6' stroke-linejoin='round' aria-hidden='true'><path d='M14.5 21v-8h2.7l.5-3.2h-3.2V7.9c0-.9.4-1.6 1.7-1.6h1.6V3.4c-.3 0-1.3-.2-2.4-.2-2.5 0-4.1 1.5-4.1 4.2v2.4H8.6V13h2.7v8z'/></svg></a>{%- endif -%}
+      </div>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class='fx__line'></div>
+  <div class='fx__main page-width'>
+    <div class='fx__brand'>
+      <a href='{{ routes.root_url }}' aria-label='{{ shop.name | escape }}'>
+        {%- if settings.logo != blank -%}{{ settings.logo | image_url: width: 480 | image_tag: class: 'fx__logo', alt: shop.name, widths: '240, 360, 480', loading: 'lazy' }}{%- else -%}<span class='fx__logotxt'>{{ shop.name }}</span>{%- endif -%}
+      </a>
+      {%- if section.settings.signoff != blank -%}<p class='fx__sign'>{{ section.settings.signoff | escape }}</p>{%- endif -%}
+    </div>
+    <div class='fx__cols'>
+      {%- for i in (1..3) -%}
+        {%- liquid
+          assign h_key = 'col' | append: i | append: '_heading'
+          assign m_key = 'col' | append: i | append: '_menu'
+          assign heading = section.settings[h_key]
+          assign menu = section.settings[m_key]
+        -%}
+        {%- if menu != blank and menu.links.size > 0 -%}
+        <details class='fx__col' open>
+          <summary class='fx__sum'><span class='fx__colh'>{{ heading | escape }}</span><span class='fx__plus' aria-hidden='true'></span></summary>
+          <ul class='fx__links' role='list'>{%- for link in menu.links -%}<li><a href='{{ link.url }}'>{{ link.title | escape }}</a></li>{%- endfor -%}</ul>
+        </details>
+        {%- endif -%}
+      {%- endfor -%}
+      <details class='fx__col' open>
+        <summary class='fx__sum'><span class='fx__colh'>{{ section.settings.contact_heading | default: 'Contact' | escape }}</span><span class='fx__plus' aria-hidden='true'></span></summary>
+        <ul class='fx__links' role='list'>
+          {%- if section.settings.contact_email != blank -%}<li><a href='mailto:{{ section.settings.contact_email }}'>{{ section.settings.contact_email | escape }}</a></li>{%- endif -%}
+          {%- if section.settings.contact_email_2 != blank -%}<li><a href='mailto:{{ section.settings.contact_email_2 }}'>{{ section.settings.contact_email_2 | escape }}</a></li>{%- endif -%}
+          {%- if wa_digits != blank -%}<li>Call: <a href='tel:+{{ wa_digits }}'>{{ section.settings.contact_whatsapp | escape }}</a><br><a href='https://wa.me/{{ wa_digits }}' target='_blank' rel='noopener'>Message on WhatsApp</a></li>{%- endif -%}
+          {%- if section.settings.contact_hours != blank -%}<li>{{ section.settings.contact_hours | escape }}</li>{%- endif -%}
+          {%- if section.settings.contact_address != blank -%}<li>{{ section.settings.contact_address | escape }}</li>{%- endif -%}
+        </ul>
+      </details>
+    </div>
+  </div>
+  {%- if section.settings.trust_line != blank -%}<div class='fx__trust'><div class='page-width'>{{ section.settings.trust_line | escape }}</div></div>{%- endif -%}
+  <div class='fx__bar'>
+    <div class='fx__bar-in page-width'>
+      <small>&copy; {{ 'now' | date: '%Y' }} {{ section.settings.legal_name | default: shop.name | escape }}{% if section.settings.legal_extra != blank %} &middot; {{ section.settings.legal_extra | escape }}{% endif %}</small>
+      {%- if shop.policies.size > 0 -%}<ul class='fx__pol' role='list'>{%- for policy in shop.policies -%}<li><a href='{{ policy.url }}'>{{ policy.title | escape }}</a></li>{%- endfor -%}</ul>{%- endif -%}
+    </div>
+  </div>
+</footer>
+<style>
+.fx{--fg:rgb(var(--color-foreground));--line:rgba(var(--color-foreground),.16);--mut:rgba(var(--color-foreground),.62);--co:var(--a-ochre,#d9603b);color:var(--fg);font-family:var(--font-body-family)}
+.fx a{color:inherit;text-decoration:none}.fx a:hover{text-decoration:underline;text-underline-offset:3px}
+.fx__news{text-align:center;padding:6rem 0 4.4rem}
+.fx__title{font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.6rem,4vw,3.8rem);line-height:1.15;margin:0;text-wrap:balance;color:var(--fg)}
+.fx__title em{color:var(--co);font-style:italic}
+.fx__rule{display:block;width:4rem;height:2px;background:var(--co);margin:1.8rem auto}
+.fx__sub{margin:0 auto;font-size:1.4rem;color:var(--mut);max-width:60rem;text-wrap:balance}
+.fx__form{position:relative;display:flex;align-items:center;flex-wrap:wrap;max-width:44rem;margin:2.4rem auto 0;border-bottom:1px solid var(--fg)}
+.fx__input{flex:1 1 0;width:0;min-width:0;background:transparent;border:0;outline:0;padding:1rem 0;font:inherit;font-size:1.4rem;color:inherit}
+.fx__input::placeholder{color:var(--mut)}
+.fx__submit{flex:0 0 auto;background:none;border:0;padding:1rem 0 1rem 1.6rem;font:inherit;font-size:1.2rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--co);cursor:pointer}
+.fx__msg{flex:0 0 100%;margin:0;padding:.8rem 0 0;font-size:1.3rem}.fx__msg--err{color:#b3261e}
+.fx__consent{margin:1.2rem auto 0;max-width:44rem;font-size:1.15rem;color:var(--mut)}
+.fx__follow{display:flex;justify-content:center;gap:1.8rem;margin-top:2.8rem}
+.fx__follow svg{width:2.2rem;height:2.2rem;display:block}
+.fx__line{border-top:1px solid var(--line)}
+.fx__main{display:grid;grid-template-columns:24% minmax(0,1fr);gap:4rem;padding-top:4.8rem;padding-bottom:3.6rem;align-items:start}
+.fx__logo{display:block;width:70%;max-width:16rem;height:auto}
+.fx__logotxt{font-family:var(--font-heading-family);font-size:2.4rem}
+.fx__sign{font-family:var(--font-heading-family);font-style:italic;color:var(--co);font-size:1.8rem;margin:1.4rem 0 0}
+.fx__cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.5fr);gap:3rem}
+.fx__sum{list-style:none;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.fx__sum::-webkit-details-marker{display:none}
+.fx__colh{font-size:1.2rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.fx__plus{display:none}
+.fx__links{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:1.1rem;font-size:1.4rem;line-height:1.5;overflow-wrap:anywhere}
+.fx__trust{border-top:1px solid var(--line);text-align:center;padding:1.8rem 0;font-size:1.15rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.fx__bar{border-top:1px solid var(--line)}
+.fx__bar-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.2rem;padding-top:2rem;padding-bottom:2rem;font-size:1.2rem;color:var(--mut)}
+.fx__pol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.8rem 2rem}
+@media(max-width:989px){.fx__main{grid-template-columns:1fr;gap:3rem}.fx__cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:749px){
+.fx__news{padding:4.4rem 0 3.4rem}
+.fx__main{gap:2.4rem;padding-top:3.2rem;padding-bottom:2.4rem;text-align:center;justify-items:center}
+.fx__logo{width:12rem;margin-inline:auto}
+.fx__cols{display:block;width:100%;text-align:left;border-top:1px solid var(--line)}
+.fx__col{border-bottom:1px solid var(--line)}
+.fx__sum{pointer-events:auto;cursor:pointer;padding:1.8rem 0}
+.fx__plus{display:block;position:relative;width:1.4rem;height:1.4rem}
+.fx__plus:before,.fx__plus:after{content:'';position:absolute;background:currentColor;top:50%;left:0;width:100%;height:1px;transition:transform .2s}
+.fx__plus:after{transform:rotate(90deg)}
+.fx__col[open] .fx__plus:after{transform:rotate(0)}
+.fx__links{margin:0;padding-bottom:1.8rem}
+.fx__trust{font-size:1.05rem;letter-spacing:.1em;line-height:1.7}
+.fx__bar-in{flex-direction:column;align-items:center;text-align:center}.fx__pol{justify-content:center}
+}
+</style>
+<script>
+(function(){
+  var root=document.querySelector('[data-fx]');if(!root)return;
+  var mq=window.matchMedia('(max-width: 749px)');
+  function sync(){root.querySelectorAll('details.fx__col').forEach(function(d){d.open=!mq.matches})}
+  sync();if(mq.addEventListener)mq.addEventListener('change',sync);
+})();
+</script>
+{% schema %}
+{
+  "name": "Atelier footer v2",
+  "settings": [
+    {"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"scheme-1"},
+    {"type":"header","content":"Newsletter"},
+    {"type":"text","id":"nl_lead","label":"Heading","default":"Letters from the"},
+    {"type":"text","id":"nl_accent","label":"Heading accent (coral italic)","default":"workshop"},
+    {"type":"text","id":"nl_text","label":"Supporting line","default":"New pieces and quiet stories from our makers. Occasionally, never noisy."},
+    {"type":"text","id":"nl_button","label":"Button label","default":"Subscribe"},
+    {"type":"text","id":"nl_consent","label":"Consent line","default":"By subscribing, you agree to receive emails from Elements of Decor. Unsubscribe anytime."},
+    {"type":"url","id":"instagram_url","label":"Instagram link"},
+    {"type":"url","id":"facebook_url","label":"Facebook link"},
+    {"type":"header","content":"Brand"},
+    {"type":"text","id":"signoff","label":"Sign-off line","default":"Felt, not styled."},
+    {"type":"header","content":"Column 1"},
+    {"type":"text","id":"col1_heading","label":"Heading","default":"Shop"},
+    {"type":"link_list","id":"col1_menu","label":"Menu"},
+    {"type":"header","content":"Column 2"},
+    {"type":"text","id":"col2_heading","label":"Heading","default":"Visit & Gift"},
+    {"type":"link_list","id":"col2_menu","label":"Menu"},
+    {"type":"header","content":"Column 3"},
+    {"type":"text","id":"col3_heading","label":"Heading","default":"Help"},
+    {"type":"link_list","id":"col3_menu","label":"Menu"},
+    {"type":"header","content":"Contact"},
+    {"type":"text","id":"contact_heading","label":"Heading","default":"Contact"},
+    {"type":"text","id":"contact_email","label":"Email"},
+    {"type":"text","id":"contact_email_2","label":"Second email (optional)"},
+    {"type":"text","id":"contact_whatsapp","label":"Phone / WhatsApp number"},
+    {"type":"text","id":"contact_hours","label":"Hours"},
+    {"type":"text","id":"contact_address","label":"Address line (optional)"},
+    {"type":"header","content":"Bottom"},
+    {"type":"text","id":"trust_line","label":"Trust line","default":"Secured by Razorpay · Pan-India delivery · 7-day returns"},
+    {"type":"text","id":"legal_name","label":"Copyright name (blank = store name)","default":"Elements of Decor"},
+    {"type":"text","id":"legal_extra","label":"Extra legal line, e.g. GSTIN (optional)","default":"Samatix Enterprise LLP"}
+  ]
+}
+{% endschema %}

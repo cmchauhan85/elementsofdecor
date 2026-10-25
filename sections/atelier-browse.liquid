@@ -1,87 +1,109 @@
-{{ 'section-atelier-browse.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'atelier-shop-by.js' | asset_url }}" defer="defer"></script>
-
+{%- comment -%}
+  Shop by category. Decision (14 Oct): bento on mobile, grid on desktop (cards up to 27rem square; they shrink on narrower desktops).
+  Only LIVE collections become tiles (products_count > 0 and not flagged coming_soon); the rest are listed in a slim
+  "Coming soon" line, so the grid never has dead ends. Add a category and it joins the grid by itself.
+  The tile link reads "View all" (call-to-action system, 20 Oct); its look comes from sections/atelier-cta-system.liquid.
+{%- endcomment -%}
 {%- liquid
-  assign req_mode = 'element'
-  if request.get.shop_by == 'object'
-    assign req_mode = 'object'
+  assign live_n = 0
+  assign soon_names = ''
+  for block in section.blocks
+    if block.settings.mode == 'object' and block.settings.collection != blank
+      assign col = block.settings.collection
+      assign is_soon = col.metafields.atelier.coming_soon.value
+      if col.products_count == 0
+        assign is_soon = true
+      endif
+      if is_soon
+        assign nm = block.settings.title_override | default: col.title
+        if soon_names == ''
+          assign soon_names = nm
+        else
+          assign soon_names = soon_names | append: ' · ' | append: nm
+        endif
+      else
+        assign live_n = live_n | plus: 1
+      endif
+    endif
+  endfor
+  assign cols = 4
+  if live_n < 4
+    assign cols = live_n
+  elsif live_n == 6
+    assign cols = 3
   endif
+  assign odd_rest = live_n | minus: 1 | modulo: 2
 -%}
+{%- style -%}
+  #ab-{{ section.id }} .ab2-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0 0 2.8rem; }
+  #ab-{{ section.id }} .ab2-title { font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(2.6rem, 3.4vw, 3.6rem); line-height: 1.15; margin: 0; text-align: center; }
+  #ab-{{ section.id }} .ab2-title em { font-style: italic; color: var(--a-ochre); }
+  #ab-{{ section.id }} .ab2-rule { width: 4rem; height: 2px; background: var(--a-ochre); margin-top: 1.2rem; }
+  #ab-{{ section.id }} .ab2-t { position: relative; display: block; text-decoration: none; color: inherit; min-height: 0; }
+  #ab-{{ section.id }} .ab2-i { position: relative; display: block; overflow: hidden; border-radius: .6rem; background: #ece7df; }
+  #ab-{{ section.id }} .ab2-i img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  #ab-{{ section.id }} .ab2-t:hover .ab2-i img { transform: scale(1.05); }
+  #ab-{{ section.id }} .ab2-n { display: block; font-family: var(--font-heading-family); font-size: 2rem; line-height: 1.2; }
+  #ab-{{ section.id }} .ab2-go { display: block; margin-top: .3rem; font-size: 1.15rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; color: var(--a-ochre, #cf4a25); }
+  #ab-{{ section.id }} .ab2-soon { margin: 2.4rem 0 0; text-align: center; font-family: var(--font-heading-family); font-style: italic; font-size: 1.6rem; color: rgba(var(--color-foreground), .7); }
+  /* mobile: bento */
+  #ab-{{ section.id }} .ab2-grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #ab-{{ section.id }} .ab2-t { aspect-ratio: 1 / 1; }
+  #ab-{{ section.id }} .ab2-t:first-child { grid-column: span 2; aspect-ratio: 16 / 10; }
+  #ab-{{ section.id }} .ab2-t.is-wide { grid-column: span 2; aspect-ratio: 16 / 8; }
+  #ab-{{ section.id }} .ab2-t .ab2-i { position: absolute; inset: 0; }
+  #ab-{{ section.id }} .ab2-lab { position: absolute; inset: auto 0 0 0; z-index: 1; padding: 3rem 1.4rem 1.3rem; background: linear-gradient(to top, rgba(20,14,8,.62), rgba(20,14,8,0)); border-radius: 0 0 .6rem .6rem; color: #fff; }
+  #ab-{{ section.id }} .ab2-lab .ab2-n { color: #fff; }
+  #ab-{{ section.id }} .ab2-lab .ab2-go { color: #fff; opacity: .9; }
+  #ab-{{ section.id }} .ab2-t:first-child .ab2-n { font-size: 2.6rem; }
+  /* desktop: grid, cards up to 27rem */
+  @media screen and (min-width: 750px) {
+    #ab-{{ section.id }} .ab2-grid { grid-template-columns: repeat({{ cols }}, minmax(0, 27rem)); justify-content: center; gap: 2rem; }
+    #ab-{{ section.id }} .ab2-t, #ab-{{ section.id }} .ab2-t:first-child, #ab-{{ section.id }} .ab2-t.is-wide { grid-column: auto; aspect-ratio: auto; }
+    #ab-{{ section.id }} .ab2-t .ab2-i { position: relative; inset: auto; aspect-ratio: 1 / 1; }
+    #ab-{{ section.id }} .ab2-lab { position: static; padding: 0; margin-top: .9rem; background: none; border-radius: 0; color: inherit; }
+    #ab-{{ section.id }} .ab2-lab .ab2-n, #ab-{{ section.id }} .ab2-t:first-child .ab2-n { color: inherit; font-size: 1.9rem; }
+    #ab-{{ section.id }} .ab2-lab .ab2-go { color: var(--a-ochre, #cf4a25); opacity: 1; }
+  }
+{%- endstyle -%}
 
-<div class="atelier-browse color-{{ section.settings.color_scheme }} a-section">
+<div class="atelier-browse color-{{ section.settings.color_scheme }} gradient a-section" id="ab-{{ section.id }}">
   <div class="page-width">
-    {%- if section.settings.mobile_intro != blank -%}
-      <div class="atelier-browse__mobile-intro">
-        <span class="atelier-browse__mobile-intro-label">{{ section.settings.mobile_intro_label }}</span>
-        <p class="atelier-browse__mobile-intro-copy">{{ section.settings.mobile_intro }}</p>
+    {%- if section.settings.heading_lead != blank or section.settings.heading_accent != blank -%}
+      <div class="ab2-head">
+        <h2 class="ab2-title">{{ section.settings.heading_lead }} <em>{{ section.settings.heading_accent }}</em></h2>
+        <span class="ab2-rule" aria-hidden="true"></span>
       </div>
     {%- endif -%}
-    <div class="atelier-browse__head">
-      <div class="atelier-browse__lead">
-        {% render 'atelier-shop-by-switch',
-          mode: req_mode,
-          base_url: request.path,
-          lead: section.settings.lead,
-          element_label: section.settings.element_label,
-          object_label: section.settings.object_label
-        %}
-        <span class="atelier-browse__caption" data-mode-when="element" {% if req_mode != 'element' %}hidden{% endif %}>
-          {{ section.settings.element_caption }}
-        </span>
-        <span class="atelier-browse__caption" data-mode-when="object" {% if req_mode != 'object' %}hidden{% endif %}>
-          {{ section.settings.object_caption }}
-        </span>
-      </div>
-
-      {%- liquid
-        if req_mode == 'object'
-          assign active_status = section.settings.object_status_text
-        else
-          assign active_status = section.settings.element_status_text
-        endif
-      -%}
-      {%- if active_status != blank -%}
-        <div class="atelier-browse__status">
-          <span class="atelier-browse__rule" aria-hidden="true"></span>
-          <span class="atelier-browse__caption">{{ active_status }}</span>
-        </div>
-      {%- endif -%}
+    <div class="ab2-grid">
+      {%- assign shown = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.mode == 'object' and block.settings.collection != blank -%}
+          {%- liquid
+            assign col = block.settings.collection
+            assign is_soon = col.metafields.atelier.coming_soon.value
+            if col.products_count == 0
+              assign is_soon = true
+            endif
+            assign card_image = col.featured_image
+            if card_image == blank and col.products.first != blank
+              assign card_image = col.products.first.featured_image
+            endif
+            assign nm = block.settings.title_override | default: col.title
+          -%}
+          {%- unless is_soon -%}
+            {%- assign shown = shown | plus: 1 -%}
+            <a class="ab2-t{% if shown == live_n and odd_rest == 1 %} is-wide{% endif %}" href="{{ col.url }}" {{ block.shopify_attributes }}>
+              <span class="ab2-i">{%- if card_image != blank -%}{{ card_image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 27rem, 90vw', widths: '275, 400, 550, 800', alt: nm }}{%- endif -%}</span>
+              <span class="ab2-lab"><span class="ab2-n">{{ nm }}</span><span class="ab2-go">View all &rarr;</span></span>
+            </a>
+          {%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
     </div>
-
-    {%- assign browse_modes = 'element,object' | split: ',' -%}
-    {%- for mode in browse_modes -%}
-      <div class="atelier-browse__grid" data-mode-grid="{{ mode }}" {% if req_mode != mode %}hidden{% endif %}>
-        {%- assign n = 0 -%}
-        {%- for block in section.blocks -%}
-          {%- if block.settings.mode == mode and block.settings.collection != blank -%}
-            {%- assign n = n | plus: 1 -%}
-            {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
-            <div {{ block.shopify_attributes }}>
-              {% render 'atelier-collection-card',
-                collection: block.settings.collection,
-                number: num,
-                show_element: block.settings.show_element,
-                title_override: block.settings.title_override
-              %}
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-      {%- liquid
-        if mode == 'element'
-          assign view_all_url = section.settings.element_view_all_url | default: '/collections/all'
-          assign view_all_label = section.settings.element_view_all_label | default: 'View all elements →'
-        else
-          assign view_all_url = section.settings.object_view_all_url | default: '/collections/all'
-          assign view_all_label = section.settings.object_view_all_label | default: 'View all objects →'
-        endif
-      -%}
-      {%- if view_all_url != blank -%}
-        <div class="atelier-browse__view-all" data-mode-grid="{{ mode }}" {% if req_mode != mode %}hidden{% endif %}>
-          <a href="{{ view_all_url }}" class="atelier-browse__view-all-link">{{ view_all_label }}</a>
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
+    {%- if soon_names != '' -%}
+      <p class="ab2-soon">Coming soon: {{ soon_names }}</p>
+    {%- endif -%}
   </div>
 </div>
 
@@ -91,86 +113,8 @@
   "tag": "section",
   "max_blocks": 12,
   "settings": [
-    {
-      "type": "text",
-      "id": "mobile_intro_label",
-      "label": "Mobile intro — label",
-      "default": "THE SHOP",
-      "info": "Shown only on mobile, above the browse toggle"
-    },
-    {
-      "type": "text",
-      "id": "mobile_intro",
-      "label": "Mobile intro — tagline",
-      "default": "Considered, not collected.",
-      "info": "Leave blank to hide this intro block"
-    },
-    {
-      "type": "text",
-      "id": "lead",
-      "label": "Lead label",
-      "default": "Shop by"
-    },
-    {
-      "type": "text",
-      "id": "element_label",
-      "label": "Element option label",
-      "default": "Element"
-    },
-    {
-      "type": "text",
-      "id": "object_label",
-      "label": "Object option label",
-      "default": "Object"
-    },
-    {
-      "type": "text",
-      "id": "element_caption",
-      "label": "Caption — Element mode",
-      "default": "Five materials, each with its own voice."
-    },
-    {
-      "type": "text",
-      "id": "object_caption",
-      "label": "Caption — Object mode",
-      "default": "What it is, and what it holds."
-    },
-    {
-      "type": "text",
-      "id": "element_status_text",
-      "label": "Status text — Element mode",
-      "default": "TWO OF FIVE LIVE · THREE COMING SOON"
-    },
-    {
-      "type": "text",
-      "id": "object_status_text",
-      "label": "Status text — Object mode",
-      "default": "THREE OF FIVE LIVE · TWO COMING SOON"
-    },
-    {
-      "type": "url",
-      "id": "element_view_all_url",
-      "label": "Element mode — View all URL",
-      "info": "Leave blank to hide the link"
-    },
-    {
-      "type": "text",
-      "id": "element_view_all_label",
-      "label": "Element mode — View all label",
-      "default": "View all elements →"
-    },
-    {
-      "type": "url",
-      "id": "object_view_all_url",
-      "label": "Object mode — View all URL",
-      "info": "Leave blank to hide the link"
-    },
-    {
-      "type": "text",
-      "id": "object_view_all_label",
-      "label": "Object mode — View all label",
-      "default": "View all objects →"
-    },
+    { "type": "text", "id": "heading_lead", "label": "Heading - plain part", "default": "Shop by" },
+    { "type": "text", "id": "heading_accent", "label": "Heading - accent word (coral italic)", "default": "category" },
     {
       "type": "color_scheme",
       "id": "color_scheme",
@@ -183,33 +127,20 @@
       "type": "card",
       "name": "Collection card",
       "settings": [
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection"
-        },
+        { "type": "collection", "id": "collection", "label": "Collection" },
         {
           "type": "select",
           "id": "mode",
           "label": "Show in mode",
+          "info": "Only Object cards are shown in this section. Element cards are kept for placement elsewhere.",
           "options": [
-            { "value": "element", "label": "Element" },
+            { "value": "element", "label": "Element (hidden here)" },
             { "value": "object", "label": "Object" }
           ],
-          "default": "element"
+          "default": "object"
         },
-        {
-          "type": "checkbox",
-          "id": "show_element",
-          "label": "Show element tag (Object cards)",
-          "default": false
-        },
-        {
-          "type": "text",
-          "id": "title_override",
-          "label": "Title override",
-          "info": "Leave blank to use the collection's own title. Useful when the same collection appears in both Element and Object mode under different names (e.g. \"Wax\" vs \"Candles\")."
-        }
+        { "type": "checkbox", "id": "show_element", "label": "Show element tag (unused)", "default": false },
+        { "type": "text", "id": "title_override", "label": "Title override" }
       ]
     }
   ],
@@ -217,16 +148,12 @@
     {
       "name": "Atelier Shop By band",
       "blocks": [
-        { "type": "card", "settings": { "mode": "element" } },
-        { "type": "card", "settings": { "mode": "element" } },
-        { "type": "card", "settings": { "mode": "element" } },
-        { "type": "card", "settings": { "mode": "element" } },
-        { "type": "card", "settings": { "mode": "element" } },
-        { "type": "card", "settings": { "mode": "object", "show_element": true } },
-        { "type": "card", "settings": { "mode": "object", "show_element": true } },
-        { "type": "card", "settings": { "mode": "object", "show_element": true } },
-        { "type": "card", "settings": { "mode": "object", "show_element": true } },
-        { "type": "card", "settings": { "mode": "object", "show_element": true } }
+        { "type": "card", "settings": { "mode": "object" } },
+        { "type": "card", "settings": { "mode": "object" } },
+        { "type": "card", "settings": { "mode": "object" } },
+        { "type": "card", "settings": { "mode": "object" } },
+        { "type": "card", "settings": { "mode": "object" } },
+        { "type": "card", "settings": { "mode": "object" } }
       ]
     }
   ]

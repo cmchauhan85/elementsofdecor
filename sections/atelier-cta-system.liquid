@@ -1,0 +1,47 @@
+{%- comment -%}
+  Call-to-action system (decided 20 Oct 2026), loaded on every page through the footer group. Four styles, each with one job:
+  BUY    solid coral: Buy Now, sticky Buy, Check out (cart page and the Add-to-bag pop-up).
+  OPTION outline: Add to the bag, View cart, WhatsApp / phone call, bundle button.
+  LINK   coral bold uppercase text with an arrow, no box, no underline: every other call to action on a plain background.
+  GLASS  small translucent pill with white text: only where the button sits on a photo (home hero; category tiles on phone).
+  The arrow on .cb-cta and .rf-cta comes from CSS (::after); do not type an arrow into those labels. Tiles read "View all" (sections/atelier-browse.liquid).
+  Selectors use html:not([data-x]) body so they out-rank the section styles without raising anything above !important.
+{%- endcomment -%}
+<style>
+/* ===== BUY ===== */
+html:not([data-x]) body :is(.btn-primary,.atelier-pdp-sticky__buy,cart-drawer .button--primary,cart-notification .button--primary,.cart__checkout-button){background:#cf4a25 !important;color:#fff !important;border:1px solid #cf4a25 !important;font-weight:700 !important;min-height:4.4rem}
+html:not([data-x]) body :is(.btn-primary,.atelier-pdp-sticky__buy,cart-drawer .button--primary,cart-notification .button--primary,.cart__checkout-button):is(:hover,:focus-visible){background:#a8371a !important;border-color:#a8371a !important;color:#fff !important}
+/* ===== OPTION ===== */
+html:not([data-x]) body :is(.btn-secondary,.atelier-pdp-sticky__submit,.button--secondary){border:1.5px solid #14213d !important;color:#14213d !important;font-weight:700 !important;min-height:4.4rem;opacity:1 !important}
+html:not([data-x]) body :is(.btn-secondary,.atelier-pdp-sticky__submit,.button--secondary):is(:hover,:focus-visible){background:#14213d !important;color:#fff !important}
+html:not([data-x]) body .cl-bundle__btn{background:transparent !important;color:#cf4a25 !important;border:1.5px solid #cf4a25 !important;font-weight:700 !important}
+html:not([data-x]) body .cl-bundle__btn:is(:hover,:focus-visible){background:#cf4a25 !important;color:#fff !important}
+/* ===== LINK ===== */
+html:not([data-x]) body :is(.cb-cta,.bd-cta,.rf-cta){display:inline-flex !important;align-items:center;justify-content:center;gap:.8rem;background:transparent !important;border:0 !important;border-radius:0 !important;color:#cf4a25 !important;padding:.8rem 0 !important;min-height:4.4rem;font-size:1.25rem !important;font-weight:700 !important;letter-spacing:.14em !important;text-transform:uppercase !important;text-decoration:none !important;opacity:1 !important}
+html:not([data-x]) body :is(.cb-cta,.rf-cta)::after{content:"\2192"}
+html:not([data-x]) body :is(.abs__link,.rf-link){display:inline-block;color:#cf4a25 !important;padding-block:.8rem;font-size:1.25rem !important;font-weight:700 !important;letter-spacing:.14em;text-transform:uppercase;text-decoration:none !important}
+html:not([data-x]) body :is(.cb-cta,.bd-cta,.rf-cta,.abs__link,.rf-link):is(:hover,:focus-visible){background:transparent !important;color:#a8371a !important}
+html:not([data-x]) body .abx-btn{color:#cf4a25 !important;border-color:transparent !important;font-weight:700 !important;font-size:1.2rem !important;min-height:4.4rem}
+/* ===== GLASS: home hero (all widths) ===== */
+html:not([data-x]) body .atelier-hero__cta{display:inline-flex !important;align-items:center;width:fit-content !important;max-width:100%;min-height:4rem !important;padding:.4rem .4rem .4rem 1.8rem !important;gap:1.2rem !important;background:rgba(255,255,255,.07) !important;-webkit-backdrop-filter:blur(12px) saturate(1.5);backdrop-filter:blur(12px) saturate(1.5);border:1px solid rgba(255,255,255,.42) !important;border-radius:2px !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 12px rgba(0,0,0,.12);color:#fff !important;text-shadow:0 1px 4px rgba(0,0,0,.6);font-size:1.2rem !important;font-weight:700 !important;letter-spacing:.14em !important;text-transform:uppercase !important;opacity:1 !important}
+html:not([data-x]) body .atelier-hero__cta:is(:hover,:focus-visible){background:rgba(255,255,255,.2) !important;border-color:rgba(255,255,255,.7) !important}
+html:not([data-x]) body .atelier-hero__cta .atelier-hero__arrow{width:2.8rem !important;height:2.8rem !important;min-width:2.8rem;font-size:1.3rem;background:rgba(255,255,255,.85) !important;color:#a8371a !important;border-color:transparent !important;text-shadow:none}
+/* ===== GLASS (phone) / LINK (desktop): category tiles ===== */
+html:not([data-x]) body .ab2-t .ab2-go{display:inline-flex !important;align-items:center;width:fit-content;opacity:1 !important;text-transform:uppercase;font-weight:700 !important;letter-spacing:.14em !important;text-decoration:none}
+@media (max-width:749px){
+html:not([data-x]) body .ab2-t .ab2-go{min-height:2.6rem;margin-top:.4rem !important;padding:.3rem .9rem !important;background:rgba(255,255,255,.07) !important;-webkit-backdrop-filter:blur(12px) saturate(1.5);backdrop-filter:blur(12px) saturate(1.5);border:1px solid rgba(255,255,255,.42) !important;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 12px rgba(0,0,0,.12);color:#fff !important;text-shadow:0 1px 4px rgba(0,0,0,.6);font-size:.95rem !important}
+html:not([data-x]) body .ab2-t:is(:hover,:focus-visible,:active) .ab2-go{background:rgba(255,255,255,.2) !important}
+}
+@media (min-width:750px){
+html:not([data-x]) body .ab2-t .ab2-go{background:transparent !important;border:0 !important;padding:.8rem 0 !important;margin-top:.2rem !important;color:#cf4a25 !important;font-size:1.25rem !important}
+html:not([data-x]) body .ab2-t:is(:hover,:focus-visible) .ab2-go{color:#a8371a !important}
+}
+/* ===== Tap targets ===== */
+html:not([data-x]) body :is(.atelier-chip,.product__whatsapp-button){min-height:4.4rem;display:inline-flex;align-items:center}
+</style>
+{% schema %}
+{
+  "name": "CTA system",
+  "settings": []
+}
+{% endschema %}

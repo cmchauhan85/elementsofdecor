@@ -1,0 +1,229 @@
+{%- comment -%} Reels, feature layout: slot 1 = brand film (large), slots 2-4 = supporting reels, each with a product tile (or a coming-soon tile with a waitlist email capture). Autoplay muted in view, tap for sound. The waitlist is a real server-rendered Shopify contact form (so Shopify supplies the captcha token); sign-ups land in the store inbox until Klaviyo is set up. {%- endcomment -%}
+<style>
+#rf-{{ section.id }}{padding-block:3rem}
+#rf-{{ section.id }} .rf-head{text-align:center;margin-bottom:2.4rem}
+#rf-{{ section.id }} .rf-eye{font-size:1.2rem;letter-spacing:.22em;text-transform:uppercase;color:var(--a-ochre,#d9603b);margin:0 0 1.2rem}
+#rf-{{ section.id }} .rf-title{font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.6rem,7vw,4.2rem);line-height:1.12;margin:0;text-wrap:balance}
+#rf-{{ section.id }} .rf-title em{color:var(--a-ochre,#d9603b);font-style:italic}
+#rf-{{ section.id }} .rf-rule{display:block;width:4rem;height:2px;background:var(--a-ochre,#d9603b);margin:1.8rem auto 0}
+#rf-{{ section.id }} .rf-grid{display:flex;flex-direction:column;gap:2.4rem}
+#rf-{{ section.id }} .rf-main{width:78%;max-width:34rem;margin:0 auto}
+#rf-{{ section.id }} .rf-row{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#rf-{{ section.id }} .rf-row::-webkit-scrollbar{display:none}
+#rf-{{ section.id }} .rf-card{flex:0 0 62%;max-width:26rem;scroll-snap-align:start;margin:0;min-width:0}
+#rf-{{ section.id }} .rf-frame{position:relative;aspect-ratio:9/16;overflow:hidden;border-radius:var(--a-radius-image,4px);background:var(--a-stone,#ece7df);cursor:pointer}
+#rf-{{ section.id }} .rf-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#rf-{{ section.id }} .rf-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading-family);font-size:2.4rem;letter-spacing:.2em;color:var(--a-muted,#8a8378)}
+#rf-{{ section.id }} .rf-snd{position:absolute;right:.8rem;bottom:.8rem;width:3.6rem;height:3.6rem;border-radius:50%;border:0;background:rgba(27,25,22,.55);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;backdrop-filter:blur(4px)}
+#rf-{{ section.id }} .rf-snd svg{width:1.8rem;height:1.8rem;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#rf-{{ section.id }} .rf-snd .on{display:none}
+#rf-{{ section.id }} .is-sound .rf-snd .on{display:block}
+#rf-{{ section.id }} .is-sound .rf-snd .off{display:none}
+#rf-{{ section.id }} .rf-meta{margin-top:1.2rem;text-align:center}
+#rf-{{ section.id }} .rf-cap{margin:0;font-size:1.3rem;line-height:1.5;color:var(--a-muted,rgba(var(--color-foreground),.75))}
+#rf-{{ section.id }} .rf-main .rf-cap{font-family:var(--font-heading-family);font-size:1.9rem;line-height:1.35;color:inherit}
+#rf-{{ section.id }} .rf-link{display:inline-block;margin-top:.8rem;font-size:1.15rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:var(--a-ochre,#d9603b);border-bottom:1px solid currentColor;padding-bottom:.2rem}
+#rf-{{ section.id }} .rf-pt{display:flex;gap:1rem;align-items:center;margin-top:1.4rem;padding:1rem;border:1px solid rgba(var(--color-foreground),.14);border-radius:var(--a-radius-image,4px);text-decoration:none;color:inherit;text-align:left;transition:border-color .2s}
+#rf-{{ section.id }} a.rf-pt:hover{border-color:var(--a-ochre,#d9603b)}
+#rf-{{ section.id }} .rf-pt-img{flex:0 0 5.6rem;width:5.6rem;height:5.6rem;border-radius:3px;overflow:hidden;background:var(--a-stone,#ece7df);display:block}
+#rf-{{ section.id }} .rf-pt-img img{width:100%;height:100%;object-fit:cover;display:block}
+#rf-{{ section.id }} .rf-pt-tx{display:block;min-width:0}
+#rf-{{ section.id }} .rf-pt-tx b{display:block;font-weight:500;font-size:1.3rem;line-height:1.3}
+#rf-{{ section.id }} .rf-pt-tx span{display:block;font-size:1.2rem;color:var(--a-muted,rgba(var(--color-foreground),.7));margin-top:.3rem}
+#rf-{{ section.id }} .rf-pt-go{margin-left:auto;color:var(--a-ochre,#d9603b);font-style:normal}
+#rf-{{ section.id }} .rf-soon{border-style:dashed;opacity:.7}
+#rf-{{ section.id }} .rf-wl{flex-direction:column;align-items:stretch;gap:.9rem;opacity:1;scroll-margin-top:30vh}
+#rf-{{ section.id }} .rf-wl[hidden],#rf-{{ section.id }} .rf-wl [hidden]{display:none}
+#rf-{{ section.id }} .rf-wl__form{display:flex;flex-direction:column;gap:.6rem;margin:0}
+#rf-{{ section.id }} .rf-wl__in{width:100%;box-sizing:border-box;min-height:44px;padding:0 1rem;border:1px solid #d9d0c3;border-radius:.6rem;background:#fff;font:inherit;font-size:16px;color:#14213d}
+#rf-{{ section.id }} .rf-wl__b{min-height:44px;padding:0 1.4rem;border:0;border-radius:.6rem;background:#14213d;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+#rf-{{ section.id }} .rf-wl__b[disabled]{opacity:.6}
+#rf-{{ section.id }} .rf-wl__ok{margin:0;font-weight:700;font-size:1.4rem;line-height:1.4;color:#2f6b4f}
+#rf-{{ section.id }} .rf-wl__err{margin:0;font-size:1.25rem;color:#a8371a}
+#rf-{{ section.id }} .rf-foot{text-align:center;margin-top:2.8rem}
+#rf-{{ section.id }} .rf-cta{display:inline-block;border:1px solid var(--a-ink,currentColor);padding:1.2rem 2.6rem;font-size:1.2rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:inherit;transition:background .2s,color .2s}
+#rf-{{ section.id }} .rf-cta:hover{background:var(--a-ink,#1b1916);color:#fff}
+@media(min-width:750px){#rf-{{ section.id }}{padding-block:5rem}#rf-{{ section.id }} .rf-card{flex-basis:30%}}
+@media(min-width:990px){
+  #rf-{{ section.id }} .rf-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,3fr);gap:3.2rem;align-items:start}
+  #rf-{{ section.id }} .rf-main{width:100%;max-width:none;margin:0}
+  #rf-{{ section.id }} .rf-row{overflow:visible;gap:1.6rem}
+  #rf-{{ section.id }} .rf-card{flex:1 1 0;max-width:none}
+}
+</style>
+<section id="rf-{{ section.id }}" class="rf color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    <div class="rf-head">
+      {%- if section.settings.eyebrow != blank -%}<p class="rf-eye">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="rf-title">{{ section.settings.title }}</h2>
+      <span class="rf-rule"></span>
+    </div>
+    <div class="rf-grid">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          assign vkey = 'video_' | append: i
+          assign ckey = 'caption_' | append: i
+          assign lkey = 'link_' | append: i
+          assign tkey = 'tag_' | append: i
+          assign pkey = 'product_' | append: i
+          assign skey = 'soon_title_' | append: i
+          assign v = section.settings[vkey]
+          assign cap = section.settings[ckey]
+          assign lnk = section.settings[lkey]
+          assign tag = section.settings[tkey]
+          assign prod = section.settings[pkey]
+          assign soon = section.settings[skey]
+        -%}
+        {%- if i == 2 -%}<div class="rf-row">{%- endif -%}
+        {%- if v != blank or section.settings.show_placeholders -%}
+        <figure class="{% if i == 1 %}rf-main{% else %}rf-card{% endif %}">
+          <div class="rf-frame">
+            {%- if v != blank -%}
+              {%- liquid
+                assign mp4s = v.sources | where: 'format', 'mp4' | sort: 'height' | reverse
+                assign pick = mp4s.last
+                for s in mp4s
+                  if s.height <= 720
+                    assign pick = s
+                    break
+                  endif
+                endfor
+              -%}
+              <video muted loop playsinline preload="metadata" poster="{{ v.preview_image | image_url: width: 720 }}" aria-label="{{ cap | default: 'Elements of Decor video' | escape }}">
+                <source src="{{ pick.url }}" type="{{ pick.mime_type }}">
+              </video>
+              <button type="button" class="rf-snd" aria-label="Turn sound on or off">
+                <svg class="off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l4 6M21 9l-4 6"/></svg>
+                <svg class="on" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>
+              </button>
+            {%- else -%}
+              <span class="rf-ph">ED</span>
+            {%- endif -%}
+          </div>
+          {%- if cap != blank or tag != blank -%}
+          <figcaption class="rf-meta">
+            {%- if cap != blank -%}<p class="rf-cap">{{ cap }}</p>{%- endif -%}
+            {%- if tag != blank and lnk != blank -%}<a class="rf-link" href="{{ lnk }}">{{ tag }} &rarr;</a>{%- endif -%}
+          </figcaption>
+          {%- endif -%}
+          {%- if i > 1 -%}
+            {%- if prod != blank -%}
+              <a class="rf-pt" href="{{ prod.url }}">
+                <span class="rf-pt-img">{%- if prod.featured_image -%}<img src="{{ prod.featured_image | image_url: width: 160 }}" alt="{{ prod.featured_image.alt | default: prod.title | escape }}" width="56" height="56" loading="lazy">{%- endif -%}</span>
+                <span class="rf-pt-tx"><b>{{ prod.title }}</b><span>{{ prod.price | money_without_trailing_zeros }}</span></span>
+                <em class="rf-pt-go">&rarr;</em>
+              </a>
+            {%- elsif soon != blank -%}
+              {%- assign wl_back = request.path | append: '?wl=' | append: i -%}
+              <div class="rf-pt rf-soon rf-wl" data-wl="{{ i }}">
+                <span class="rf-pt-tx"><b>{{ soon }}</b><span>Coming soon. Be first to know.</span></span>
+                {%- form 'contact', id: 'RfWl', class: 'rf-wl__form', return_to: wl_back -%}
+                  <input type="hidden" name="contact[Product]" value="Waitlist: {{ soon | escape }}" data-wl-product>
+                  <input type="hidden" name="contact[body]" value="Notify me when launched: {{ soon | escape }} (home page waitlist)" data-wl-body>
+                  <input class="rf-wl__in" type="email" name="contact[email]" placeholder="Your email" autocomplete="email" aria-label="Your email" required>
+                  <button class="rf-wl__b" type="submit">Notify me</button>
+                  <p class="rf-wl__err" hidden role="alert"></p>
+                {%- endform -%}
+                <p class="rf-wl__ok" hidden>Done. We'll email you the day it's here.</p>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        </figure>
+        {%- endif -%}
+        {%- if i == 4 -%}</div>{%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.cta_label != blank -%}
+    <div class="rf-foot"><a class="rf-cta" href="{{ section.settings.link | default: 'https://www.instagram.com/elements.of.decor' }}" target="_blank" rel="noopener">{{ section.settings.cta_label }}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+<script>
+(function(){
+  var root=document.getElementById('rf-{{ section.id }}');
+  if(!root)return;
+  var cards=[].slice.call(root.querySelectorAll('.rf-frame')).filter(function(f){return f.querySelector('video')});
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function muteAll(except){cards.forEach(function(f){var v=f.querySelector('video');if(f!==except){v.muted=true;f.classList.remove('is-sound')}})}
+  cards.forEach(function(f){
+    var v=f.querySelector('video');
+    f.addEventListener('click',function(){
+      var turnOn=v.muted;
+      muteAll(f);
+      v.muted=!turnOn;
+      f.classList.toggle('is-sound',turnOn);
+      if(turnOn||v.paused){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+    });
+  });
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      var v=e.target.querySelector('video');if(!v)return;
+      if(e.isIntersecting&&!reduce){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+      else{v.pause();if(!e.isIntersecting){v.muted=true;e.target.classList.remove('is-sound')}}
+    })},{threshold:.4});
+    cards.forEach(function(f){io.observe(f)});
+  }
+
+  /* waitlist tiles: validate, then after the redirect back show Done and bring the tile into view */
+  [].forEach.call(root.querySelectorAll('[data-wl]'),function(box){
+    var n=box.getAttribute('data-wl');
+    var form=box.querySelector('form'),ok=box.querySelector('.rf-wl__ok'),err=box.querySelector('.rf-wl__err');
+    var sent=location.search.indexOf('wl='+n)>-1;
+    if(sent){
+      form.hidden=true;ok.hidden=false;
+      try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
+      var go=function(){try{box.scrollIntoView({block:'center'})}catch(e){box.scrollIntoView()}};
+      go();[150,500,1100,2000].forEach(function(ms){setTimeout(go,ms)});
+      window.addEventListener('load',go);
+      try{history.replaceState(null,'',location.pathname)}catch(e){}
+    }
+    form.addEventListener('submit',function(e){
+      var inp=form.querySelector('input[type=email]');
+      var em=(inp.value||'').trim(),at=em.indexOf('@');
+      if(at<1||em.indexOf('.',at)<at+2||em.indexOf(' ')>-1||em.slice(-1)=='.'){
+        e.preventDefault();err.hidden=false;err.textContent='Please enter a valid email.';return;
+      }
+      form.querySelector('button').disabled=true;
+    });
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "Reels feature",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"From the workshop"},
+    {"type":"inline_richtext","id":"title","label":"Title","default":"Seen in <em>motion.</em>"},
+    {"type":"header","content":"Feature reel (large)"},
+    {"type":"video","id":"video_1","label":"Feature video"},
+    {"type":"text","id":"caption_1","label":"Feature caption"},
+    {"type":"header","content":"Supporting reel 1"},
+    {"type":"video","id":"video_2","label":"Video"},
+    {"type":"text","id":"caption_2","label":"Caption"},
+    {"type":"product","id":"product_2","label":"Product tile"},
+    {"type":"text","id":"soon_title_2","label":"Coming-soon title (when no product)"},
+    {"type":"text","id":"tag_2","label":"Link label"},
+    {"type":"url","id":"link_2","label":"Link"},
+    {"type":"header","content":"Supporting reel 2"},
+    {"type":"video","id":"video_3","label":"Video"},
+    {"type":"text","id":"caption_3","label":"Caption"},
+    {"type":"product","id":"product_3","label":"Product tile"},
+    {"type":"text","id":"soon_title_3","label":"Coming-soon title (when no product)"},
+    {"type":"text","id":"tag_3","label":"Link label"},
+    {"type":"url","id":"link_3","label":"Link"},
+    {"type":"header","content":"Supporting reel 3"},
+    {"type":"video","id":"video_4","label":"Video"},
+    {"type":"text","id":"caption_4","label":"Caption"},
+    {"type":"product","id":"product_4","label":"Product tile"},
+    {"type":"text","id":"soon_title_4","label":"Coming-soon title (when no product)"},
+    {"type":"text","id":"tag_4","label":"Link label"},
+    {"type":"url","id":"link_4","label":"Link"},
+    {"type":"checkbox","id":"show_placeholders","label":"Show placeholders for empty slots","default":false},
+    {"type":"header","content":"Footer button"},
+    {"type":"text","id":"cta_label","label":"Button label","default":"Follow @elements.of.decor"},
+    {"type":"url","id":"link","label":"Button link"},
+    {"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"scheme-1"}
+  ],
+  "presets": [{"name":"Reels feature"}]
+}
+{% endschema %}

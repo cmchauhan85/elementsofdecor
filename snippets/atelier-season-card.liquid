@@ -1,0 +1,14 @@
+{%- liquid
+  assign m = product.metafields.atelier.card_material.value | downcase
+  assign el = ''
+  if m contains 'marble' or m contains 'stone'
+    assign el = 'Stone'
+  elsif m contains 'metal' or m contains 'brass' or m contains 'silver' or m contains 'gold'
+    assign el = 'Metal'
+  endif
+-%}
+{%- if boxed -%}
+  <div class="abx-wrap" data-el="{{ el }}">{% render 'atelier-bs-card', product: product, boxed: true, show_tag: true %}</div>
+{%- else -%}
+  {% render 'atelier-product-card', product: product %}
+{%- endif -%}

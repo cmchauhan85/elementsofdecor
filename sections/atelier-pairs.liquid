@@ -1,41 +1,255 @@
-{{ 'section-atelier-pdp-blocks.css' | asset_url | stylesheet_tag }}
+{{ 'atelier-tokens.css' | asset_url | stylesheet_tag }}
+{{ 'component-atelier-card.css' | asset_url | stylesheet_tag }}
+{{ 'atelier-box-card.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   assign pairs = product.metafields.atelier.pairs_with.value
   assign limit = section.settings.products_to_show
-
-  if pairs == blank and section.settings.fallback_collection != blank
-    assign pairs = section.settings.fallback_collection.products
+  assign fb = section.settings.fallback_collection.products
+  if fb == blank
+    assign fb = collections['all'].products
   endif
+  assign shown = 0
+  assign seen = ',' | append: product.id | append: ','
+  assign sv = product.selected_or_first_available_variant
 -%}
 
-{%- if pairs != blank -%}
-  <div class="atelier-pairs color-{{ section.settings.color_scheme }} a-section">
-    <div class="page-width">
-      <h2 class="atelier-pairs__title">{{ section.settings.title }}</h2>
-      <div class="atelier-pairs__grid">
-        {%- assign shown = 0 -%}
-        {%- for p in pairs -%}
-          {%- if p.id != product.id and shown < limit -%}
-            {%- assign shown = shown | plus: 1 -%}
-            {% render 'atelier-product-card', product: p %}
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+{%- capture cards -%}
+  {%- for pass in (1..2) -%}
+    {%- if pass == 1 -%}{%- assign pool = pairs -%}{%- else -%}{%- assign pool = fb -%}{%- endif -%}
+    {%- for p in pool -%}
+      {%- assign key = ',' | append: p.id | append: ',' -%}
+      {%- unless seen contains key -%}
+        {%- if p.available and shown < limit -%}
+          {%- assign shown = shown | plus: 1 -%}
+          {%- assign seen = seen | append: p.id | append: ',' -%}
+          {%- assign v = p.selected_or_first_available_variant -%}
+          {%- assign el = p.metafields.atelier.element.value | default: p.type -%}
+<article class="cl-item" data-vid="{{ v.id }}" data-price="{{ v.price }}">
+  <label class="cl-chk"><input type="checkbox" checked aria-label="Include {{ p.title | escape }}"><span></span></label>
+  <a class="cl-media" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+    {%- if p.featured_media != blank -%}{{ p.featured_media | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 24vw, 46vw', widths: '300, 450, 700', alt: p.featured_media.alt | default: p.title | escape }}{%- endif -%}
+  </a>
+  <div class="cl-info">
+    <h3 class="cl-name"><a href="{{ p.url }}">{{ p.title }}</a></h3>
+    <p class="cl-meta">{{ el }}{% if p.variants.size > 1 %} · {{ v.title | split: ' (' | first }}{% endif %}</p>
+    <div class="cl-foot">
+      <p class="cl-price">{{ v.price | money_without_trailing_zeros }}</p>
+      <button type="button" class="abx-btn cl-add">+ Add</button>
     </div>
   </div>
+</article>
+        {%- endif -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if shown > 0 -%}
+<div class="atl-cl" data-atl-cl data-l="{{ section.settings.layout }}" data-ld="{{ section.settings.layout }}" data-lm="{{ section.settings.layout_mobile }}">
+  <div class="page-width">
+    <p class="cl-eye">{{ section.settings.eyebrow }}</p>
+    <h2 class="cl-h">{{ section.settings.heading }}</h2>
+    <span class="cl-rule"></span>
+    {%- if section.settings.sub != blank -%}<p class="cl-sub">{{ section.settings.sub }}</p>{%- endif -%}
+    <div class="cl-grid">
+      {{ cards }}
+      <article class="cl-item cl-self" data-self data-price="{{ sv.price }}">
+        <label class="cl-chk"><input type="checkbox" checked disabled aria-label="This piece"><span></span></label>
+        <a class="cl-media" href="{{ product.url }}">{%- if product.featured_media != blank -%}{{ product.featured_media | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 24vw, 46vw', widths: '300, 450, 700', alt: product.title | escape }}{%- endif -%}</a>
+        <div class="cl-info">
+          <h3 class="cl-name">{{ product.title }}</h3>
+          <p class="cl-meta">This piece</p>
+          <div class="cl-foot"><p class="cl-price">{{ sv.price | money_without_trailing_zeros }}</p></div>
+        </div>
+      </article>
+    </div>
+    <div class="cl-offer">
+      <div class="cl-offer__cards">
+        <div class="cl-offer__card is-next" data-offer="2"><span class="cl-offer__buy">Buy 2 pieces</span><span class="cl-offer__big">Get 5% off</span><span class="cl-offer__need" data-need>2 to go</span></div>
+        <div class="cl-offer__card" data-offer="3"><span class="cl-offer__buy">Buy 3 pieces</span><span class="cl-offer__big">Get 10% off</span><span class="cl-offer__need" data-need>3 to go</span></div>
+      </div>
+      <p class="cl-offer__note">Applied automatically in your bag. Offer applies to pieces priced ₹500 and above.</p>
+    </div>
+    <div class="cl-bundle">
+      <div class="cl-bundle__sum"><span>Bundle total</span><strong data-cl-total></strong><s class="cl-bundle__was" data-cl-was hidden></s></div>
+      <button type="button" class="cl-bundle__btn" data-cl-bundle>Add <span data-cl-n></span> to bag</button>
+      <a class="cl-bundle__view" href="{{ routes.cart_url }}" hidden>View bag →</a>
+    </div>
+  </div>
+</div>
+<style>
+.atl-cl{background:#f5f2eb;padding:6rem 0 5.6rem;border-top:1px solid #d9d0c3;color:#14213d}
+.cl-eye{margin:0 0 1.4rem;font-size:1.2rem;letter-spacing:.2em;text-transform:uppercase;color:#cf4a25;font-weight:600;text-align:center}
+.cl-h{margin:0;text-align:center;font-family:var(--font-heading-family);font-weight:400;font-size:clamp(3rem,4.4vw,4.4rem);line-height:1.12;text-wrap:balance}
+.cl-h em{color:#cf4a25;font-style:italic}
+.cl-rule{display:block;width:4.8rem;height:2px;background:#cf4a25;margin:2rem auto 0}
+.cl-sub{margin:1.8rem auto 0;max-width:46rem;text-align:center;font-size:1.5rem;line-height:1.6;color:rgba(20,33,61,.75)}
+.cl-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.6rem;margin-top:3.6rem}
+.cl-item{display:flex;flex-direction:column;position:relative;background:transparent;border:1px solid #d9d0c3;border-radius:1rem;padding:.8rem;box-sizing:border-box;transition:border-color .25s,box-shadow .25s;min-width:0}
+.cl-item:hover{border-color:#cf4a25;box-shadow:0 6px 20px rgba(27,37,64,.07)}
+.cl-media{display:block;aspect-ratio:4/5;overflow:hidden;border-radius:.6rem;background:#fff}
+.cl-media img{width:100%;height:100%;object-fit:cover;display:block}
+.cl-info{display:flex;flex-direction:column;flex:1;padding:1rem .4rem .3rem;min-width:0}
+.cl-name{margin:0;font-size:1.5rem;line-height:1.35;font-weight:400}
+.cl-name a{color:#14213d;text-decoration:none}
+.cl-meta{margin:.5rem 0 0;font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;color:var(--a-muted,#6b7280);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cl-foot{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:auto;padding-top:1rem}
+.cl-info .cl-foot{border-top:1px solid #d9d0c3;margin-top:1rem}
+.cl-price{margin:0;font-weight:600;white-space:nowrap}
+.cl-add{background:transparent;cursor:pointer;font-family:inherit;white-space:nowrap}
+.cl-add:hover,.cl-add.is-done{background:#cf4a25;color:#fff}
+.cl-add[disabled]{opacity:.6;cursor:default}
+.cl-chk,.cl-self,.cl-bundle{display:none}
+.cl-chk input{position:absolute;opacity:0;width:0;height:0}
+.cl-chk span{display:block;width:2.2rem;height:2.2rem;border:1.5px solid #14213d;border-radius:.4rem;background:#fff;position:relative}
+.cl-chk input:checked+span{background:#cf4a25;border-color:#cf4a25}
+.cl-chk input:checked+span::after{content:"";position:absolute;left:.65rem;top:.2rem;width:.6rem;height:1.1rem;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.cl-chk input:disabled+span{opacity:.75}
+[data-l=b] .cl-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:3.6rem;max-width:96rem;margin-left:auto;margin-right:auto}
+[data-l=b] .cl-self{display:flex;order:-1}
+[data-l=b] .cl-item:not(.cl-self):nth-child(n+3){display:none}
+[data-l=b] .cl-chk{display:block;position:absolute;top:1.6rem;left:1.6rem;z-index:2}
+[data-l=b] .cl-add{display:none}
+[data-l=b] .cl-self::after,[data-l=b] .cl-item:nth-child(1)::after{content:"+";position:absolute;right:-2.9rem;top:38%;width:2.2rem;text-align:center;font-size:2.8rem;line-height:1;color:#cf4a25}
+[data-l=b] .cl-bundle{display:flex;align-items:center;justify-content:center;gap:2.4rem;flex-wrap:wrap;margin:2.4rem auto 0;padding:2rem 2.4rem;max-width:96rem;background:#fff;border:1px solid #d9d0c3;border-radius:1rem}
+.cl-bundle__sum{display:flex;flex-direction:column;gap:.2rem;font-size:1.2rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(20,33,61,.7)}
+.cl-bundle__sum strong{font-size:2.2rem;letter-spacing:0;text-transform:none;color:#14213d;font-weight:600}
+.cl-bundle__was{font-size:1.3rem;letter-spacing:0;text-transform:none;color:rgba(20,33,61,.55)}
+.cl-bundle__btn{border:0;background:#cf4a25;color:#fff;font:inherit;font-size:1.4rem;letter-spacing:.12em;text-transform:uppercase;padding:1.5rem 3.2rem;cursor:pointer}
+.cl-bundle__btn:hover{background:#a8371a}.cl-bundle__btn[disabled]{opacity:.6}
+.cl-bundle__view{font-size:1.3rem;color:#14213d;text-decoration:underline;text-underline-offset:.4rem}
+.cl-offer{margin:2.8rem auto 0;max-width:46rem}
+.cl-offer__cards{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.cl-offer__card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.1rem;padding:.9rem 1.2rem;border:1.5px dashed #d9d0c3;border-radius:1rem;background:#fff}
+.cl-offer__card.is-next{border:1.5px solid #a8371a}
+.cl-offer__card.is-on{border:1.5px solid #cf4a25;background:#fdf1ec}
+.cl-offer__buy{font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(20,33,61,.65)}
+.cl-offer__big{font-family:var(--font-heading-family);font-size:2rem;line-height:1.1}
+.cl-offer__card.is-on .cl-offer__big{color:#cf4a25}
+.cl-offer__need{font-size:1.15rem;color:rgba(20,33,61,.65)}
+.cl-offer__card.is-next .cl-offer__need{color:#a8371a;font-weight:600}
+.cl-offer__card.is-on .cl-offer__need{color:#2f6b4f;font-weight:700}
+.cl-offer__note{margin:1rem 0 0;text-align:center;font-size:1.2rem;color:rgba(20,33,61,.62)}
+[data-l=c] .cl-grid{grid-template-columns:1.05fr 1fr;grid-template-rows:repeat(3,auto);gap:1.4rem 2.4rem;max-width:104rem;margin-left:auto;margin-right:auto}
+[data-l=c] .cl-item:first-child{grid-row:1/4;grid-column:1}
+[data-l=c] .cl-item:first-child .cl-media{aspect-ratio:1/1}
+[data-l=c] .cl-item:first-child .cl-name{font-size:2.2rem}
+[data-l=c] .cl-item:first-child .cl-info{padding-top:1.4rem}
+[data-l=c] .cl-item:nth-child(n+5):not(.cl-self){display:none}
+[data-l=c] .cl-item:not(:first-child),[data-l=e] .cl-item{flex-direction:row;align-items:stretch;gap:1.4rem}
+[data-l=c] .cl-item:not(:first-child) .cl-media,[data-l=e] .cl-item .cl-media{flex:0 0 11rem;aspect-ratio:1/1}
+[data-l=c] .cl-item:not(:first-child) .cl-info,[data-l=e] .cl-item .cl-info{padding:.2rem 0;justify-content:center}
+[data-l=c] .cl-item:not(:first-child) .cl-info .cl-foot,[data-l=e] .cl-info .cl-foot{border-top:0;margin-top:.8rem;padding-top:0;justify-content:flex-start;gap:1.6rem}
+[data-l=e] .cl-grid{grid-template-columns:1fr;max-width:72rem;margin-left:auto;margin-right:auto;gap:1.2rem}
+[data-l=e] .cl-item .cl-media{flex-basis:13rem}
+[data-l=e] .cl-name{font-size:1.7rem}
+[data-l=d] .cl-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1.6rem;padding:0 0 1.6rem;margin-top:3.6rem;scrollbar-width:thin}
+[data-l=d] .cl-item{flex:0 0 27rem;scroll-snap-align:start}
+@media(max-width:989px){
+  .cl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  [data-l=c] .cl-grid{grid-template-columns:1fr;grid-template-rows:auto}
+  [data-l=c] .cl-item:first-child{grid-row:auto}
+  [data-l=b] .cl-grid{grid-template-columns:1fr;gap:1.2rem}
+  [data-l=e] .cl-grid{grid-template-columns:1fr}
+}
+@media(max-width:749px){
+  .atl-cl{padding:4.4rem 0 4rem}
+  .cl-offer{margin-top:1.8rem}
+  .cl-offer__cards{gap:.8rem}
+  .cl-offer__card{padding:1rem .8rem}
+  .cl-offer__big{font-size:1.8rem}
+  .cl-offer__buy{font-size:1rem;letter-spacing:.1em}
+  .cl-offer__note{font-size:1.1rem}
+  .cl-grid{gap:1rem;margin-top:2.8rem}
+  .cl-name{font-size:1.35rem}
+  .cl-item .cl-add.abx-btn{width:auto;height:auto;min-width:0;padding:.55rem 1.1rem;border-radius:999px;font-size:1.05rem;line-height:1.2}
+  .cl-price{font-size:1.3rem}
+  [data-l=b] .cl-self::after,[data-l=b] .cl-item:nth-child(1)::after{display:none}
+  [data-l=b] .cl-item{flex-direction:row;align-items:stretch;gap:1.2rem;padding:.7rem .7rem .7rem 4.6rem}
+  [data-l=b] .cl-media{flex:0 0 9rem;aspect-ratio:1/1}
+  [data-l=b] .cl-info{padding:.2rem 0;justify-content:center}
+  [data-l=b] .cl-info .cl-foot{border-top:0;margin-top:.6rem;padding-top:0}
+  [data-l=b] .cl-chk{top:50%;left:1.2rem;transform:translateY(-50%)}
+  [data-l=b] .cl-bundle{padding:1.6rem;gap:1.2rem;justify-content:space-between}
+  [data-l=b] .cl-bundle__btn{padding:1.3rem 1.8rem;flex:1}
+  [data-l=c] .cl-item:not(:first-child) .cl-media,[data-l=e] .cl-item .cl-media{flex-basis:9rem}
+  [data-l=d] .cl-item{flex-basis:68vw}
+}
+</style>
+<script>
+(function(){
+  var root=document.querySelector('[data-atl-cl]');if(!root)return;
+  function money(c){return '₹'+(c/100).toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:2})}
+  function rs(c){return '₹'+Math.round(c/100).toLocaleString('en-IN')}
+  var mq=window.matchMedia('(min-width:750px)');
+  function setL(l){root.setAttribute('data-l',l);calc();if(l!=='b')bagUpdate()}
+  /* Offer cards: in the bundle layout they follow the selected pieces; in other layouts they follow the real bag. */
+  function paintOffer(n){var cs=root.querySelectorAll('.cl-offer__card');if(cs.length<2)return;
+    function set(c){var th=Number(c.getAttribute('data-offer')),on=n>=th,nd=c.querySelector('[data-need]');
+      c.classList.toggle('is-on',on);c.classList.toggle('is-next',!on&&((th===2)||n>=th-1));
+      if(nd)nd.textContent=on?'✓ Unlocked':((th-n)+' more to go')}
+    set(cs[0]);set(cs[1])}
+  function auto(){setL(mq.matches?root.getAttribute('data-ld'):root.getAttribute('data-lm'))}
+  mq.addEventListener?mq.addEventListener('change',auto):mq.addListener(auto);
+  function bundleItems(){return [].slice.call(root.querySelectorAll('.cl-item')).filter(function(i){return getComputedStyle(i).display!=='none'&&i.querySelector('.cl-chk input').checked})}
+  function selfVid(){var f=document.querySelector('form[action*="/cart/add"] [name=id]');return f?Number(f.value):null}
+  /* Automatic discounts: 5% for 2+ pieces, 10% for 3+ pieces (set up in Shopify admin) */
+  function rate(n){return n>=3?0.10:(n===2?0.05:0)}
+  var FLOOR=50000; /* only pieces priced ₹500 and above count toward the offer */
+  function calc(){var its=bundleItems(),t=0,te=0,ne=0,n=its.length;its.forEach(function(i){var p=Number(i.dataset.price);t+=p;if(p>=FLOOR){te+=p;ne++}});
+    var r=rate(ne),sv=Math.round(te*r),pay=t-sv;
+    var a=root.querySelector('[data-cl-total]'),was=root.querySelector('[data-cl-was]'),nn=root.querySelector('[data-cl-n]'),btn=root.querySelector('[data-cl-bundle]');
+    if(a)a.textContent=money(pay);
+    if(was){if(sv>0){was.hidden=false;was.textContent=money(t)}else was.hidden=true}
+    if(nn)nn.textContent=n+(n===1?' piece':' pieces');
+    if(btn&&!btn.disabled&&sv>0){btn.innerHTML='Add '+n+' pieces · save '+rs(sv)}
+    else if(btn&&!btn.disabled){btn.innerHTML='Add <span data-cl-n>'+n+(n===1?' piece':' pieces')+'</span> to bag'}
+    if(root.getAttribute('data-l')==='b')paintOffer(ne);
+  }
+  root.addEventListener('change',function(e){if(e.target.closest('.cl-chk'))calc()});
+  function bagUpdate(){fetch('/cart.js').then(function(r){return r.json()}).then(function(c){document.querySelectorAll('.cart-count-bubble span[aria-hidden]').forEach(function(s){s.textContent=c.item_count});
+    if(root.getAttribute('data-l')!=='b'){var n=0;c.items.forEach(function(i){if(i.original_price>=FLOOR)n+=i.quantity});paintOffer(n)}}).catch(function(){})}
+  root.addEventListener('click',function(e){
+    var bb=e.target.closest('[data-cl-bundle]');
+    if(bb){if(bb.disabled)return;var its=bundleItems(),items=its.map(function(i){return {id:i.hasAttribute('data-self')?selfVid():Number(i.dataset.vid),quantity:1}}).filter(function(x){return x.id});
+      if(!items.length)return;bb.disabled=true;bb.textContent='Adding…';
+      fetch('/cart/add.js',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items:items})}).then(function(r){return r.json()}).then(function(j){
+        if(j.status)throw 0;bb.textContent='Added ✓';root.querySelector('.cl-bundle__view').hidden=false;bagUpdate();setTimeout(function(){bb.disabled=false;calc()},3000)
+      }).catch(function(){bb.textContent='Try again';bb.disabled=false});return}
+    var b=e.target.closest('.cl-add');if(!b||b.disabled)return;var it=b.closest('.cl-item');
+    b.disabled=true;var t=b.textContent;b.textContent='Adding…';
+    var cn=document.querySelector('cart-notification'),cd=document.querySelector('cart-drawer');
+    var body={id:Number(it.dataset.vid),quantity:1};
+    if(cn){body.sections=cn.getSectionsToRender().map(function(s){return s.id}).join(',');body.sections_url=window.location.pathname}
+    else if(cd){body.sections=cd.getSectionsToRender().map(function(s){return s.id}).join(',');body.sections_url=window.location.pathname}
+    fetch('/cart/add.js',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json()}).then(function(j){
+      if(j.status)throw 0;b.textContent='Added ✓';b.classList.add('is-done');
+      try{if(cn&&cn.renderContents)cn.renderContents(j);else if(cd&&cd.renderContents)cd.renderContents(j)}catch(x){}
+      bagUpdate();setTimeout(function(){b.textContent=t;b.disabled=false;b.classList.remove('is-done')},2600)
+    }).catch(function(){b.textContent='Try again';b.disabled=false})
+  });
+  auto();
+})();
+</script>
 {%- endif -%}
 
 {% schema %}
 {
-  "name": "Atelier pairs with",
+  "name": "Complete the look",
   "tag": "section",
   "settings": [
-    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "For the same surface." },
+    { "type": "select", "id": "layout_mobile", "label": "Layout on mobile", "default": "d", "options": [
+      { "value": "a", "label": "A · Grid" }, { "value": "b", "label": "B · Bundle" }, { "value": "c", "label": "C · Feature + list" }, { "value": "d", "label": "D · Rail" }, { "value": "e", "label": "E · List" } ] },
+    { "type": "select", "id": "layout", "label": "Layout on desktop", "default": "b", "options": [
+      { "value": "a", "label": "A · Grid" }, { "value": "b", "label": "B · Bundle" }, { "value": "c", "label": "C · Feature + list" }, { "value": "d", "label": "D · Rail" }, { "value": "e", "label": "E · List" } ] },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Pairs well with" },
+    { "type": "inline_richtext", "id": "heading", "label": "Title", "default": "Complete the <em>look.</em>" },
+    { "type": "text", "id": "sub", "label": "Sub line", "default": "Pieces that sit well beside this one. Add them in a tap." },
     { "type": "range", "id": "products_to_show", "min": 2, "max": 8, "step": 1, "default": 4, "label": "Products to show" },
     { "type": "collection", "id": "fallback_collection", "label": "Fallback collection", "info": "Used when the product has no 'pairs_with' metafield." },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme (unused)", "default": "scheme-1" }
   ],
-  "presets": [{ "name": "Atelier pairs with" }]
+  "presets": [{ "name": "Complete the look" }]
 }
 {% endschema %}

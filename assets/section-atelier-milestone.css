@@ -46,7 +46,7 @@
   width: 1.2rem;
   height: 1.2rem;
   border-radius: 50%;
-  background: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-background, 255, 255, 255));
   border: 1px solid var(--a-hairline-strong);
   display: grid;
   place-items: center;
@@ -56,7 +56,7 @@
 .atelier-milestone__dot.is-earned {
   background: var(--milestone-accent);
   border-color: var(--milestone-accent);
-  color: #1b1916;
+  color: #14213d;
   box-shadow: 0 0 0 3px rgba(232, 144, 26, 0.2);
 }
 .atelier-milestone__cards {

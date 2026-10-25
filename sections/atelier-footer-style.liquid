@@ -1,0 +1,342 @@
+{%- assign d = section.settings.desktop -%}
+{%- assign m = section.settings.mobile -%}
+{%- liquid
+  comment
+    Stock map for the quantity cap (15 Oct 2026): variant id : units in stock, for tracked variants that do not allow overselling.
+    Product page: every variant of the product. Any page: variants already in the cart (cart page).
+  endcomment
+  assign ed_stock = ''
+  if template.name == 'product' and product
+    for v in product.variants
+      if v.inventory_management == 'shopify' and v.inventory_policy == 'deny'
+        assign ed_stock = ed_stock | append: v.id | append: ':' | append: v.inventory_quantity | append: ','
+      endif
+    endfor
+  endif
+  if template.name == 'cart'
+    for item in cart.items
+      assign cv = item.variant
+      if cv.inventory_management == 'shopify' and cv.inventory_policy == 'deny'
+        assign ed_stock = ed_stock | append: cv.id | append: ':' | append: cv.inventory_quantity | append: ','
+      endif
+    endfor
+  endif
+-%}
+<style>
+{%- if d == 'navy' -%}
+@media(min-width:750px){footer.fx{background:#14213d!important;--fg:#f5f2eb;--line:rgba(245,242,235,.2);--mut:rgba(245,242,235,.68);--co:#f08a6c;color:#f5f2eb}footer.fx .fx__logo{filter:brightness(0) invert(1)}footer.fx .fx__input{color:#f5f2eb}footer.fx .fx__form{border-bottom-color:rgba(245,242,235,.6)}}
+{%- elsif d == 'coral' -%}
+@media(min-width:750px){footer.fx{background:#cf4a25!important;--fg:#ffffff;--line:rgba(255,255,255,.32);--mut:rgba(255,255,255,.86);--co:#14213d;color:#fff}footer.fx .fx__logo{filter:brightness(0) invert(1)}footer.fx .fx__input{color:#fff}footer.fx .fx__form{border-bottom-color:rgba(255,255,255,.7)}footer.fx .fx__submit{font-weight:700}footer.fx .fx__sign{font-weight:500}}
+{%- endif -%}
+{%- if m == 'navy' -%}
+@media(max-width:749px){footer.fx{background:#14213d!important;--fg:#f5f2eb;--line:rgba(245,242,235,.2);--mut:rgba(245,242,235,.68);--co:#f08a6c;color:#f5f2eb}footer.fx .fx__logo{filter:brightness(0) invert(1)}footer.fx .fx__input{color:#f5f2eb}footer.fx .fx__form{border-bottom-color:rgba(245,242,235,.6)}}
+{%- elsif m == 'coral' -%}
+@media(max-width:749px){footer.fx{background:#cf4a25!important;--fg:#ffffff;--line:rgba(255,255,255,.32);--mut:rgba(255,255,255,.86);--co:#14213d;color:#fff}footer.fx .fx__logo{filter:brightness(0) invert(1)}footer.fx .fx__input{color:#fff}footer.fx .fx__form{border-bottom-color:rgba(255,255,255,.7)}footer.fx .fx__submit{font-weight:700}footer.fx .fx__sign{font-weight:500}}
+{%- endif -%}
+
+/* Phone tap targets (14 Oct 2026): this section loads on every page, so these rules are site-wide. */
+@media(max-width:749px){
+  html body footer.fx .fx__follow a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px}
+  html body footer.fx .fx__submit{min-height:44px}
+  html body .announcement-bar__link{min-height:44px;display:flex;align-items:center;justify-content:center}
+  html body a.atl-st__link{display:inline-flex;align-items:center;min-height:44px}
+  html body .cl-name a{display:inline-flex;align-items:center;min-height:44px}
+  /* Footer text links: 32px rows (decided 14 Oct 2026, option B) */
+  html body footer.fx .fx__links, html body footer.fx .fx__pol{row-gap:2px}
+  html body footer.fx .fx__links a, html body footer.fx .fx__pol a{display:flex;align-items:center;min-height:32px}
+}
+
+/* Stock note under the quantity box (15 Oct 2026) */
+.ed-stocknote{margin:.6rem 0 0;font-size:1.3rem;line-height:1.35;color:#cf4a25}
+.ed-stocknote[hidden]{display:none}
+
+/* Gallery video slide (14 Oct 2026): theme hid deferred-media in the product media list, leaving the video slide blank. Show the poster and play button. */
+html body .product__media-list .product-media-container.media-type-video .deferred-media{display:block !important}
+/* Gallery video slide sized like the photos (15 Oct 2026): the portrait video made the slide 2x tall, which left white space above the first photo, and the poster stayed on screen beside the playing video. Square slide, video letterboxed on cream, poster hidden once the video loads. */
+.product__media-list .product-media-container.media-type-video{aspect-ratio:1/1;height:auto!important;padding:0!important;overflow:hidden}
+.product__media-list .product-media-container.media-type-video::before,.product__media-list .product-media-container.media-type-video::after{display:none!important}
+.product__media-list .media-type-video deferred-media{position:absolute!important;inset:0;width:100%;height:100%!important;padding:0!important}
+.product__media-list .media-type-video .deferred-media__poster{position:absolute;inset:0;width:100%;height:100%}
+.product__media-list .media-type-video .deferred-media__poster img{width:100%;height:100%;object-fit:contain}
+.product__media-list .media-type-video deferred-media[loaded] .deferred-media__poster{display:none!important}
+.product__media-list .media-type-video template{display:none!important}
+.product__media-list .media-type-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#f5f2eb}
+
+/* Story video teaser (15 Oct 2026). Phone and tablet only: a card under Add to cart opens the film full screen. Built by the script below from the story section's video. Desktop is unchanged. */
+.ed-teaser{display:none}
+@media(max-width:989px){
+  .ed-teaser{display:flex;align-items:center;gap:1.2rem;width:100%;margin:1.2rem 0;padding:.8rem 1.4rem .8rem .8rem;border:1px solid #d9d0c3;border-radius:1rem;background:#f5f2eb;color:#14213d;text-align:left;cursor:pointer;font:inherit;min-height:44px}
+  .ed-teaser:focus-visible{outline:2px solid #cf4a25;outline-offset:2px}
+  .ed-teaser__thumb{position:relative;flex:0 0 5.6rem;height:7.2rem;border-radius:.6rem;overflow:hidden;background:#d9d0c3}
+  .ed-teaser__thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .ed-teaser__play{position:absolute;left:50%;top:50%;width:3.2rem;height:3.2rem;margin:-1.6rem 0 0 -1.6rem;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center}
+  .ed-teaser__play svg{width:1.2rem;height:1.2rem;margin-left:.2rem;fill:#14213d}
+  .ed-teaser__txt{flex:1;min-width:0}
+  .ed-teaser__t{display:block;font-weight:600;font-size:1.5rem;line-height:1.3}
+  .ed-teaser__s{display:block;font-size:1.25rem;line-height:1.35;color:#5d6579}
+  .ed-teaser__go{flex:0 0 auto;width:1.8rem;height:1.8rem;stroke:#cf4a25;fill:none;stroke-width:2}
+}
+.ed-modal{position:fixed;inset:0;z-index:2000;background:rgba(10,16,30,.92);display:flex;align-items:center;justify-content:center;padding:2rem}
+.ed-modal video{max-width:100%;max-height:88vh;border-radius:.8rem;background:#000}
+.ed-modal__x{position:absolute;top:1.2rem;right:1.2rem;width:4.4rem;height:4.4rem;border-radius:50%;border:0;background:#fff;color:#14213d;font-size:2.6rem;line-height:1;cursor:pointer}
+
+/* Search panel readable on the homepage (15 Oct 2026): the homepage header uses white text over the hero, which left typed text and results white on the white search panel. */
+sticky-header:has(details[open]), sticky-header:has(details[open]) *{color:#14213d!important}
+sticky-header:has(details[open]) input::placeholder{color:rgba(20,33,61,.55)!important}
+
+/* Desktop gallery arrows (15 Oct 2026): prev/next over the main image, placed by script at the image edges. Phones swipe, so hidden there. */
+.ed-garrow{display:none;position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:4.4rem;height:4.4rem;padding:0;border-radius:50%;border:1px solid #d9d0c3;background:rgba(255,255,255,.92);color:#14213d;cursor:pointer;align-items:center;justify-content:center;transition:background .15s,color .15s}
+.ed-garrow:hover{background:#14213d;color:#fff}
+.ed-garrow:focus-visible{outline:2px solid #cf4a25;outline-offset:2px}
+.ed-garrow svg{width:1.8rem;height:1.8rem;display:block}
+.ed-garrow--prev{left:1.2rem}
+.ed-garrow--next{right:1.2rem}
+@media(min-width:750px){.ed-garrow{display:flex}}
+/* Phone photo counter (15 Oct 2026): a small 1 / 7 pill on the main image, since phones swipe and give no sign there are more photos. */
+.ed-gcount{display:none}
+@media(max-width:749px){.ed-gcount{display:block;position:absolute;right:1.2rem;bottom:1.2rem;z-index:4;background:rgba(20,33,61,.78);color:#fff;font-size:1.2rem;line-height:1;padding:.6rem 1rem;border-radius:999px;letter-spacing:.04em;font-variant-numeric:tabular-nums;pointer-events:none}}
+
+/* Collection page top (decided 14 Oct 2026, option C): slim banner strip. Desktop: title sits on the banner. Phone: title just below it. */
+@media(min-width:750px){
+  .atelier-plp__banner{height:18rem!important;width:100%!important;aspect-ratio:auto!important;overflow:hidden!important;margin:0!important}
+  .atelier-plp__banner img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:right center!important}
+  .atelier-plp__crumb{display:none!important}
+  .atelier-plp__head{position:relative!important;z-index:2;margin:-18rem 0 0!important;height:18rem!important;display:flex!important;align-items:center!important;padding-left:4rem!important}
+}
+@media(max-width:749px){
+  .atelier-plp__banner{height:11rem!important;width:100%!important;aspect-ratio:auto!important;overflow:hidden!important;margin-bottom:0!important}
+  .atelier-plp__banner img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:78% center!important}
+  .atelier-plp__head{margin-top:1.6rem!important}
+}
+
+/* Collection page matches homepage and PDP (decided 14 Oct 2026, desktop option B): same sans font, 1100px container, boxed card, no sidebar, 4 across. The element/object chip rows show on desktop too. */
+html body .atelier-plp{--font-heading-family:Assistant,sans-serif;--font-body-family:Assistant,sans-serif}
+html body .atelier-plp__head{font-weight:400!important;letter-spacing:0!important;font-size:clamp(2.6rem,3.4vw,3.6rem)!important;line-height:1.15!important}
+html body .atelier-plp__head em{color:var(--a-ochre)}
+@media(min-width:990px){html body .atelier-plp .page-width{max-width:110rem!important;padding-left:0!important;padding-right:0!important}}
+html body .atelier-plp__grid{display:grid!important;gap:1.6rem!important;background:none!important;border:0!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+@media(min-width:750px){html body .atelier-plp__grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(min-width:990px){
+  html body .atelier-plp__grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  html body .atelier-plp__body{grid-template-columns:1fr!important}
+  html body .atelier-plp__sidebar{display:none!important}
+  html body .atelier-plp__mobile-nav{display:flex!important;margin-bottom:2rem}
+  html body .atelier-plp__chips{display:none!important}
+  html body .atelier-plp__filter-bar{justify-content:flex-end}
+}
+html body .atelier-plp .abs-card{display:flex;flex-direction:column;text-decoration:none;color:inherit;min-width:0}
+html body .atelier-plp .abs-media{position:relative;overflow:hidden;background:var(--a-stone);border-radius:var(--a-radius-image);aspect-ratio:1/1}
+html body .atelier-plp .abs-name{font-family:var(--font-body-family);font-size:1.5rem;font-weight:400;line-height:1.35;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html body .atelier-plp .abs-card--box .abs-price{font-size:1.4rem}
+html body .atelier-plp .atelier-plp__editorial{grid-column:1/-1!important;min-height:22rem}
+html body .atelier-plp .atelier-plp__editorial-title{font-weight:400!important}
+@media(max-width:749px){html body .atelier-plp .abs-name{font-size:1.3rem}}
+/* Empty-category chips: greyed out with a Soon label (decided 15 Oct 2026, option A) */
+html body .atelier-plp__mobile-nav .atelier-chip.is-soon{opacity:.5;pointer-events:none}
+html body .atelier-plp__mobile-nav .atelier-chip.is-soon::after{content:'Soon';margin-left:.6rem;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--a-ochre)}
+</style>
+<script>
+/* Gallery videos: loop, and autoplay muted when the slide is on screen (15 Oct 2026). */
+(function(){
+  function prep(v){ try{ v.loop=true; v.setAttribute('loop',''); v.muted=true; v.setAttribute('muted',''); v.setAttribute('playsinline',''); }catch(e){} }
+  function play(v){ prep(v); var p=v.play(); if(p&&p.catch) p.catch(function(){}); }
+  document.addEventListener('DOMContentLoaded', function(){
+    var list = document.querySelector('.product__media-list');
+    if(!list) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function scan(){
+      list.querySelectorAll('video').forEach(function(v){
+        if(v.dataset.edPrep) return; v.dataset.edPrep='1'; prep(v);
+        if(!reduce && v.dataset.edVisible==='1') play(v); else if(reduce) v.pause();
+      });
+    }
+    scan();
+    new MutationObserver(scan).observe(list,{childList:true,subtree:true});
+    if(reduce || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var dm = en.target, v = dm.querySelector('video');
+        if(en.isIntersecting){
+          dm.dataset.edVisible='1';
+          if(v){ play(v); }
+          else if(typeof dm.loadContent==='function' && !dm.hasAttribute('loaded')){ try{ dm.loadContent(false); }catch(e){} }
+        } else {
+          dm.dataset.edVisible='0';
+          if(v){ try{ v.pause(); }catch(e){} }
+        }
+      });
+    },{threshold:0.6});
+    list.querySelectorAll('.media-type-video deferred-media').forEach(function(dm){ io.observe(dm); });
+  });
+})();
+</script>
+<script>
+/* Story video teaser (15 Oct 2026): phone and tablet only. Uses the story section's own video; a card under Add to cart opens it full screen. */
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    var rv = document.querySelector('.atl-story .atl-reel video');
+    if(!rv) return;
+    var poster = rv.getAttribute('poster') || '';
+    var s = rv.querySelector('source');
+    var src = s ? s.getAttribute('src') : rv.getAttribute('src');
+    if(!src) return;
+    var h = document.querySelector('.atl-story h2, .atl-story h3');
+    var sub = h ? h.textContent.trim() : '';
+    var label = rv.getAttribute('aria-label') || 'Product video';
+    var anchor = document.querySelector('.product__microcopy') || document.querySelector('product-form');
+    if(!anchor) return;
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'ed-teaser';
+    b.setAttribute('aria-label','Watch the short film');
+    b.innerHTML = '<span class="ed-teaser__thumb">' + (poster ? '<img src="' + poster + '" alt="" loading="lazy">' : '') + '<span class="ed-teaser__play"><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></span></span>'
+      + '<span class="ed-teaser__txt"><span class="ed-teaser__t">Watch the short film</span>' + (sub ? '<span class="ed-teaser__s"></span>' : '') + '</span>'
+      + '<svg class="ed-teaser__go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+    var ss = b.querySelector('.ed-teaser__s'); if(ss) ss.textContent = sub;
+    anchor.insertAdjacentElement('afterend', b);
+    b.addEventListener('click', function(){ openModal(b); });
+    function openModal(opener){
+      var m = document.createElement('div'); m.className = 'ed-modal'; m.setAttribute('role','dialog'); m.setAttribute('aria-modal','true'); m.setAttribute('aria-label', label);
+      var v = document.createElement('video'); v.controls = true; v.autoplay = true; v.setAttribute('playsinline',''); v.playsInline = true;
+      if(poster) v.poster = poster; v.src = src;
+      var x = document.createElement('button'); x.type = 'button'; x.className = 'ed-modal__x'; x.setAttribute('aria-label','Close video'); x.innerHTML = '&times;';
+      m.appendChild(v); m.appendChild(x); document.body.appendChild(m);
+      var prevOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden';
+      function close(){ try{ v.pause(); }catch(e){} m.remove(); document.body.style.overflow = prevOverflow; document.removeEventListener('keydown', key); if(opener) opener.focus(); }
+      function key(e){ if(e.key === 'Escape') close(); }
+      x.addEventListener('click', close);
+      m.addEventListener('click', function(e){ if(e.target === m) close(); });
+      document.addEventListener('keydown', key);
+      x.focus();
+      var p = v.play(); if(p && p.catch) p.catch(function(){});
+    }
+  });
+})();
+</script>
+<script>
+/* Desktop gallery arrows + phone photo counter (15 Oct 2026): arrows step through the visible thumbnails, wrapping at the ends, and sit on the edges of the current image. The counter pill shows n / total on phones, read from the swipe position. Photos hidden by the variant filter (class atl-vg-hide) are skipped (fixed 15 Oct 2026). */
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    var viewer = document.querySelector('[id^="GalleryViewer"]');
+    var thumbs = document.querySelector('[id^="GalleryThumbnails"]');
+    if(!viewer || !thumbs) return;
+    var prev, next, cnt, raf = 0;
+    function items(){ return Array.prototype.filter.call(viewer.querySelectorAll('.product__media-item'), function(i){ return !i.hasAttribute('hidden') && !i.classList.contains('product__media-item--variant-hidden') && !i.classList.contains('atl-vg-hide'); }); }
+    function count(){
+      if(!cnt) return;
+      var l = items(), i = 0;
+      var list = viewer.querySelector('.product__media-list');
+      if(window.innerWidth < 750 && list){
+        var lr = list.getBoundingClientRect().left, best = 1e9;
+        l.forEach(function(it,ix){ var dd = Math.abs(it.getBoundingClientRect().left - lr); if(dd < best){ best = dd; i = ix; } });
+      } else {
+        l.forEach(function(it,ix){ if(it.classList.contains('is-active')) i = ix; });
+      }
+      cnt.textContent = (i + 1) + ' / ' + l.length;
+      cnt.style.display = l.length < 2 ? 'none' : '';
+    }
+    function place(){
+      var a = viewer.querySelector('.product__media-item.is-active');
+      var c = a && a.querySelector('.product-media-container');
+      if(!c || !prev) return;
+      var v = viewer.getBoundingClientRect(), r = c.getBoundingClientRect();
+      if(!r.width) return;
+      prev.style.left = Math.max(8, r.left - v.left + 12) + 'px';
+      prev.style.right = 'auto';
+      next.style.left = Math.max(8, r.right - v.left - 12 - next.offsetWidth) + 'px';
+      next.style.right = 'auto';
+      var mid = (r.top - v.top) + r.height / 2;
+      prev.style.top = next.style.top = mid + 'px';
+    }
+    function go(dir){
+      var list = items(); if(list.length < 2) return;
+      var cur = 0; list.forEach(function(it,ix){ if(it.classList.contains('is-active')) cur = ix; });
+      var nxt = list[(cur + dir + list.length) % list.length];
+      var li = Array.prototype.filter.call(thumbs.querySelectorAll('li[data-target]'), function(l){ return l.getAttribute('data-target') === nxt.getAttribute('data-media-id'); })[0];
+      var b = li && li.querySelector('button'); if(b) b.click();
+      setTimeout(place, 80); setTimeout(place, 400);
+    }
+    var svg = function(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + d + '"/></svg>'; };
+    function mk(cls,label,d,dir){ var b = document.createElement('button'); b.type='button'; b.className='ed-garrow '+cls; b.setAttribute('aria-label',label); b.innerHTML = svg(d); b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); go(dir); }); return b; }
+    if(getComputedStyle(viewer).position === 'static') viewer.style.position='relative';
+    prev = mk('ed-garrow--prev','Previous image','M15 18l-6-6 6-6',-1);
+    next = mk('ed-garrow--next','Next image','M9 18l6-6-6-6',1);
+    cnt = document.createElement('div'); cnt.className = 'ed-gcount'; cnt.setAttribute('aria-hidden','true');
+    viewer.appendChild(prev); viewer.appendChild(next); viewer.appendChild(cnt);
+    place(); count(); setTimeout(place, 300); setTimeout(place, 1200); setTimeout(count, 600);
+    window.addEventListener('resize', function(){ place(); count(); }); window.addEventListener('load', function(){ place(); count(); });
+    thumbs.addEventListener('click', function(){ setTimeout(place, 80); setTimeout(place, 400); setTimeout(count, 120); setTimeout(count, 600); });
+    var sl = viewer.querySelector('.product__media-list');
+    if(sl) sl.addEventListener('scroll', function(){ if(raf) return; raf = requestAnimationFrame(function(){ raf = 0; count(); }); }, {passive:true});
+    new MutationObserver(function(){ place(); count(); }).observe(viewer, {attributes:true, subtree:true, attributeFilter:['class','hidden']});
+  });
+})();
+</script>
+{%- if ed_stock != blank -%}
+<script>
+/* Quantity cap (15 Oct 2026): the quantity box on the product page and in the cart cannot go above the units in stock. Shows "Only N pieces left" at 5 or fewer. The product page also counts what is already in the cart. */
+(function(){
+  var S = {};
+  '{{ ed_stock }}'.split(',').forEach(function(p){ if(!p) return; var a = p.split(':'); S[a[0]] = Math.max(0, parseInt(a[1], 10) || 0); });
+  if(!Object.keys(S).length) return;
+  function noteFor(inp){
+    var host = inp.closest('quantity-input') || inp.parentNode;
+    var el = host.parentNode.querySelector('.ed-stocknote');
+    if(!el){ el = document.createElement('p'); el.className = 'ed-stocknote'; el.setAttribute('role','status'); el.hidden = true; host.insertAdjacentElement('afterend', el); }
+    return el;
+  }
+  function apply(inp, vid, inCart){
+    var stock = S[vid]; if(stock === undefined) return;
+    var eff = stock - (inCart || 0);
+    var el = noteFor(inp);
+    if(eff < 1){
+      el.textContent = inCart ? 'All ' + stock + ' available are already in your cart.' : '';
+      el.hidden = !el.textContent;
+      return;
+    }
+    if(inp.getAttribute('max') !== String(eff)) inp.setAttribute('max', eff);
+    var v = parseInt(inp.value, 10) || 0;
+    if(v > eff){ inp.value = eff; v = eff; inp.dispatchEvent(new Event('change', {bubbles:true})); }
+    var plus = (inp.closest('quantity-input') || inp.parentNode).querySelector('button[name="plus"]');
+    if(plus){ var atMax = v >= eff; plus.classList.toggle('disabled', atMax); if(atMax) plus.setAttribute('disabled', 'disabled'); else plus.removeAttribute('disabled'); }
+    var txt = '';
+    if(eff <= 5) txt = 'Only ' + eff + (eff === 1 ? ' piece' : ' pieces') + ' left' + (v >= eff ? ', that is all we have.' : '');
+    if(el.textContent !== txt) el.textContent = txt;
+    el.hidden = !txt;
+  }
+  function tick(){
+    if(document.hidden) return;
+    document.querySelectorAll('input.quantity__input').forEach(function(inp){
+      var vid = inp.getAttribute('data-quantity-variant-id'), inCart = 0;
+      if(!vid){
+        var f = inp.form || inp.closest('form');
+        var idEl = f && f.querySelector('input[name="id"]');
+        vid = idEl && idEl.value;
+        inCart = parseInt(inp.getAttribute('data-cart-quantity'), 10) || 0;
+      }
+      if(vid) apply(inp, String(vid), inCart);
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function(){ tick(); setInterval(tick, 500); });
+  document.addEventListener('input', function(e){ if(e.target && e.target.classList && e.target.classList.contains('quantity__input')) tick(); });
+  document.addEventListener('change', function(){ setTimeout(tick, 50); });
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Footer colour",
+  "settings": [
+    { "type": "select", "id": "desktop", "label": "Desktop footer", "default": "navy", "options": [
+      { "value": "white", "label": "White (original)" },
+      { "value": "navy", "label": "Navy" },
+      { "value": "coral", "label": "Coral" }
+    ] },
+    { "type": "select", "id": "mobile", "label": "Mobile footer", "default": "navy", "options": [
+      { "value": "white", "label": "White (original)" },
+      { "value": "navy", "label": "Navy" },
+      { "value": "coral", "label": "Coral" }
+    ] }
+  ],
+  "presets": [{ "name": "Footer colour" }]
+}
+{% endschema %}

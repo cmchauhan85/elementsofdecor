@@ -1,0 +1,48 @@
+{%- comment -%}
+  Variant-scoped PDP gallery.
+  Image alt text that starts with "<Option 1 value> — " belongs to that variant. Only the selected variant's images are shown.
+  Images whose alt does not start with a variant name show for every variant, so other products are unaffected.
+{%- endcomment -%}
+<style>.atl-vg-hide{display:none!important}</style>
+<script>
+(function(){
+  var root=document.getElementById('MediaGallery-{{ section.id }}');
+  if(!root) return;
+  var names={{ product.variants | map: 'option1' | uniq | json }};
+  var SEP=' — ';
+  function altOf(el){var i=el.querySelector('img');return i?(i.getAttribute('alt')||''):'';}
+  function ownerOf(el){var a=altOf(el);for(var k=0;k<names.length;k++){if(a.indexOf(names[k]+SEP)===0)return names[k];}return null;}
+  function current(){
+    var r=document.querySelector('variant-selects input[type=radio]:checked');
+    if(r) return r.value;
+    var s=document.querySelector('variant-selects select');
+    if(s) return s.value;
+    return {{ product.selected_or_first_available_variant.option1 | json }};
+  }
+  var scoped=false;
+  root.querySelectorAll('.product__media-item').forEach(function(el){if(ownerOf(el)!==null)scoped=true;});
+  if(!scoped) return;
+  var busy=false;
+  function apply(){
+    if(busy) return; busy=true;
+    var cur=current(),first=null;
+    root.querySelectorAll('.product__media-item,.thumbnail-list__item').forEach(function(el){
+      var o=ownerOf(el),hide=(o!==null&&o!==cur);
+      el.classList.toggle('atl-vg-hide',hide);
+      if(!hide&&!first&&el.classList.contains('product__media-item'))first=el;
+    });
+    var act=root.querySelector('.product__media-item.is-active');
+    if(first&&(!act||act.classList.contains('atl-vg-hide'))&&typeof root.setActiveMedia==='function'){try{root.setActiveMedia(first.getAttribute('data-media-id'),false);}catch(e){}}
+    window.dispatchEvent(new Event('resize'));
+    busy=false;
+  }
+  apply();
+  document.addEventListener('change',function(e){
+    var t=e.target;
+    if(!t||!t.closest||!t.closest('variant-selects'))return;
+    [0,250,800].forEach(function(ms){setTimeout(apply,ms);});
+  });
+  var list=document.getElementById('Slider-Gallery-{{ section.id }}');
+  if(list&&window.MutationObserver){new MutationObserver(function(){apply();}).observe(list,{childList:true});}
+})();
+</script>

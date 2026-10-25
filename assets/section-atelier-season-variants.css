@@ -1,0 +1,69 @@
+/* New Additions - extra rail designs 5-8 */
+.as-chips { display: none; }
+.atelier-season[data-v="5"] .as-head, .atelier-season[data-v="7"] .as-head, .atelier-season[data-v="8"] .as-head { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.atelier-season[data-v="5"] .as-head__text, .atelier-season[data-v="7"] .as-head__text, .atelier-season[data-v="8"] .as-head__text { align-items: center; }
+.atelier-season[data-v="5"] .atelier-season__nav, .atelier-season[data-v="6"] .atelier-season__nav, .atelier-season[data-v="7"] .atelier-season__nav, .atelier-season[data-v="8"] .atelier-season__nav { display: none !important; }
+.atelier-season[data-v="5"] .as-foot, .atelier-season[data-v="6"] .as-foot, .atelier-season[data-v="7"] .as-foot, .atelier-season[data-v="8"] .as-foot { display: block; }
+.atelier-season[data-v="8"] .as-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin: -.8rem 0 2.8rem; }
+.as-chip { all: unset; cursor: pointer; font-size: 1.2rem; letter-spacing: .1em; text-transform: uppercase; padding: .7rem 1.6rem; border: 1px solid var(--a-hairline); border-radius: 999px; color: inherit; transition: background-color .2s, color .2s, border-color .2s; }
+.as-chip:hover { border-color: var(--a-ochre); }
+.as-chip[aria-pressed="true"] { background: var(--a-ochre); border-color: var(--a-ochre); color: #fff; }
+.atelier-season [data-el][hidden] { display: none !important; }
+
+/* shared grid base for 5,6,7 */
+.atelier-season[data-v="5"] .atelier-season__rail, .atelier-season[data-v="6"] .atelier-season__rail, .atelier-season[data-v="7"] .atelier-season__rail { display: grid; overflow: visible; gap: 1.6rem; margin-inline: 0; padding-inline: 0; }
+.atelier-season[data-v="5"] .atelier-season__rail > *, .atelier-season[data-v="6"] .atelier-season__rail > *, .atelier-season[data-v="7"] .atelier-season__rail > * { min-width: 0; flex: none; }
+.atelier-season[data-v="5"] .atelier-season__rail > *:nth-child(n+9) { display: none; }
+.atelier-season[data-v="6"] .atelier-season__rail > *:nth-child(n+6) { display: none; }
+.atelier-season[data-v="7"] .atelier-season__rail > *:nth-child(n+6) { display: none; }
+
+/* 5: staggered */
+.atelier-season[data-v="5"] .atelier-season__rail { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; padding-bottom: 2.4rem; }
+.atelier-season[data-v="5"] .atelier-season__rail > *:nth-child(even) { margin-top: 2.4rem; }
+@media screen and (min-width: 990px) {
+  .atelier-season[data-v="5"] .atelier-season__rail { grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: 5rem; }
+  .atelier-season[data-v="5"] .atelier-season__rail > *:nth-child(even) { margin-top: 5rem; }
+}
+
+/* 6: feature banner + row */
+.atelier-season[data-v="6"] .as-head { align-items: flex-end; }
+.atelier-season[data-v="6"] .as-link--head { display: none; }
+.atelier-season[data-v="6"] .atelier-season__rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.atelier-season[data-v="6"] .atelier-season__rail > *:first-child { grid-column: 1 / -1; }
+@media screen and (min-width: 990px) {
+  .atelier-season[data-v="6"] .atelier-season__rail { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abs-card { flex-direction: row; align-items: stretch; gap: 3.2rem; padding: 1.2rem; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abs-media { flex: 0 0 46%; aspect-ratio: 4 / 3; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abs-info { flex: 1; justify-content: center; padding: 1rem 3rem 1rem 0; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abs-name { font-size: 2.8rem; font-family: var(--font-heading-family); -webkit-line-clamp: 3; min-height: 0; line-height: 1.15; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abx-detail { font-size: 1.3rem; margin-top: 1.2rem; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abx-foot { margin-top: 2.4rem; justify-content: flex-start; gap: 2.4rem; border-top: 0; padding-top: 0; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abs-price { font-size: 1.8rem; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abx-btn__long { display: inline; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abx-btn__short { display: none; }
+  .atelier-season[data-v="6"] .atelier-season__rail > *:first-child .abx-btn { padding: .8rem 1.8rem; font-size: 1.2rem; }
+}
+
+/* 7: bento (1 large + 4) */
+.atelier-season[data-v="7"] .atelier-season__rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.atelier-season[data-v="7"] .atelier-season__rail > *:first-child { grid-column: 1 / -1; }
+.atelier-season[data-v="7"] .atelier-season__rail > *:first-child .abs-media { aspect-ratio: 4 / 3; }
+@media screen and (min-width: 990px) {
+  .atelier-season[data-v="7"] .atelier-season__rail { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .atelier-season[data-v="7"] .atelier-season__rail > *:first-child { grid-column: span 2; grid-row: span 2; }
+  .atelier-season[data-v="7"] .atelier-season__rail > *:first-child .abs-media { aspect-ratio: auto; flex: 1; min-height: 30rem; }
+  .atelier-season[data-v="7"] .atelier-season__rail > *:first-child .abs-name { font-size: 2.2rem; font-family: var(--font-heading-family); }
+  .atelier-season[data-v="7"] .atelier-season__rail > *:first-child .abx-btn__long { display: inline; }
+  .atelier-season[data-v="7"] .atelier-season__rail > *:first-child .abx-btn__short { display: none; }
+}
+
+/* 8: filter chips + rail (swipe on phone, 5 across on desktop) */
+@media screen and (max-width: 989px) {
+  .atelier-season[data-v="8"] .atelier-season__rail { display: flex; gap: 1.2rem; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -1.5rem; padding-inline: 1.5rem; scrollbar-width: none; }
+  .atelier-season[data-v="8"] .atelier-season__rail > * { flex: 0 0 calc((100% - 1.2rem) / 2.2); min-width: 0; scroll-snap-align: start; }
+}
+@media screen and (min-width: 990px) {
+  .atelier-season[data-v="8"] .atelier-season__rail { display: flex; gap: 1.6rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .atelier-season[data-v="8"] .atelier-season__rail > * { flex: 0 0 calc((100% - 6.4rem) / 5); min-width: 0; scroll-snap-align: start; }
+}
+.as-sw__in { flex-wrap: wrap; justify-content: center; }

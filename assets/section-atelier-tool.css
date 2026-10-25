@@ -29,8 +29,8 @@
   cursor: pointer;
 }
 .atelier-tool__browse button.is-active {
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-foreground, 20, 33, 61));
+  color: rgb(var(--color-background, 255, 255, 255));
   font-style: normal;
 }
 
@@ -71,14 +71,14 @@
   width: 2.8rem; height: 2.8rem;
   display: grid; place-items: center;
   border-radius: 50%;
-  background: rgba(27,25,22,0.4);
-  color: #faf7f1;
+  background: rgba(20,33,61,0.4);
+  color: #ffffff;
   font-family: var(--font-body-family);
   font-size: 1.3rem;
   transform: translate(-50%, -50%);
   transition: background-color 0.2s ease;
 }
-.atelier-tool__pin.is-on { background: var(--a-ochre); color: #1b1916; }
+.atelier-tool__pin.is-on { background: var(--a-ochre); color: #ffffff; }
 
 /* Look panel */
 .atelier-tool__slot {
@@ -98,7 +98,7 @@
   color: var(--a-ochre);
   cursor: pointer;
 }
-.atelier-tool__slot:not(.is-excluded) .atelier-tool__inc { background: var(--a-ochre); color: #1b1916; }
+.atelier-tool__slot:not(.is-excluded) .atelier-tool__inc { background: var(--a-ochre); color: #ffffff; }
 .atelier-tool__slot-thumb { aspect-ratio: 1; overflow: hidden; background: var(--a-stone); }
 .atelier-tool__slot-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .atelier-tool__slot-info { display: flex; flex-direction: column; gap: 0.2rem; }
@@ -118,12 +118,12 @@
   padding: 2.4rem;
   position: relative;
   overflow: hidden;
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: rgb(var(--color-foreground, 20, 33, 61));
+  color: rgb(var(--color-background, 255, 255, 255));
 }
 .atelier-tool__bundle-price { font-family: var(--font-heading-family); font-weight: 300; font-size: 3.2rem; color: var(--a-ochre-light); margin: 0.8rem 0 0.4rem; }
-.atelier-tool__bundle-price s { font-size: 1.8rem; color: rgba(250,247,241,0.5); margin-left: 1rem; }
-.atelier-tool__bundle-save { font-family: var(--font-body-family); font-size: 1.3rem; color: rgba(250,247,241,0.7); margin: 0 0 0.4rem; }
+.atelier-tool__bundle-price s { font-size: 1.8rem; color: rgba(255,255,255,0.5); margin-left: 1rem; }
+.atelier-tool__bundle-save { font-family: var(--font-body-family); font-size: 1.3rem; color: rgba(255,255,255,0.7); margin: 0 0 0.4rem; }
 .atelier-tool__bundle-tier { font-family: var(--font-heading-family); font-style: italic; font-size: 1.5rem; color: var(--a-ochre-light); margin: 0 0 1.6rem; }
 .atelier-tool__add { width: 100%; border-radius: 0; }
 

@@ -1,0 +1,83 @@
+{{ 'section-atelier-browse.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  .ae-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0 0 2.8rem; }
+  .ae-title { font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(2.6rem, 3.4vw, 3.6rem); line-height: 1.15; margin: 0; text-align: center; }
+  .ae-title em { font-style: italic; color: var(--a-ochre); }
+  .ae-rule { width: 4rem; height: 2px; background: var(--a-ochre); margin-top: 1.2rem; }
+  .ae-bar { display: none; width: 14rem; height: 4px; margin: 2.4rem auto 0; background: rgba(0,0,0,.12); border-radius: 4px; position: relative; overflow: hidden; }
+  .ae-bar.is-on { display: block; }
+  .ae-bar span { position: absolute; top: 0; bottom: 0; left: 0; background: var(--a-ochre); border-radius: 4px; }
+{%- endstyle -%}
+
+<div class="atelier-browse atelier-browse--rail color-{{ section.settings.color_scheme }} a-section" id="ae-{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.heading_lead != blank or section.settings.heading_accent != blank -%}
+      <div class="ae-head">
+        <h2 class="ae-title">{{ section.settings.heading_lead }} <em>{{ section.settings.heading_accent }}</em></h2>
+        <span class="ae-rule" aria-hidden="true"></span>
+      </div>
+    {%- endif -%}
+    <div class="atelier-browse__rail">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.collection != blank -%}
+          <div class="atelier-browse__item" {{ block.shopify_attributes }}>
+            {% render 'atelier-collection-card',
+              collection: block.settings.collection,
+              show_element: false,
+              title_override: block.settings.title_override
+            %}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="ae-bar" aria-hidden="true"><span></span></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('ae-{{ section.id }}');
+    if (!root) return;
+    var rail = root.querySelector('.atelier-browse__rail');
+    var bar = root.querySelector('.ae-bar');
+    var thumb = bar.querySelector('span');
+    function update() {
+      var over = rail.scrollWidth - rail.clientWidth;
+      if (over <= 2) { bar.classList.remove('is-on'); return; }
+      bar.classList.add('is-on');
+      var w = Math.max(rail.clientWidth / rail.scrollWidth, 0.15);
+      thumb.style.width = (w * 100) + '%';
+      thumb.style.left = ((rail.scrollLeft / over) * (1 - w) * 100) + '%';
+    }
+    rail.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+    update();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Atelier Shop By Element",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "heading_lead", "label": "Heading - plain part", "default": "Shop by" },
+    { "type": "text", "id": "heading_accent", "label": "Heading - accent word (coral italic)", "default": "element" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-2" }
+  ],
+  "blocks": [
+    {
+      "type": "element",
+      "name": "Element",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title_override", "label": "Title override" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Atelier Shop By Element", "blocks": [ { "type": "element" }, { "type": "element" }, { "type": "element" }, { "type": "element" }, { "type": "element" }, { "type": "element" } ] }
+  ]
+}
+{% endschema %}

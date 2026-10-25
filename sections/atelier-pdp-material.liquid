@@ -1,129 +1,38 @@
-{{ 'section-atelier-pdp-material.css' | asset_url | stylesheet_tag }}
-
 {%- liquid
-  assign mat_title = product.metafields.atelier.material_title.value | default: section.settings.default_title
-  assign mat_issue = section.settings.issue
-  assign mat_body  = product.metafields.atelier.material_body.value | default: section.settings.default_body
-  assign mat_image = section.settings.image
-  assign mat_stat1_n = section.settings.stat1_number
-  assign mat_stat1_l = section.settings.stat1_label
-  assign mat_stat2_n = section.settings.stat2_number
-  assign mat_stat2_l = section.settings.stat2_label
+  assign mat_title = product.metafields.atelier.material_title.value
+  assign mat_body = product.metafields.atelier.material_body
+  assign mat_img = product.images[1] | default: product.images[0]
 -%}
-
-<div class="atelier-pdp-mat color-{{ section.settings.color_scheme }}">
-  <div class="page-width atelier-pdp-mat__inner">
-
-    <div class="atelier-pdp-mat__text">
-      <div class="atelier-pdp-mat__meta">
-        {%- if mat_issue != blank -%}
-          {% render 'atelier-eyebrow', text: mat_issue %}
-        {%- endif -%}
-      </div>
-      <h2 class="atelier-pdp-mat__title">{{ mat_title }}</h2>
-      {%- if mat_body != blank -%}
-        <div class="atelier-pdp-mat__body rte">{{ mat_body }}</div>
-      {%- endif -%}
-      {%- if mat_stat1_n != blank or mat_stat2_n != blank -%}
-        <dl class="atelier-pdp-mat__stats">
-          {%- if mat_stat1_n != blank -%}
-            <div class="atelier-pdp-mat__stat">
-              <dd class="atelier-pdp-mat__stat-n">{{ mat_stat1_n }}</dd>
-              <dt class="atelier-pdp-mat__stat-l">{{ mat_stat1_l }}</dt>
-            </div>
-          {%- endif -%}
-          {%- if mat_stat2_n != blank -%}
-            <div class="atelier-pdp-mat__stat">
-              <dd class="atelier-pdp-mat__stat-n">{{ mat_stat2_n }}</dd>
-              <dt class="atelier-pdp-mat__stat-l">{{ mat_stat2_l }}</dt>
-            </div>
-          {%- endif -%}
-        </dl>
-      {%- endif -%}
+{%- if mat_body != blank -%}
+<style>
+.atl-mat{background:#14213d;color:#f5f2eb;padding:6.4rem 0}
+.atl-mat__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,40rem);gap:7rem;align-items:center}
+.atl-mat__eye{margin:0 0 1.8rem;font-size:1.2rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#e8613c;line-height:1.2}
+.atl-mat__h{margin:0 0 2.4rem;font-family:var(--font-heading-family);font-weight:400;font-size:clamp(3.2rem,4.4vw,4.8rem);line-height:1.08;color:#fff;letter-spacing:var(--a-display-tracking,0);text-wrap:balance}
+.atl-mat__body,.atl-mat__body p{margin:0;max-width:52ch;font-size:1.8rem;line-height:1.65;color:rgba(245,242,235,.86)}
+.atl-mat__img{aspect-ratio:4/5;border-radius:.6rem;overflow:hidden;background:#1d2d52}
+.atl-mat__img img{display:block;width:100%;height:100%;object-fit:cover}
+@media(max-width:749px){.atl-mat{padding:4.4rem 0}.atl-mat__in{grid-template-columns:1fr;gap:2.8rem}.atl-mat__img{order:-1;aspect-ratio:1/1}.atl-mat__body,.atl-mat__body p{font-size:1.6rem}}
+</style>
+<div class="atl-mat">
+  <div class="page-width atl-mat__in">
+    <div class="atl-mat__text">
+      <p class="atl-mat__eye">On material</p>
+      {%- if mat_title != blank -%}<h2 class="atl-mat__h">{{ mat_title }}</h2>{%- endif -%}
+      <div class="atl-mat__body rte">{{ mat_body | metafield_tag }}</div>
     </div>
-
-    {%- if mat_image != blank -%}
-      <div class="atelier-pdp-mat__media">
-        {{
-          mat_image
-          | image_url: width: 1200
-          | image_tag:
-            loading: 'lazy',
-            widths: '600, 900, 1200',
-            sizes: '(min-width: 990px) 45vw, 100vw',
-            alt: mat_title | escape
-        }}
-      </div>
+    {%- if mat_img != blank -%}
+      <div class="atl-mat__img">{{ mat_img | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '500, 800, 1000', sizes: '(min-width: 990px) 40rem, 100vw', alt: mat_img.alt | default: product.title | escape }}</div>
     {%- endif -%}
-
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "On Material",
   "tag": "section",
-  "settings": [
-    {
-      "type": "text",
-      "id": "issue",
-      "label": "Issue / eyebrow",
-      "default": "On Material · No. 04",
-      "info": "e.g. 'On Material · No. 04'"
-    },
-    {
-      "type": "text",
-      "id": "default_title",
-      "label": "Default title",
-      "default": "Marble remembers.",
-      "info": "Overridden per product by atelier.material_title metafield"
-    },
-    {
-      "type": "richtext",
-      "id": "default_body",
-      "label": "Default body",
-      "info": "Overridden per product by atelier.material_body metafield"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Material image"
-    },
-    {
-      "type": "text",
-      "id": "stat1_number",
-      "label": "Stat 1 — number",
-      "default": "200 M"
-    },
-    {
-      "type": "text",
-      "id": "stat1_label",
-      "label": "Stat 1 — label",
-      "default": "Years in the earth"
-    },
-    {
-      "type": "text",
-      "id": "stat2_number",
-      "label": "Stat 2 — number",
-      "default": "7 Days"
-    },
-    {
-      "type": "text",
-      "id": "stat2_label",
-      "label": "Stat 2 — label",
-      "default": "To finish one piece"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-3"
-    }
-  ],
-  "presets": [
-    {
-      "name": "On Material"
-    }
-  ]
+  "settings": [],
+  "presets": [{ "name": "On Material" }]
 }
 {% endschema %}

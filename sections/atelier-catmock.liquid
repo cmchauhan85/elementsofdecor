@@ -1,0 +1,109 @@
+{%- comment -%} TEMPORARY decision mockup, rendered IN PLACE of the Shop-by-category section on the full home page (templates/index.catmock.json). Decision so far: grid on desktop, bento on mobile. The fixed bar switches desktop card size and item count. Delete this section and templates/index.catmock.json once decided. Tiles 7 and 8 are labelled placeholders. {%- endcomment -%}
+{%- assign handles = 'urlis-bowls,decorative-vases,candle-stands-holders,wall-tabletop,trays-stands,candles,placeholder-a,placeholder-b' | split: ',' -%}
+{%- assign titles = 'Urlis & Bowls,Vases & Vessels,Candle Stands,Wall & Tabletop,Trays & Stands,Candles,Placeholder category,Placeholder category' | split: ',' -%}
+<style>
+.cm *{box-sizing:border-box}
+.cm-head{display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 0 2.4rem}
+.cm-head h2{font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.6rem,3.4vw,3.6rem);line-height:1.15;margin:0}
+.cm-head em{font-style:italic;color:var(--a-ochre,#cf4a25)}
+.cm-head i{display:block;width:4rem;height:2px;background:var(--a-ochre,#cf4a25);margin-top:1.2rem}
+.cm-note{margin:0 auto 2rem;max-width:62ch;padding:.8rem 1.2rem;border:1px dashed #cf4a25;border-radius:.6rem;font-size:1.2rem;line-height:1.45;color:#14213d;background:rgba(207,74,37,.06)}
+.cm-note b{color:#a8371a;letter-spacing:.12em;text-transform:uppercase;font-size:1.05rem}
+.cm-l1{display:none}
+.cm[data-count="4"] .cm-t:nth-child(n+5),.cm[data-count="6"] .cm-t:nth-child(n+7){display:none}
+.cm-t{position:relative;display:block;text-decoration:none;color:inherit}
+.cm-i{position:relative;display:block;overflow:hidden;border-radius:.6rem;background:#ece7df}
+.cm-ph .cm-i{border:1px dashed #b9ae9d;background:#efe9de}
+.cm-ph .cm-i::after{content:"placeholder";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;letter-spacing:.14em;text-transform:uppercase;color:#8a8378}
+.cm-i img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.cm-t:hover .cm-i img{transform:scale(1.05)}
+.cm-n{display:block;margin-top:.9rem;font-family:var(--font-heading-family);font-size:1.7rem;line-height:1.2}
+.cm-go{display:block;margin-top:.3rem;font-size:1.15rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#cf4a25}
+.cm-soon{margin:2.4rem 0 0;text-align:center;font-family:var(--font-heading-family);font-style:italic;font-size:1.6rem;color:rgba(20,33,61,.7)}
+.cm:not([data-count="4"]) .cm-soon{display:none}
+/* mobile: bento */
+.cm-b{display:grid;gap:1.2rem;grid-template-columns:repeat(2,minmax(0,1fr))}
+.cm-b .cm-t{min-height:0;aspect-ratio:1/1}
+.cm-b .cm-i{position:absolute;inset:0;border-radius:.6rem}
+.cm-b .cm-t:nth-child(1){grid-column:span 2;aspect-ratio:16/10}
+.cm[data-count="4"] .cm-b .cm-t:nth-child(4),.cm[data-count="6"] .cm-b .cm-t:nth-child(6),.cm[data-count="8"] .cm-b .cm-t:nth-child(8){grid-column:span 2;aspect-ratio:16/8}
+.cm-ov{position:absolute;inset:auto 0 0 0;padding:3rem 1.4rem 1.3rem;background:linear-gradient(to top,rgba(20,14,8,.62),rgba(20,14,8,0));border-radius:0 0 .6rem .6rem;color:#fff;z-index:1}
+.cm-ov .cm-n{margin:0;color:#fff;font-size:2rem}
+.cm-b .cm-t:nth-child(1) .cm-ov .cm-n{font-size:2.6rem}
+.cm-ov .cm-go{color:#fff;opacity:.9}
+.cm-ph .cm-ov,.cm-ph .cm-ov .cm-n,.cm-ph .cm-ov .cm-go{background:none;color:#14213d}
+/* desktop: grid, three card sizes */
+.cm-g{display:grid;justify-content:center;gap:2rem;grid-template-columns:repeat(4,minmax(0,1fr))}
+.cm[data-count="6"] .cm-g{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cm-g .cm-i{aspect-ratio:4/5}
+.cm[data-size="m"] .cm-g{grid-template-columns:repeat(4,22rem)}
+.cm[data-size="m"][data-count="6"] .cm-g{grid-template-columns:repeat(3,22rem)}
+.cm[data-size="s"] .cm-g{grid-template-columns:repeat(4,17rem);gap:1.6rem}
+.cm[data-size="s"][data-count="6"] .cm-g{grid-template-columns:repeat(3,17rem)}
+.cm[data-size="m"] .cm-g .cm-i,.cm[data-size="s"] .cm-g .cm-i{aspect-ratio:1/1}
+.cm[data-size="m"] .cm-n{font-size:1.8rem}
+.cm[data-size="s"] .cm-n{font-size:1.6rem}
+@media screen and (min-width:750px){
+  .cm-l2{display:none}
+  .cm-l1{display:block}
+  .cm-n{font-size:2rem}
+  .cm[data-size="m"] .cm-n{font-size:1.8rem}
+  .cm[data-size="s"] .cm-n{font-size:1.6rem}
+}
+@media screen and (max-width:749px){.cm-bar .cm-grp.cm-desk{display:none}}
+/* fixed preview bar */
+.cm-bar{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#14213d;color:#fff;padding:.8rem 1.2rem calc(.8rem + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:.6rem 1.8rem;justify-content:center;align-items:center;box-shadow:0 -6px 20px rgba(0,0,0,.25)}
+.cm-grp{display:flex;align-items:center;gap:.8rem}
+.cm-lab{font-size:1.05rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;opacity:.75}
+.cm-seg{display:flex;border:1px solid rgba(255,255,255,.7);border-radius:999px;overflow:hidden}
+.cm-seg button{appearance:none;border:0;background:transparent;color:#fff;font:inherit;font-size:1.25rem;font-weight:600;padding:.7rem 1.2rem;min-height:44px;cursor:pointer}
+.cm-seg button+button{border-left:1px solid rgba(255,255,255,.5)}
+.cm-seg button[aria-pressed=true]{background:#fff;color:#14213d}
+.cm-pad{height:9rem}
+</style>
+<div class="cm color-scheme-2 gradient a-section" id="cm" data-size="l" data-count="4">
+  <div class="page-width">
+    <div class="cm-head"><h2>Shop by <em>category</em></h2><i></i></div>
+    <p class="cm-note" id="cm-note"></p>
+
+    <div class="cm-l1"><div class="cm-g">
+      {%- for h in handles -%}{%- assign c = collections[h] -%}
+      <a class="cm-t{% unless c.image %} cm-ph{% endunless %}" href="#" onclick="return false"><span class="cm-i">{%- if c.image -%}<img src="{{ c.image | image_url: width: 600 }}" alt="{{ titles[forloop.index0] }}" loading="lazy">{%- endif -%}</span><span class="cm-n">{{ titles[forloop.index0] }}</span><span class="cm-go">Shop &rarr;</span></a>
+      {%- endfor -%}
+    </div></div>
+
+    <div class="cm-l2"><div class="cm-b">
+      {%- for h in handles -%}{%- assign c = collections[h] -%}
+      <a class="cm-t{% unless c.image %} cm-ph{% endunless %}" href="#" onclick="return false"><span class="cm-i">{%- if c.image -%}<img src="{{ c.image | image_url: width: 900 }}" alt="{{ titles[forloop.index0] }}" loading="lazy">{%- endif -%}</span><span class="cm-ov"><span class="cm-n">{{ titles[forloop.index0] }}</span><span class="cm-go">Shop &rarr;</span></span></a>
+      {%- endfor -%}
+    </div></div>
+
+    <p class="cm-soon">Coming soon: Trays &amp; Stands &middot; Candles</p>
+  </div>
+</div>
+<div class="cm-bar" id="cm-bar">
+  <div class="cm-grp cm-desk"><span class="cm-lab">Desktop card size</span><div class="cm-seg" data-k="size"><button type="button" data-v="l" aria-pressed="true">Large (now)</button><button type="button" data-v="m" aria-pressed="false">Medium</button><button type="button" data-v="s" aria-pressed="false">Small</button></div></div>
+  <div class="cm-grp"><span class="cm-lab">Categories</span><div class="cm-seg" data-k="count"><button type="button" data-v="4" aria-pressed="true">4 today</button><button type="button" data-v="6" aria-pressed="false">6</button><button type="button" data-v="8" aria-pressed="false">8</button></div></div>
+</div>
+<div class="cm-pad"></div>
+<script>
+(function(){
+  var root=document.getElementById('cm'),bar=document.getElementById('cm-bar');
+  var snote={'l':'Desktop cards at the size they are now: they fill the full page width.','m':'Desktop cards at a medium fixed size (about 22rem wide, square photos).','s':'Desktop cards at a small fixed size (about 17rem wide, square photos).'};
+  var cnote={'4':'Showing the 4 live categories; Trays & Stands and Candles as a coming-soon line.','6':'Showing 6: the two coming-soon categories as if live, with their real photos.','8':'Showing 8: tiles 7 and 8 are labelled placeholders (no other categories exist yet).'};
+  function note(){var mob=innerWidth<750;document.getElementById('cm-note').innerHTML='<b>Preview</b> &middot; Mobile uses the bento layout, desktop the grid. '+(mob?'':snote[root.getAttribute('data-size')]+' ')+cnote[root.getAttribute('data-count')]}
+  function set(k,v){
+    root.setAttribute('data-'+k,v);
+    [].forEach.call(bar.querySelectorAll('.cm-seg[data-k="'+k+'"] button'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-v')===v?'true':'false')});
+    note();
+  }
+  [].forEach.call(bar.querySelectorAll('.cm-seg'),function(g){
+    g.addEventListener('click',function(e){var b=e.target.closest('button');if(b)set(g.getAttribute('data-k'),b.getAttribute('data-v'))});
+  });
+  addEventListener('resize',note);
+  set('count','4');set('size','l');
+})();
+</script>
+{% schema %}
+{"name":"Category mockup","settings":[]}
+{% endschema %}

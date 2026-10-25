@@ -1,0 +1,87 @@
+{{ 'atelier-tokens.css' | asset_url | stylesheet_tag }}
+{{ 'component-atelier-card.css' | asset_url | stylesheet_tag }}
+{{ 'atelier-box-card.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} CRO audit item 10: in-stock products first, sold-out ones marked and moved last, and a Clear history link. {%- endcomment -%}
+<div class="atl-cl atl-rv" data-atl-rv data-handle="{{ product.handle }}" data-limit="{{ section.settings.products_to_show }}" hidden>
+  <div class="page-width">
+    <p class="atl-cl__eye">{{ section.settings.eyebrow }}</p>
+    <h2 class="atl-cl__h">{{ section.settings.heading }}</h2>
+    <span class="atl-cl__rule"></span>
+    <div class="atl-cl__grid" data-atl-rv-grid></div>
+    <p class="atl-rv__clear"><button type="button" data-atl-rv-clear>Clear history</button></p>
+  </div>
+</div>
+
+<style>
+.atl-rv[hidden]{display:none}
+.atl-rv{background:#f5f2eb;padding:5rem 0 5.6rem;border-top:1px solid #d9d0c3}
+.atl-rv .atl-cl__eye{margin:0 0 1.4rem;font-size:1.2rem;letter-spacing:.2em;text-transform:uppercase;color:#cf4a25;font-weight:600;text-align:center}
+.atl-rv .atl-cl__h{margin:0;text-align:center;font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.6rem,3.6vw,3.6rem);line-height:1.12;color:#14213d}
+.atl-rv .atl-cl__h em{color:#cf4a25;font-style:italic}
+.atl-rv .atl-cl__rule{display:block;width:4.8rem;height:2px;background:#cf4a25;margin:2rem auto 0}
+.atl-rv .atl-cl__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.6rem;margin-top:3.2rem}
+.atl-rv .abs-card{display:flex;flex-direction:column;height:auto;text-decoration:none;color:#14213d}
+.atl-rv .abs-media{display:block;aspect-ratio:4/5;overflow:hidden;border-radius:.6rem;background:#fff}
+.atl-rv .abs-media img{width:100%;height:100%;object-fit:cover;display:block}
+.atl-rv .abs-name{margin:0;font-size:1.5rem;line-height:1.35;font-weight:400}
+.atl-rv .abx-btn__short,.atl-rv .abx-btn__long{display:none}
+.atl-rv .abs-card--soldout .abs-media img{opacity:.55}
+.atl-rv .abs-card--soldout .abx-btn{color:rgba(20,33,61,.6);border-color:rgba(20,33,61,.25)}
+.atl-rv__clear{margin:2.4rem 0 0;text-align:center}
+.atl-rv__clear button{background:none;border:0;padding:.6rem 1rem;font-size:1.2rem;letter-spacing:.08em;text-decoration:underline;text-underline-offset:3px;color:rgba(20,33,61,.65);cursor:pointer}
+@media(max-width:989px){.atl-rv .atl-cl__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:749px){.atl-rv{padding:4rem 0}.atl-rv .atl-cl__grid{gap:1rem}.atl-rv .abs-name{font-size:1.35rem}.atl-rv .abx-btn{width:auto;height:auto;padding:.45rem .9rem;font-size:1.05rem}}
+</style>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-atl-rv]');
+    if (!root) return;
+    var KEY = 'atl_recently_viewed', handle = root.dataset.handle, limit = parseInt(root.dataset.limit, 10) || 4, list = [];
+    try { list = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { list = []; }
+    var others = list.filter(function (h) { return h !== handle; }).slice(0, limit + 4);
+    try { localStorage.setItem(KEY, JSON.stringify([handle].concat(list.filter(function (h) { return h !== handle; })).slice(0, 12))); } catch (e) {}
+    var clear = root.querySelector('[data-atl-rv-clear]');
+    if (clear) clear.addEventListener('click', function () {
+      try { localStorage.setItem(KEY, JSON.stringify([handle])); } catch (e) {}
+      root.hidden = true;
+    });
+    if (!others.length) return;
+    var grid = root.querySelector('[data-atl-rv-grid]');
+    function money(c) { return '₹' + (c / 100).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 }); }
+    function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+    Promise.all(others.map(function (h) {
+      return fetch('/products/' + encodeURIComponent(h) + '.js').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+    })).then(function (ps) {
+      ps = ps.filter(Boolean);
+      if (!ps.length) return;
+      var inStock = ps.filter(function (p) { return p.available; }), soldOut = ps.filter(function (p) { return !p.available; });
+      ps = inStock.concat(soldOut).slice(0, limit);
+      grid.innerHTML = ps.map(function (p) {
+        var img = p.featured_image ? '<img src="' + p.featured_image + '" alt="' + esc(p.title) + '" loading="lazy">' : '';
+        var from = p.price_varies ? '<small> onwards</small>' : '';
+        var so = !p.available;
+        var btn = so ? 'Sold out' : 'View <span aria-hidden="true">→</span>';
+        return '<a href="' + p.url + '" class="abs-card abs-card--box' + (so ? ' abs-card--soldout' : '') + '"><div class="abs-media">' + img + '</div>' +
+          '<div class="abs-info"><h3 class="abs-name">' + esc(p.title) + '</h3><p class="abx-detail">' + esc(p.type) + '</p>' +
+          '<div class="abx-foot"><p class="abs-price">' + money(p.price) + from + '</p><span class="abx-btn">' + btn + '</span></div></div></a>';
+      }).join('');
+      root.hidden = false;
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Atelier recently viewed",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Your trail" },
+    { "type": "inline_richtext", "id": "heading", "label": "Title", "default": "Recently <em>viewed.</em>" },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 4, "step": 1, "default": 4, "label": "Products to show" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme (unused)", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "Atelier recently viewed" }]
+}
+{% endschema %}

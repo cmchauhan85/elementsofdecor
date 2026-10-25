@@ -476,22 +476,10 @@
       "type": "select",
       "id": "logo_position",
       "options": [
-        {
-          "value": "top-left",
-          "label": "t:sections.header.settings.logo_position.options__2.label"
-        },
-        {
-          "value": "top-center",
-          "label": "t:sections.header.settings.logo_position.options__3.label"
-        },
-        {
-          "value": "middle-left",
-          "label": "t:sections.header.settings.logo_position.options__1.label"
-        },
-        {
-          "value": "middle-center",
-          "label": "t:sections.header.settings.logo_position.options__4.label"
-        }
+        { "value": "top-left", "label": "t:sections.header.settings.logo_position.options__2.label" },
+        { "value": "top-center", "label": "t:sections.header.settings.logo_position.options__3.label" },
+        { "value": "middle-left", "label": "t:sections.header.settings.logo_position.options__1.label" },
+        { "value": "middle-center", "label": "t:sections.header.settings.logo_position.options__4.label" }
       ],
       "default": "middle-left",
       "label": "t:sections.header.settings.logo_position.label",
@@ -501,14 +489,8 @@
       "type": "select",
       "id": "mobile_logo_position",
       "options": [
-        {
-          "value": "center",
-          "label": "t:sections.header.settings.mobile_logo_position.options__1.label"
-        },
-        {
-          "value": "left",
-          "label": "t:sections.header.settings.mobile_logo_position.options__2.label"
-        }
+        { "value": "center", "label": "t:sections.header.settings.mobile_logo_position.options__1.label" },
+        { "value": "left", "label": "t:sections.header.settings.mobile_logo_position.options__2.label" }
       ],
       "default": "center",
       "label": "t:sections.header.settings.mobile_logo_position.label"
@@ -523,18 +505,9 @@
       "type": "select",
       "id": "menu_type_desktop",
       "options": [
-        {
-          "value": "dropdown",
-          "label": "t:sections.header.settings.menu_type_desktop.options__1.label"
-        },
-        {
-          "value": "mega",
-          "label": "t:sections.header.settings.menu_type_desktop.options__2.label"
-        },
-        {
-          "value": "drawer",
-          "label": "t:sections.header.settings.menu_type_desktop.options__3.label"
-        }
+        { "value": "dropdown", "label": "t:sections.header.settings.menu_type_desktop.options__1.label" },
+        { "value": "mega", "label": "t:sections.header.settings.menu_type_desktop.options__2.label" },
+        { "value": "drawer", "label": "t:sections.header.settings.menu_type_desktop.options__3.label" }
       ],
       "default": "dropdown",
       "label": "t:sections.header.settings.menu_type_desktop.label"
@@ -543,22 +516,10 @@
       "type": "select",
       "id": "sticky_header_type",
       "options": [
-        {
-          "value": "none",
-          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
-        },
-        {
-          "value": "always",
-          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
-        },
-        {
-          "value": "reduce-logo-size",
-          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
-        }
+        { "value": "none", "label": "t:sections.header.settings.sticky_header_type.options__1.label" },
+        { "value": "on-scroll-up", "label": "t:sections.header.settings.sticky_header_type.options__2.label" },
+        { "value": "always", "label": "t:sections.header.settings.sticky_header_type.options__3.label" },
+        { "value": "reduce-logo-size", "label": "t:sections.header.settings.sticky_header_type.options__4.label" }
       ],
       "default": "on-scroll-up",
       "label": "t:sections.header.settings.sticky_header_type.label"
@@ -610,6 +571,23 @@
       "label": "t:sections.header.settings.enable_customer_avatar.label",
       "info": "t:sections.header.settings.enable_customer_avatar.info"
     },
+    {
+      "type": "header",
+      "content": "Mobile menu: featured rows (hidden by default)"
+    },
+    { "type": "checkbox", "id": "drawer_show_sale", "default": false, "label": "Show Sale row" },
+    { "type": "text", "id": "drawer_sale_label", "default": "Sale", "label": "Sale label" },
+    { "type": "url", "id": "drawer_sale_url", "label": "Sale link", "info": "Blank = /collections/sale" },
+    { "type": "checkbox", "id": "drawer_show_gifting", "default": false, "label": "Show Corporate Gifting row" },
+    { "type": "text", "id": "drawer_gifting_label", "default": "Corporate Gifting", "label": "Corporate Gifting label" },
+    { "type": "url", "id": "drawer_gifting_url", "label": "Corporate Gifting link", "info": "Blank = /pages/corporate-gifting" },
+    {
+      "type": "header",
+      "content": "Mobile menu: utility links"
+    },
+    { "type": "url", "id": "drawer_track_url", "label": "Track order link", "info": "Blank = customer account" },
+    { "type": "url", "id": "drawer_store_url", "label": "Visit our store link", "info": "Blank = /pages/contact-us" },
+    { "type": "url", "id": "drawer_contact_url", "label": "Contact link", "info": "Blank = WhatsApp chat" },
     {
       "type": "header",
       "content": "t:sections.all.spacing"

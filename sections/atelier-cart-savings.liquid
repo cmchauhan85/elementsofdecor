@@ -1,0 +1,30 @@
+{%- if cart.total_discount > 0 -%}
+<style>
+.atl-sav-wrap{padding:0 1.6rem}
+.atl-sav{max-width:60rem;margin:0 auto 1.6rem;padding:1.4rem 1.6rem;background:#f5f2eb;border:1px solid #d9d0c3;border-radius:.6rem;font-size:1.4rem;color:#14213d}
+.atl-sav__eyebrow{font-size:1.1rem;letter-spacing:.14em;text-transform:uppercase;color:#a8371a;font-weight:700;margin:0 0 .6rem}
+.atl-sav__row{display:flex;justify-content:space-between;gap:1.2rem;padding:.4rem 0}
+.atl-sav__row--disc{color:#2f6b4f;font-weight:700}
+.atl-sav__tot{display:flex;justify-content:space-between;margin-top:.6rem;padding-top:.9rem;border-top:1px solid #d9d0c3;font-weight:700;font-size:1.6rem}
+.atl-sav__badge{margin-top:1rem;padding:.8rem 1rem;background:#2f6b4f;color:#fff;border-radius:.4rem;text-align:center;font-weight:700;font-size:1.4rem;letter-spacing:.02em}
+</style>
+<div class="atl-sav-wrap"><div class="atl-sav" role="group" aria-label="Savings summary">
+  <p class="atl-sav__eyebrow">Your savings</p>
+  <div class="atl-sav__row"><span>Price of {{ cart.item_count }} piece{% if cart.item_count > 1 %}s{% endif %}</span><span>{{ cart.original_total_price | money }}</span></div>
+  {%- for item in cart.items -%}
+    {%- for alloc in item.line_level_discount_allocations -%}
+      <div class="atl-sav__row atl-sav__row--disc"><span>{{ alloc.discount_application.title | escape }}</span><span>&minus; {{ alloc.amount | money }}</span></div>
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- for discount in cart.cart_level_discount_applications -%}
+    <div class="atl-sav__row atl-sav__row--disc"><span>{{ discount.title | escape }}</span><span>&minus; {{ discount.total_allocated_amount | money }}</span></div>
+  {%- endfor -%}
+  <div class="atl-sav__row"><span>Shipping</span><span>Free</span></div>
+  <div class="atl-sav__tot"><span>You pay</span><span>{{ cart.total_price | money }}</span></div>
+  {%- assign pct = cart.total_discount | times: 100.0 | divided_by: cart.original_total_price | round -%}
+  <div class="atl-sav__badge">You save {{ cart.total_discount | money }} ({{ pct }}% off)</div>
+</div></div>
+{%- endif -%}
+{% schema %}
+{"name":"Cart savings summary","settings":[]}
+{% endschema %}

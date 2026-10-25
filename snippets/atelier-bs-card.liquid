@@ -1,0 +1,54 @@
+{%- liquid
+  assign p = product
+  assign on_sale = false
+  if p.compare_at_price > p.price
+    assign on_sale = true
+  endif
+  assign c_mat = p.metafields.atelier.card_material.value
+  assign c_size = p.metafields.atelier.card_size.value
+  assign detail = ''
+  if c_mat != blank or c_size != blank
+    assign detail = c_mat
+    if c_mat != blank and c_size != blank
+      assign detail = detail | append: ' · '
+    endif
+    assign detail = detail | append: c_size
+  else
+    assign detail = p.type | split: '>' | last | strip | replace: 'Candle Stands & Holders', 'Candle stand' | replace: 'Urlis & Bowls', 'Urli' | replace: 'Wall & Tabletop', 'Tabletop'
+  endif
+-%}
+<a href="{{ p.url }}" class="abs-card{% if boxed %} abs-card--box{% endif %}">
+  <div class="abs-media">
+    {%- if p.featured_media != blank -%}
+      {{
+        p.featured_media
+        | image_url: width: 800
+        | image_tag:
+          loading: 'lazy',
+          sizes: '(min-width: 990px) 25vw, 45vw',
+          widths: '275, 400, 550, 800',
+          alt: p.featured_media.alt | default: p.title | escape
+      }}
+    {%- endif -%}
+    {%- if index != blank -%}<span class="abs-num" aria-hidden="true">0{{ index }}</span>{%- endif -%}
+    {%- if boxed and show_tag and p.tags contains 'new-arrival' -%}<span class="abx-tag">New</span>{%- endif -%}
+  </div>
+  <div class="abs-info">
+    <h3 class="abs-name">{{ p.title }}</h3>
+    {%- if boxed -%}
+      <p class="abx-detail">{{ detail }}</p>
+      <div class="abx-foot">
+    {%- endif -%}
+    <p class="abs-price">
+      {%- if on_sale -%}
+        <s>{{ p.compare_at_price | money_without_trailing_zeros }}</s> <span>{{ p.price | money_without_trailing_zeros }}</span>
+      {%- else -%}
+        {{ p.price | money_without_trailing_zeros }}
+      {%- endif -%}
+    </p>
+    {%- if boxed -%}
+        <span class="abx-btn"><span class="abx-btn__long">View piece</span><span class="abx-btn__short">View</span> <span aria-hidden="true">→</span></span>
+      </div>
+    {%- endif -%}
+  </div>
+</a>

@@ -1,0 +1,125 @@
+{%- comment -%} Reels strip: up to 4 vertical videos (Shopify-hosted). Autoplay muted in view, tap for sound. {%- endcomment -%}
+<style>
+#rl-{{ section.id }}{padding-block:3rem}
+#rl-{{ section.id }} .rl-head{text-align:center;margin-bottom:2.4rem}
+#rl-{{ section.id }} .rl-eye{font-size:1.2rem;letter-spacing:.22em;text-transform:uppercase;color:var(--a-ochre,#d9603b);margin:0 0 1.2rem}
+#rl-{{ section.id }} .rl-title{font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.6rem,7vw,4.2rem);line-height:1.12;margin:0;text-wrap:balance}
+#rl-{{ section.id }} .rl-title em{color:var(--a-ochre,#d9603b);font-style:italic}
+#rl-{{ section.id }} .rl-rule{display:block;width:4rem;height:2px;background:var(--a-ochre,#d9603b);margin:1.8rem auto 0}
+#rl-{{ section.id }} .rl-scroll{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:.4rem;-webkit-overflow-scrolling:touch}
+#rl-{{ section.id }} .rl-scroll::-webkit-scrollbar{display:none}
+#rl-{{ section.id }} .rl-card{flex:0 0 62%;max-width:26rem;scroll-snap-align:start;margin:0;min-width:0}
+#rl-{{ section.id }} .rl-frame{position:relative;aspect-ratio:9/16;overflow:hidden;border-radius:var(--a-radius-image,4px);background:var(--a-stone,#ece7df);cursor:pointer}
+#rl-{{ section.id }} .rl-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#rl-{{ section.id }} .rl-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading-family);font-size:2.4rem;letter-spacing:.2em;color:var(--a-muted,#8a8378);background:repeating-linear-gradient(135deg,rgba(0,0,0,.025) 0 1px,transparent 1px 10px)}
+#rl-{{ section.id }} .rl-snd{position:absolute;right:.8rem;bottom:.8rem;width:3.6rem;height:3.6rem;border-radius:50%;border:0;background:rgba(27,25,22,.55);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;backdrop-filter:blur(4px)}
+#rl-{{ section.id }} .rl-snd svg{width:1.8rem;height:1.8rem;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#rl-{{ section.id }} .rl-snd .on{display:none}
+#rl-{{ section.id }} .is-sound .rl-snd .on{display:block}
+#rl-{{ section.id }} .is-sound .rl-snd .off{display:none}
+#rl-{{ section.id }} .rl-cap{margin:1rem 0 0;font-size:1.2rem;letter-spacing:.14em;text-transform:uppercase;color:var(--a-muted,rgba(var(--color-foreground),.7));text-align:center}
+#rl-{{ section.id }} .rl-foot{text-align:center;margin-top:2.4rem}
+#rl-{{ section.id }} .rl-cta{display:inline-block;border:1px solid var(--a-ink,currentColor);padding:1.2rem 2.6rem;font-size:1.2rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:inherit;transition:background .2s,color .2s}
+#rl-{{ section.id }} .rl-cta:hover{background:var(--a-ink,#1b1916);color:#fff}
+@media(min-width:750px){#rl-{{ section.id }}{padding-block:5rem}#rl-{{ section.id }} .rl-card{flex-basis:30%}}
+@media(min-width:990px){#rl-{{ section.id }} .rl-scroll{overflow:visible;gap:1.6rem}#rl-{{ section.id }} .rl-card{flex:1 1 0;max-width:none}}
+</style>
+<section id="rl-{{ section.id }}" class="rl color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    <div class="rl-head">
+      {%- if section.settings.eyebrow != blank -%}<p class="rl-eye">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="rl-title">{{ section.settings.title }}</h2>
+      <span class="rl-rule"></span>
+    </div>
+    <div class="rl-scroll">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          assign vkey = 'video_' | append: i
+          assign ckey = 'caption_' | append: i
+          assign v = section.settings[vkey]
+          assign cap = section.settings[ckey]
+        -%}
+        {%- if v != blank or section.settings.show_placeholders -%}
+        <figure class="rl-card">
+          <div class="rl-frame">
+            {%- if v != blank -%}
+              {%- liquid
+                assign mp4s = v.sources | where: 'format', 'mp4' | sort: 'height' | reverse
+                assign pick = mp4s.last
+                for s in mp4s
+                  if s.height <= 720
+                    assign pick = s
+                    break
+                  endif
+                endfor
+              -%}
+              <video muted loop playsinline preload="metadata" poster="{{ v.preview_image | image_url: width: 540 }}" aria-label="{{ cap | default: 'Elements of Decor video' | escape }}">
+                <source src="{{ pick.url }}" type="{{ pick.mime_type }}">
+              </video>
+              <button type="button" class="rl-snd" aria-label="Turn sound on or off">
+                <svg class="off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l4 6M21 9l-4 6"/></svg>
+                <svg class="on" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>
+              </button>
+            {%- else -%}
+              <span class="rl-ph">ED</span>
+            {%- endif -%}
+          </div>
+          {%- if cap != blank -%}<figcaption class="rl-cap">{{ cap }}</figcaption>{%- endif -%}
+        </figure>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.cta_label != blank -%}
+    <div class="rl-foot"><a class="rl-cta" href="{{ section.settings.link | default: 'https://www.instagram.com/elements.of.decor' }}" target="_blank" rel="noopener">{{ section.settings.cta_label }}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+<script>
+(function(){
+  var root=document.getElementById('rl-{{ section.id }}');
+  if(!root)return;
+  var cards=[].slice.call(root.querySelectorAll('.rl-frame')).filter(function(f){return f.querySelector('video')});
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function muteAll(except){cards.forEach(function(f){var v=f.querySelector('video');if(f!==except){v.muted=true;f.classList.remove('is-sound')}})}
+  cards.forEach(function(f){
+    var v=f.querySelector('video');
+    f.addEventListener('click',function(){
+      var turnOn=v.muted;
+      muteAll(f);
+      v.muted=!turnOn;
+      f.classList.toggle('is-sound',turnOn);
+      if(turnOn||v.paused){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+    });
+  });
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      var v=e.target.querySelector('video');if(!v)return;
+      if(e.isIntersecting&&!reduce){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+      else{v.pause();if(!e.isIntersecting){v.muted=true;e.target.classList.remove('is-sound')}}
+    })},{threshold:.4});
+    cards.forEach(function(f){io.observe(f)});
+  }
+})();
+</script>
+{% schema %}
+{
+  "name": "Reels strip",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"From the workshop"},
+    {"type":"inline_richtext","id":"title","label":"Title","default":"Seen in <em>motion.</em>"},
+    {"type":"video","id":"video_1","label":"Video 1"},
+    {"type":"text","id":"caption_1","label":"Caption 1"},
+    {"type":"video","id":"video_2","label":"Video 2"},
+    {"type":"text","id":"caption_2","label":"Caption 2"},
+    {"type":"video","id":"video_3","label":"Video 3"},
+    {"type":"text","id":"caption_3","label":"Caption 3"},
+    {"type":"video","id":"video_4","label":"Video 4"},
+    {"type":"text","id":"caption_4","label":"Caption 4"},
+    {"type":"checkbox","id":"show_placeholders","label":"Show placeholders for empty slots","default":true},
+    {"type":"text","id":"cta_label","label":"Button label","default":"Follow @elements.of.decor"},
+    {"type":"url","id":"link","label":"Button link"},
+    {"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"scheme-1"}
+  ],
+  "presets": [{"name":"Reels strip"}]
+}
+{% endschema %}

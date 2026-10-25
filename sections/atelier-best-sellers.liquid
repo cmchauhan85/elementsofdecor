@@ -1,0 +1,111 @@
+{{ 'atelier-box-card.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  .abs__head { display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0 0 2.8rem; }
+  .abs__title { font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(2.6rem, 3.4vw, 3.6rem); line-height: 1.15; margin: 0; }
+  .abs__title em { font-style: italic; color: var(--a-ochre); }
+  .abs__rule { width: 4rem; height: 2px; background: var(--a-ochre); margin-top: 1.2rem; }
+  .abs__link { font-family: var(--font-body-family); font-size: 1.2rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--a-ochre); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 0.1rem; }
+  .abs__head .abs__link { display: none; }
+  .abs__foot { text-align: center; margin-top: 3rem; }
+
+  .abs__grid { display: grid; gap: 1.6rem; }
+  .abs-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; min-width: 0; }
+  .abs-media { position: relative; overflow: hidden; background: var(--a-stone); border-radius: var(--a-radius-image); }
+  .abs-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+  .abs-card:hover .abs-media img { transform: scale(1.03); }
+  .abs-info { margin-top: 1.2rem; }
+  .abs-name { font-family: var(--font-body-family); font-size: 1.5rem; font-weight: 400; line-height: 1.35; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .abs-price { margin: 0.4rem 0 0; font-size: 1.4rem; color: var(--a-muted); }
+  .abs-price s { opacity: .6; margin-right: .4rem; }
+  .abs-num { display: none; }
+
+  /* Desktop / tablet: centred heading, 4 cards across, View all below (decided 14 Oct 2026) */
+  @media screen and (min-width: 750px) {
+    .abs__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .abs-media { aspect-ratio: 1 / 1; }
+  }
+
+  /* Mobile: magazine - tall card left, two small right, wide card below */
+  @media screen and (max-width: 749px) {
+    .abs__grid { grid-template-columns: 1.35fr 1fr; gap: 1.6rem 1.2rem; }
+    .abs-card:nth-child(1) { grid-row: span 2; }
+    .abs-card:nth-child(1) .abs-media { flex: 1; min-height: 24rem; }
+    .abs-card:nth-child(2) .abs-media, .abs-card:nth-child(3) .abs-media { aspect-ratio: 1 / 1; }
+    .abs-card:nth-child(4) { grid-column: 1 / -1; }
+    .abs-card:nth-child(4) .abs-media { aspect-ratio: 16 / 10; }
+    .abs-card:nth-child(n+2) .abs-name { font-size: 1.3rem; }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign n = 0
+  assign ids = ','
+  assign picked = section.settings.best_sellers
+  assign coll = section.settings.collection
+  assign boxed = false
+  if section.settings.card_style == 'boxed'
+    assign boxed = true
+  endif
+-%}
+
+{%- capture bs_cards -%}
+  {%- for product in picked -%}
+    {%- if n >= 4 -%}{%- break -%}{%- endif -%}
+    {%- assign n = n | plus: 1 -%}
+    {%- assign ids = ids | append: product.id | append: ',' -%}
+    {% render 'atelier-bs-card', product: product, boxed: boxed %}
+  {%- endfor -%}
+  {%- if n < 4 and coll != blank -%}
+    {%- for product in coll.products -%}
+      {%- if n >= 4 -%}{%- break -%}{%- endif -%}
+      {%- assign tok = product.id | prepend: ',' | append: ',' -%}
+      {%- unless ids contains tok -%}
+        {%- assign n = n | plus: 1 -%}
+        {%- assign ids = ids | append: product.id | append: ',' -%}
+        {% render 'atelier-bs-card', product: product, boxed: boxed %}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if n < 4 -%}
+    {%- for product in collections.all.products -%}
+      {%- if n >= 4 -%}{%- break -%}{%- endif -%}
+      {%- assign tok = product.id | prepend: ',' | append: ',' -%}
+      {%- unless ids contains tok -%}
+        {%- assign n = n | plus: 1 -%}
+        {%- assign ids = ids | append: product.id | append: ',' -%}
+        {% render 'atelier-bs-card', product: product, boxed: boxed %}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="abs color-{{ section.settings.color_scheme }} a-section" id="abs-{{ section.id }}">
+  <div class="page-width">
+    <div class="abs__layout">
+      <div class="abs__head">
+        <h2 class="abs__title">{{ section.settings.heading_lead }} <em>{{ section.settings.heading_accent }}</em></h2>
+        <span class="abs__rule" aria-hidden="true"></span>
+        <a class="abs__link" href="{{ coll.url | default: routes.all_products_collection_url }}">{{ section.settings.link_label }}</a>
+      </div>
+      <div class="abs__grid">{{ bs_cards }}</div>
+    </div>
+    <div class="abs__foot"><a class="abs__link" href="{{ coll.url | default: routes.all_products_collection_url }}">{{ section.settings.link_label }}</a></div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier Best Sellers",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading_lead", "label": "Heading - plain part", "default": "Most" },
+    { "type": "text", "id": "heading_accent", "label": "Heading - accent word", "default": "loved" },
+    { "type": "text", "id": "link_label", "label": "View all label", "default": "View all →" },
+    { "type": "select", "id": "card_style", "label": "Card style", "options": [ { "value": "boxed", "label": "Boxed (frame, details, View piece button)" }, { "value": "plain", "label": "Plain (image, name, price)" } ], "default": "plain" },
+    { "type": "product_list", "id": "best_sellers", "label": "Products (first 4 are shown)", "limit": 8 },
+    { "type": "collection", "id": "collection", "label": "Fallback collection", "info": "Fills any empty slots and is the View all link." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [ { "name": "Atelier Best Sellers" } ]
+}
+{% endschema %}

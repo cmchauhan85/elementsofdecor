@@ -1,0 +1,56 @@
+{%- comment -%}
+  Cart tweaks: (1) checkout button carries the live total; (2) line items show the full retail price only,
+  the bundle discount is declared once, in the Order summary; (3) items + order summary read as ONE card;
+  (4) on mobile the PRODUCT / TOTAL table header row is hidden; (5) summary amounts never break across lines;
+  (6) desktop line-item typography: column headers, product name, unit price, quantity, line total.
+{%- endcomment -%}
+<style>
+.cart-item .cart-item__final-price{display:none}
+.cart-item s.cart-item__old-price{text-decoration:none;color:inherit;opacity:1}
+.cart-item__totals dl.cart-item__discounted-prices dd.price{display:none}
+.cart-item .discounts{display:none}
+.cart-item__totals .price{white-space:nowrap}
+/* one card: items (top) + order summary (bottom) */
+cart-items{padding-bottom:0!important}
+cart-items .cart__items{border:1px solid #d9d0c3;border-bottom:0;border-radius:.6rem .6rem 0 0;padding:0 1.4rem 1.6rem!important;background:#fff}
+cart-items .cart-items{margin:0}
+#main-cart-footer .cart__footer{padding-top:0!important}
+#main-cart-footer .atl-sum{margin:0 0 1.6rem;border-radius:0 0 .6rem .6rem;border-top:1px solid #d9d0c3}
+/* amounts stay on one line (the minus sign used to wrap away from the number) */
+#main-cart-footer .atl-sum__row>span:last-child{white-space:nowrap;flex:0 0 auto}
+#main-cart-footer .atl-sum__row>span:first-child{min-width:0}
+@media(max-width:749px){cart-items .cart-items thead{display:none}}
+/* desktop line-item typography */
+@media(min-width:750px){
+  cart-items .cart-items thead th{font-size:1.1rem!important;font-weight:700!important;letter-spacing:.18em!important;color:rgba(20,33,61,.62)!important}
+  cart-items .cart-item a.cart-item__name{font-size:2.3rem;line-height:1.2;font-weight:400;letter-spacing:0;color:#14213d}
+  cart-items .cart-item .cart-item__element{font-size:1.1rem;font-weight:700;letter-spacing:.18em;color:rgba(20,33,61,.62)}
+  cart-items .cart-item .cart-item__details .cart-item__old-price{font-size:1.6rem;font-weight:600;letter-spacing:.01em;color:#14213d;font-variant-numeric:tabular-nums}
+  cart-items .cart-item .cart-item__details .product-option,cart-items .cart-item .cart-item__details dt,cart-items .cart-item .cart-item__details dd{font-size:1.35rem;letter-spacing:.02em;color:rgba(20,33,61,.72)}
+  cart-items .cart-item quantity-input .quantity__input{font-size:1.7rem;font-weight:600;color:#14213d}
+  cart-items .cart-item .cart-item__totals .cart-item__price-wrapper{line-height:4.6rem;padding-top:.7rem}
+  cart-items .cart-item .cart-item__totals .price,cart-items .cart-item .cart-item__totals s.cart-item__old-price{font-size:2rem;font-weight:700;letter-spacing:.01em;color:#14213d;font-variant-numeric:tabular-nums}
+}
+</style>
+<script>
+(function(){
+  var label='Check out';
+  function sync(){
+    var btn=document.getElementById('checkout');
+    var tot=document.querySelector('.atl-sum__tot span:last-child');
+    if(!btn||!tot)return;
+    var txt=label+' · '+tot.textContent.trim();
+    if(btn.textContent.trim()!==txt)btn.textContent=txt;
+  }
+  function start(){
+    sync();
+    var root=document.getElementById('main-cart-footer')||document.body;
+    new MutationObserver(function(){sync();}).observe(root,{childList:true,subtree:true,characterData:true});
+    document.addEventListener('change',function(){setTimeout(sync,600);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+})();
+</script>
+{% schema %}
+{"name":"Cart tweaks","settings":[]}
+{% endschema %}

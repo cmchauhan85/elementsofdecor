@@ -11,120 +11,68 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
-    "newsletter_9Dt6Un": {
-      "type": "newsletter",
-      "blocks": {
-        "heading_wraKGC": {
-          "type": "heading",
-          "settings": {
-            "heading": "Discover Curated Styling Ideas and Design Inspiration",
-            "heading_size": "h1"
-          }
-        },
-        "paragraph_RcMJtW": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p><br/>Join our mailing list for styling tips and early access to new collections<br/></p>"
-          }
-        },
-        "email_form_WPqMRN": {
-          "type": "email_form",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "heading_wraKGC",
-        "paragraph_RcMJtW",
-        "email_form_WPqMRN"
-      ],
-      "name": "t:sections.newsletter.presets.name",
+    "atelier_footer_v2": {
+      "type": "atelier-footer-v2",
       "settings": {
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
+        "color_scheme": "scheme-1",
+        "nl_lead": "Letters from the",
+        "nl_accent": "workshop",
+        "nl_text": "New pieces and quiet stories from our makers. Occasionally, never noisy.",
+        "nl_button": "Subscribe",
+        "instagram_url": "https://www.instagram.com/elements.of.decor",
+        "facebook_url": "https://www.facebook.com/elementsofdecorindia",
+        "signoff": "Felt, not styled.",
+        "col1_heading": "Shop",
+        "col1_menu": "footer-v2-shop",
+        "col2_heading": "Visit & Gift",
+        "col2_menu": "footer-v2-visit",
+        "col3_heading": "Help",
+        "col3_menu": "footer-v2-help",
+        "contact_heading": "Contact",
+        "contact_email": "support@elementsofdecor.com",
+        "contact_whatsapp": "+91 63530 52025",
+        "contact_hours": "Mon–Sat, 10am–6pm",
+        "trust_line": "Secured by Razorpay · Free shipping · 7-day returns"
       }
     },
-    "footer": {
-      "type": "footer",
-      "blocks": {
-        "link_list_support": {
-          "type": "link_list",
-          "settings": {
-            "heading": "<strong>Shop</strong>",
-            "menu": "footer-shop"
-          }
-        },
-        "link_list_category": {
-          "type": "link_list",
-          "settings": {
-            "heading": "Category",
-            "menu": "footer"
-          }
-        },
-        "link_list_policy": {
-          "type": "link_list",
-          "settings": {
-            "heading": "<strong>Policy Pages</strong>",
-            "menu": "footer-policy"
-          }
-        },
-        "address": {
-          "type": "text",
-          "settings": {
-            "heading": "Our Studio",
-            "subtext": "<p>16, Nest, Tokarkhada, Silvassa, UT of Dadra and Nagar Haveli 396230</p>"
-          }
-        },
-        "trust_secure": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "lock",
-            "label": "Secured by Razorpay"
-          }
-        },
-        "trust_returns": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "return",
-            "label": "7-day easy returns"
-          }
-        },
-        "trust_material": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "leaf",
-            "label": "Handmade, natural materials"
-          }
-        }
-      },
-      "block_order": [
-        "link_list_support",
-        "link_list_category",
-        "link_list_policy",
-        "address",
-        "trust_secure",
-        "trust_returns",
-        "trust_material"
-      ],
+    "ftr_style": {
+      "type": "atelier-footer-style",
       "settings": {
-        "color_scheme": "scheme-luxury-premium",
-        "newsletter_enable": false,
-        "newsletter_heading": "Subscribe to our emails",
-        "enable_follow_on_shop": false,
-        "show_social": true,
-        "enable_country_selector": false,
-        "enable_language_selector": false,
-        "payment_enable": true,
-        "show_policy": true,
-        "margin_top": 0,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "desktop": "navy",
+        "mobile": "navy"
       }
+    },
+    "atelier_footer": {
+      "type": "atelier-footer",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-1",
+        "newsletter_heading": "NEWSLETTER",
+        "newsletter_text": "",
+        "newsletter_button": "Subscribe",
+        "follow_text": "Follow us on",
+        "instagram_url": "https://www.instagram.com/elements.of.decor",
+        "facebook_url": "https://www.facebook.com/elementsofdecorindia",
+        "col1_heading": "SHOP",
+        "col1_menu": "footer-shop",
+        "col2_heading": "COMPANY",
+        "col2_menu": "footer",
+        "col3_heading": "HELP",
+        "col3_menu": "footer-help",
+        "col4_heading": "POLICIES",
+        "col4_menu": "footer-policy",
+        "contact_heading": "CONTACT",
+        "contact_email": "support@elementsofdecor.com",
+        "contact_whatsapp": "+91 63530 52025",
+        "contact_hours": "Mon–Sat, 10am–6pm",
+        "show_payment": true,
+        "show_policies": true
+      }
+    },
+    "cta_system": {
+      "type": "atelier-cta-system",
+      "settings": {}
     }
   },
-  "order": [
-    "newsletter_9Dt6Un",
-    "footer"
-  ]
+  "order": ["atelier_footer_v2", "ftr_style", "atelier_footer", "cta_system"]
 }

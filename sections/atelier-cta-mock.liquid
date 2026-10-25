@@ -1,0 +1,84 @@
+{%- comment -%} TEMPORARY mockup (20 Oct 2026), reset to three choices: A today, B minimal fix, C full system. Switched by a fixed bar that only appears when the address has ?ctamock=1 (or after it was opened once in this tab). Delete this section, its entry in sections/footer-group.json and templates/index.cta-mock.json after the decision. {%- endcomment -%}
+<style>
+/* ===== B. Minimal fix: only the faint home buttons get stronger. Nothing else changes. ===== */
+html[data-cta="min"] body :is(.cb-cta,.bd-cta,.rf-cta){color:#14213d !important;border:1.5px solid #14213d !important;font-size:1.25rem !important;font-weight:700 !important;letter-spacing:.14em !important;text-transform:uppercase !important;min-height:4.4rem;opacity:1 !important}
+html[data-cta="min"] body :is(.cb-cta,.bd-cta,.rf-cta):is(:hover,:focus-visible){background:#14213d !important;color:#fff !important}
+html[data-cta="min"] body .atelier-hero__cta{font-weight:700 !important;border:1.5px solid rgba(255,255,255,.9) !important;opacity:1 !important}
+
+/* ===== C. Full system: Buy (solid coral), Option (outline), Link (coral text + arrow), Glass (only on photos). ===== */
+/* Buy */
+html[data-cta="sys"] body :is(.btn-primary,.atelier-pdp-sticky__buy,cart-drawer .button--primary,.cart__checkout-button){background:#cf4a25 !important;color:#fff !important;border:1px solid #cf4a25 !important;font-weight:700 !important;min-height:4.4rem}
+html[data-cta="sys"] body :is(.btn-primary,.atelier-pdp-sticky__buy,cart-drawer .button--primary,.cart__checkout-button):is(:hover,:focus-visible){background:#a8371a !important;border-color:#a8371a !important;color:#fff !important}
+/* Option */
+html[data-cta="sys"] body :is(.btn-secondary,.atelier-pdp-sticky__submit,.button--secondary){border:1.5px solid #14213d !important;color:#14213d !important;font-weight:700 !important;min-height:4.4rem;opacity:1 !important}
+html[data-cta="sys"] body :is(.btn-secondary,.atelier-pdp-sticky__submit,.button--secondary):is(:hover,:focus-visible){background:#14213d !important;color:#fff !important}
+html[data-cta="sys"] body .cl-bundle__btn{background:transparent !important;color:#cf4a25 !important;border:1.5px solid #cf4a25 !important;font-weight:700 !important}
+html[data-cta="sys"] body .cl-bundle__btn:is(:hover,:focus-visible){background:#cf4a25 !important;color:#fff !important}
+/* Link */
+html[data-cta="sys"] body :is(.cb-cta,.bd-cta,.rf-cta){display:inline-flex !important;align-items:center;justify-content:center;background:transparent !important;border:0 !important;border-radius:0 !important;color:#cf4a25 !important;padding:.8rem 0 !important;min-height:4.4rem;font-size:1.25rem !important;font-weight:700 !important;letter-spacing:.14em !important;text-transform:uppercase !important;text-decoration:none !important;opacity:1 !important}
+html[data-cta="sys"] body :is(.abs__link,.rf-link){display:inline-block;color:#cf4a25 !important;padding-block:.8rem;font-size:1.25rem !important;font-weight:700 !important;letter-spacing:.14em;text-transform:uppercase;text-decoration:none !important}
+html[data-cta="sys"] body :is(.cb-cta,.bd-cta,.rf-cta,.abs__link,.rf-link):is(:hover,:focus-visible){background:transparent !important;color:#a8371a !important}
+html[data-cta="sys"] body .abx-btn{color:#cf4a25 !important;border-color:transparent !important;font-weight:700 !important;font-size:1.2rem !important;min-height:4.4rem}
+/* Glass: the home hero (all widths) and the category tiles (phone only; on desktop the tile link sits under the photo and is a coral Link). */
+html[data-cta="sys"] body .atelier-hero__cta{display:inline-flex !important;align-items:center;width:fit-content !important;max-width:100%;min-height:4rem !important;padding:.4rem .4rem .4rem 1.8rem !important;gap:1.2rem !important;background:rgba(255,255,255,.07) !important;-webkit-backdrop-filter:blur(12px) saturate(1.5);backdrop-filter:blur(12px) saturate(1.5);border:1px solid rgba(255,255,255,.42) !important;border-radius:2px !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 12px rgba(0,0,0,.12);color:#fff !important;text-shadow:0 1px 4px rgba(0,0,0,.6);font-size:1.2rem !important;font-weight:700 !important;letter-spacing:.14em !important;text-transform:uppercase !important;opacity:1 !important}
+html[data-cta="sys"] body .atelier-hero__cta:is(:hover,:focus-visible){background:rgba(255,255,255,.2) !important;border-color:rgba(255,255,255,.7) !important}
+html[data-cta="sys"] body .atelier-hero__cta .atelier-hero__arrow{width:2.8rem !important;height:2.8rem !important;min-width:2.8rem;font-size:1.3rem;background:rgba(255,255,255,.85) !important;color:#a8371a !important;border-color:transparent !important;text-shadow:none}
+html[data-cta="sys"] body .ab2-t .ab2-go{display:inline-flex !important;align-items:center;width:fit-content;opacity:1 !important;text-transform:uppercase;font-weight:700 !important;letter-spacing:.14em !important;text-decoration:none}
+@media (max-width:749px){
+html[data-cta="sys"] body .ab2-t .ab2-go{min-height:2.6rem;margin-top:.4rem !important;padding:.3rem .9rem !important;background:rgba(255,255,255,.07) !important;-webkit-backdrop-filter:blur(12px) saturate(1.5);backdrop-filter:blur(12px) saturate(1.5);border:1px solid rgba(255,255,255,.42) !important;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 12px rgba(0,0,0,.12);color:#fff !important;text-shadow:0 1px 4px rgba(0,0,0,.6);font-size:.95rem !important}
+html[data-cta="sys"] body .ab2-t:is(:hover,:focus-visible,:active) .ab2-go{background:rgba(255,255,255,.2) !important}
+}
+@media (min-width:750px){
+html[data-cta="sys"] body .ab2-t .ab2-go{background:transparent !important;border:0 !important;padding:.8rem 0 !important;margin-top:.2rem !important;color:#cf4a25 !important;font-size:1.25rem !important}
+html[data-cta="sys"] body .ab2-t:is(:hover,:focus-visible) .ab2-go{color:#a8371a !important}
+}
+/* Tap targets */
+html[data-cta="sys"] body :is(.atelier-chip,.product__whatsapp-button){min-height:4.4rem;display:inline-flex;align-items:center}
+
+/* ---------- selector bar ---------- */
+.cm-bar{position:fixed;left:0;right:0;bottom:6.4rem;z-index:2147483000;background:#14213d;color:#fff;padding:.9rem max(1.6rem,env(safe-area-inset-right,0px)) .9rem max(1.6rem,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:.8rem;box-shadow:0 -2px 12px rgba(0,0,0,.25);font-family:inherit}
+.cm-note{margin:0;font-size:1.3rem;line-height:1.4;color:#d9d0c3;min-height:5.4rem}
+.cm-btns{display:flex;gap:.6rem}
+.cm-btn{flex:1 1 0;min-height:4.4rem;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;font:inherit;font-size:1.25rem;font-weight:600;cursor:pointer;border-radius:.4rem;padding:.6rem .4rem}
+.cm-btn.is-on{background:#cf4a25;border-color:#cf4a25}
+.cm-btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+body.cm-on{padding-bottom:24rem}
+</style>
+<script>
+(function(){
+  if(window.__cmInit) return; window.__cmInit=true;
+  var KEY='eod-cta-mock2', on=false, cur='a';
+  try{ if(/[?&](ctamock|view=cta-mock)/.test(location.search)) sessionStorage.setItem(KEY,(sessionStorage.getItem(KEY)||'a')); on=sessionStorage.getItem(KEY)!==null; cur=sessionStorage.getItem(KEY)||'a'; }catch(e){ on=/[?&](ctamock|view=cta-mock)/.test(location.search); }
+  if(!on) return;
+  var root=document.documentElement;
+  var notes={
+    a:"Today, as it is on the live site. Home buttons are thin outlines with small regular text. Buy Now is solid coral, Check out is navy.",
+    b:"Minimal fix. Only the faint home buttons get stronger: full navy, bold, 44px tall. Product page, cart, tiles and hero stay as they are.",
+    c:"Full system. Buy = solid coral (Buy Now, sticky Buy, Check out). Option = outline (Add to the bag, View cart, bundle). Link = coral text with an arrow (every other call to action). Glass = small translucent pill, only on photos."
+  };
+  var bar=document.createElement('div'); bar.className='cm-bar'; bar.setAttribute('role','group'); bar.setAttribute('aria-label','Button options');
+  bar.innerHTML='<p class="cm-note" aria-live="polite"></p><div class="cm-btns"><button type="button" class="cm-btn" data-opt="a">A. Today</button><button type="button" class="cm-btn" data-opt="b">B. Minimal fix</button><button type="button" class="cm-btn" data-opt="c">C. Full system</button></div>';
+  function labels(sys){
+    [].forEach.call(document.querySelectorAll('.ab2-go'),function(e){if(!e.hasAttribute('data-orig'))e.setAttribute('data-orig',e.textContent);e.textContent=sys?'View all →':e.getAttribute('data-orig');});
+    [].forEach.call(document.querySelectorAll('.cb-cta,.bd-cta,.rf-cta'),function(e){if(e.children.length)return;if(!e.hasAttribute('data-orig'))e.setAttribute('data-orig',e.textContent);var o=e.getAttribute('data-orig').trim();e.textContent=(sys&&o.indexOf('→')<0)?o+' →':e.getAttribute('data-orig');});
+  }
+  function show(k){
+    cur=k; root.removeAttribute('data-cta');
+    if(k==='b'){root.setAttribute('data-cta','min');}
+    if(k==='c'){root.setAttribute('data-cta','sys');}
+    labels(k==='c');
+    try{sessionStorage.setItem(KEY,k);}catch(e){}
+    [].forEach.call(bar.querySelectorAll('.cm-btn'),function(b){var s=b.getAttribute('data-opt')===k;b.classList.toggle('is-on',s);b.setAttribute('aria-pressed',s?'true':'false')});
+    bar.querySelector('.cm-note').textContent=notes[k];
+  }
+  function mount(){ document.body.classList.add('cm-on'); document.body.appendChild(bar); [].forEach.call(bar.querySelectorAll('.cm-btn'),function(b){b.addEventListener('click',function(){show(b.getAttribute('data-opt'))})}); show(cur); }
+  if(document.body){mount();}else{document.addEventListener('DOMContentLoaded',mount);}
+})();
+</script>
+{% schema %}
+{
+  "name": "CTA mockup",
+  "settings": [],
+  "presets": [{"name": "CTA mockup"}]
+}
+{% endschema %}

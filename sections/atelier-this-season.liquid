@@ -1,14 +1,67 @@
 {{ 'section-atelier-this-season.css' | asset_url | stylesheet_tag }}
+{{ 'atelier-box-card.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign limit        = section.settings.products_to_show
-  assign coll         = section.settings.collection
-  assign picked       = section.settings.best_sellers
-  assign n            = 0
+  assign is_grid = false
+  if section.settings.layout == 'grid'
+    assign is_grid = true
+  endif
+
+  assign boxed = false
+  if section.settings.card_style == 'boxed' and is_grid == false
+    assign boxed = true
+  endif
+
+  assign limit = section.settings.products_to_show
+  if is_grid
+    assign limit = 4
+  endif
+
+  assign coll   = section.settings.collection
+  assign picked = section.settings.best_sellers
+  assign n      = 0
+  assign included_ids = ','
+  assign sid = section.id
 -%}
+
+{%- unless is_grid -%}
+{%- style -%}
+  #AtelierSeason-{{ sid }} .as-head { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 2.8rem; }
+  #AtelierSeason-{{ sid }} .as-title { font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(2.6rem, 3.4vw, 3.6rem); line-height: 1.15; margin: 0; }
+  #AtelierSeason-{{ sid }} .as-title em { font-style: italic; color: var(--a-ochre); }
+  #AtelierSeason-{{ sid }} .as-rule { display: block; width: 4rem; height: 2px; background: var(--a-ochre); margin-top: 1.2rem; }
+  #AtelierSeason-{{ sid }} .as-sub { margin: 1rem 0 0; font-size: 1.4rem; color: var(--a-muted); }
+  #AtelierSeason-{{ sid }} .atelier-season__nav { display: none; }
+  #AtelierSeason-{{ sid }} .atelier-season__rail { display: flex; gap: 1.2rem; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -1.5rem; padding-inline: 1.5rem; scrollbar-width: none; }
+  #AtelierSeason-{{ sid }} .atelier-season__rail::-webkit-scrollbar { display: none; }
+  #AtelierSeason-{{ sid }} .atelier-season__rail > * { flex: 0 0 calc((100% - 1.2rem) / 1.35); min-width: 0; scroll-snap-align: start; }
+  #AtelierSeason-{{ sid }} .as-bar { display: none; }
+  #AtelierSeason-{{ sid }} .as-bar.is-on { display: block; position: relative; width: 12rem; height: 3px; margin: 2rem auto 0; background: var(--a-hairline); border-radius: 3px; }
+  .as-bar__thumb { position: absolute; top: 0; left: 0; height: 100%; background: var(--a-ochre); border-radius: 3px; }
+  @media screen and (min-width: 750px) {
+    #AtelierSeason-{{ sid }} .atelier-season__rail > * { flex-basis: calc((100% - 1.2rem) / 2.4); }
+  }
+  @media screen and (min-width: 990px) {
+    #AtelierSeason-{{ sid }} .atelier-season__nav { display: flex; position: absolute; right: 0; bottom: 0; }
+    #AtelierSeason-{{ sid }} .atelier-season__rail { gap: 1.6rem; margin-inline: 0; padding-inline: 0; }
+    #AtelierSeason-{{ sid }} .atelier-season__rail > * { flex-basis: calc((100% - 3.2rem) / 3.3); }
+  }
+{%- endstyle -%}
+{%- endunless -%}
 
 <div class="atelier-season color-{{ section.settings.color_scheme }} a-section" id="AtelierSeason-{{ section.id }}">
   <div class="page-width">
+    {%- unless is_grid -%}
+      <div class="as-head">
+        <h2 class="as-title">{{ section.settings.heading_lead }} <em>{{ section.settings.heading_accent }}</em></h2>
+        <span class="as-rule" aria-hidden="true"></span>
+        {%- if section.settings.subtext != blank -%}<p class="as-sub">{{ section.settings.subtext }}</p>{%- endif -%}
+        <nav class="atelier-season__nav" aria-label="Scroll new additions">
+          <button class="atelier-season__btn" id="SeasonPrev-{{ section.id }}" aria-label="Previous">←</button>
+          <button class="atelier-season__btn" id="SeasonNext-{{ section.id }}" aria-label="Next">→</button>
+        </nav>
+      </div>
+    {%- else -%}
     <div class="atelier-season__head">
       <div>
         {%- if section.settings.eyebrow != blank -%}
@@ -16,49 +69,115 @@
         {%- endif -%}
         <h2 class="atelier-season__title">{{ section.settings.title }}</h2>
       </div>
-      <nav class="atelier-season__nav" aria-label="{{ 'sections.featured_collection.see_all' | t }}">
-        <button class="atelier-season__btn" id="SeasonPrev-{{ section.id }}" aria-label="Previous">←</button>
-        <button class="atelier-season__btn" id="SeasonNext-{{ section.id }}" aria-label="Next">→</button>
-      </nav>
+      {%- if section.settings.show_all_tile -%}
+        <a href="{{ coll.url | default: routes.all_products_collection_url }}" class="atelier-season__view-all">
+          {{ section.settings.all_title | default: 'View all →' }}
+        </a>
+      {%- endif -%}
     </div>
+    {%- endunless -%}
 
-    <div class="atelier-season__rail" id="SeasonRail-{{ section.id }}">
+    <div class="{% if is_grid %}atelier-season__grid{% else %}atelier-season__rail{% endif %}" id="SeasonRail-{{ section.id }}">
 
       {%- if picked.count > 0 -%}
-        {%- comment %} Source 1: explicit picks from the Theme Editor product_list setting {%- endcomment -%}
         {%- for product in picked limit: limit -%}
           {%- assign n = n | plus: 1 -%}
-          {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
-          {% render 'atelier-product-card', product: product, number: num %}
+          {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+          {%- if is_grid -%}
+            {%- liquid
+              assign grid_class = ''
+              if n == 1
+                assign grid_class = 'atelier-season__grid-item--featured'
+              elsif n == limit
+                assign grid_class = 'atelier-season__grid-item--wide'
+              endif
+            -%}
+            <div class="atelier-season__grid-item {{ grid_class }}">
+              {% render 'atelier-product-card', product: product %}
+            </div>
+          {%- else -%}
+            {% render 'atelier-season-card', product: product, boxed: boxed %}
+          {%- endif -%}
         {%- endfor -%}
 
       {%- else -%}
-        {%- comment %} Source 2: scan all products for custom.best_seller = true {%- endcomment -%}
         {%- for product in collections.all.products -%}
           {%- if product.metafields.custom.best_seller.value == true -%}
             {%- assign n = n | plus: 1 -%}
-            {%- assign num = n | prepend: '0' | slice: -2, 2 -%}
-            {% render 'atelier-product-card', product: product, number: num %}
+            {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+            {%- if is_grid -%}
+              {%- liquid
+                assign grid_class = ''
+                if n == 1
+                  assign grid_class = 'atelier-season__grid-item--featured'
+                elsif n == limit
+                  assign grid_class = 'atelier-season__grid-item--wide'
+                endif
+              -%}
+              <div class="atelier-season__grid-item {{ grid_class }}">
+                {% render 'atelier-product-card', product: product %}
+              </div>
+            {%- else -%}
+              {% render 'atelier-season-card', product: product, boxed: boxed %}
+            {%- endif -%}
             {%- if n >= limit -%}{%- break -%}{%- endif -%}
           {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
 
       {%- if n == 0 -%}
-        {%- comment %} Source 3: fall back to the collection setting {%- endcomment -%}
         {%- for product in coll.products limit: limit -%}
-          {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
-          {% render 'atelier-product-card', product: product, number: num %}
-        {%- else -%}
-          {%- for i in (1..5) -%}
-            <div class="atelier-pcard">
-              <div class="atelier-pcard__media">{{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}</div>
+          {%- assign n = n | plus: 1 -%}
+          {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+          {%- if is_grid -%}
+            {%- liquid
+              assign grid_class = ''
+              if forloop.index == 1
+                assign grid_class = 'atelier-season__grid-item--featured'
+              elsif forloop.index == limit
+                assign grid_class = 'atelier-season__grid-item--wide'
+              endif
+            -%}
+            <div class="atelier-season__grid-item {{ grid_class }}">
+              {% render 'atelier-product-card', product: product %}
             </div>
-          {%- endfor -%}
+          {%- else -%}
+            {% render 'atelier-season-card', product: product, boxed: boxed %}
+          {%- endif -%}
+        {%- else -%}
+          {%- unless is_grid -%}
+            {%- for i in (1..5) -%}
+              <div class="atelier-pcard">
+                <div class="atelier-pcard__media">{{ 'product-apparel-1' | placeholder_svg_tag: 'atelier-pcard__placeholder' }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
         {%- endfor -%}
       {%- endif -%}
 
-      {%- if section.settings.show_all_tile -%}
+      {%- if is_grid and n < limit -%}
+        {%- for product in collections.all.products -%}
+          {%- if n >= limit -%}{%- break -%}{%- endif -%}
+          {%- assign pid_token = product.id | prepend: ',' | append: ',' -%}
+          {%- unless included_ids contains pid_token -%}
+            {%- assign n = n | plus: 1 -%}
+            {%- assign included_ids = included_ids | append: product.id | append: ',' -%}
+            {%- liquid
+              assign grid_class = ''
+              if n == 1
+                assign grid_class = 'atelier-season__grid-item--featured'
+              elsif n == limit
+                assign grid_class = 'atelier-season__grid-item--wide'
+              endif
+            -%}
+            <div class="atelier-season__grid-item {{ grid_class }}">
+              {% render 'atelier-product-card', product: product %}
+            </div>
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- if section.settings.show_all_tile and is_grid == false -%}
         <a href="{{ coll.url | default: routes.all_products_collection_url }}" class="atelier-season__all a-anim">
           {% render 'atelier-eyebrow', text: section.settings.all_eyebrow %}
           <h3 class="atelier-season__all-title">{{ section.settings.all_title }}</h3>
@@ -67,99 +186,73 @@
       {%- endif -%}
 
     </div>
+    {%- unless is_grid -%}
+      <div class="as-bar" id="AsBar-{{ sid }}" aria-hidden="true"><span class="as-bar__thumb"></span></div>
+    {%- endunless -%}
   </div>
 </div>
 
-<script>
-(function(){
-  var rail = document.getElementById('SeasonRail-{{ section.id }}');
-  var prev = document.getElementById('SeasonPrev-{{ section.id }}');
-  var next = document.getElementById('SeasonNext-{{ section.id }}');
-  if (!rail || !prev || !next) return;
-  function getStep() {
-    var card = rail.querySelector('.atelier-pcard');
-    if (!card) return rail.offsetWidth * 0.8;
-    return card.offsetWidth + parseInt(getComputedStyle(rail).columnGap || 0, 10);
-  }
-  prev.addEventListener('click', function() { rail.scrollBy({ left: -getStep(), behavior: 'smooth' }); });
-  next.addEventListener('click', function() { rail.scrollBy({ left:  getStep(), behavior: 'smooth' }); });
-  function updateButtons() {
-    prev.disabled = rail.scrollLeft <= 4;
-    next.disabled = rail.scrollLeft + rail.offsetWidth >= rail.scrollWidth - 4;
-  }
-  rail.addEventListener('scroll', updateButtons, { passive: true });
-  updateButtons();
-})();
-</script>
+{%- unless is_grid -%}
+  <script>
+  (function(){
+    var rail = document.getElementById('SeasonRail-{{ sid }}');
+    var prev = document.getElementById('SeasonPrev-{{ sid }}');
+    var next = document.getElementById('SeasonNext-{{ sid }}');
+    var bar = document.getElementById('AsBar-{{ sid }}');
+    if (!rail) return;
+    var thumb = bar && bar.querySelector('.as-bar__thumb');
+    function getStep() {
+      var card = rail.querySelector('.atelier-pcard, .abx-wrap');
+      if (!card) return rail.offsetWidth * 0.8;
+      return card.offsetWidth + parseInt(getComputedStyle(rail).columnGap || 0, 10);
+    }
+    function update() {
+      if (prev && next) {
+        prev.disabled = rail.scrollLeft <= 4;
+        next.disabled = rail.scrollLeft + rail.offsetWidth >= rail.scrollWidth - 4;
+      }
+      if (bar && thumb) {
+        var over = rail.scrollWidth > rail.clientWidth + 4;
+        bar.classList.toggle('is-on', over);
+        if (over) {
+          var ratio = rail.clientWidth / rail.scrollWidth;
+          var tw = Math.max(ratio * bar.clientWidth, 24);
+          var max = rail.scrollWidth - rail.clientWidth;
+          thumb.style.width = tw + 'px';
+          thumb.style.transform = 'translateX(' + ((rail.scrollLeft / max) * (bar.clientWidth - tw)) + 'px)';
+        }
+      }
+    }
+    if (prev) prev.addEventListener('click', function() { rail.scrollBy({ left: -getStep(), behavior: 'smooth' }); });
+    if (next) next.addEventListener('click', function() { rail.scrollBy({ left:  getStep(), behavior: 'smooth' }); });
+    rail.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+    setTimeout(update, 400);
+  })();
+  </script>
+{%- endunless -%}
 
 {% schema %}
 {
   "name": "Atelier This Season",
   "tag": "section",
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "This Season"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "title",
-      "label": "Title",
-      "default": "Considered, <em>not collected.</em>"
-    },
-    {
-      "type": "product_list",
-      "id": "best_sellers",
-      "label": "Best Sellers",
-      "info": "Pick products here to feature them. Alternatively, toggle 'Best Seller' on each product in Shopify Admin → Products — the section will auto-include them.",
-      "limit": 20
-    },
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "Fallback collection",
-      "info": "Shown only when no Best Sellers are set above."
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 4,
-      "max": 20,
-      "step": 1,
-      "default": 10,
-      "label": "Max products to show"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_all_tile",
-      "label": "Show \"full shop\" tile",
-      "default": false
-    },
-    {
-      "type": "text",
-      "id": "all_eyebrow",
-      "label": "Tile eyebrow",
-      "default": "Everything"
-    },
-    {
-      "type": "text",
-      "id": "all_title",
-      "label": "Tile title",
-      "default": "The full shop →"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    }
+    { "type": "select", "id": "layout", "label": "Layout", "options": [ { "value": "rail", "label": "Horizontal scroll rail" }, { "value": "grid", "label": "Editorial grid" } ], "default": "rail", "info": "Editorial grid always shows exactly 4 products, ignoring Max products to show." },
+    { "type": "text", "id": "heading_lead", "label": "Heading - plain part", "default": "New" },
+    { "type": "text", "id": "heading_accent", "label": "Heading - accent word", "default": "additions" },
+    { "type": "text", "id": "subtext", "label": "Sub line", "default": "Freshly made, just added to the shop." },
+    { "type": "select", "id": "card_style", "label": "Card style (rail only)", "options": [ { "value": "boxed", "label": "Boxed (frame, details, View piece button)" }, { "value": "plain", "label": "Plain (image, name, price)" } ], "default": "plain" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (grid layout only)", "default": "This Season" },
+    { "type": "inline_richtext", "id": "title", "label": "Title (grid layout only)", "default": "Considered, <em>not collected.</em>" },
+    { "type": "product_list", "id": "best_sellers", "label": "Products", "info": "Pick products here to feature them. Alternatively, toggle 'Best Seller' on each product in Shopify Admin.", "limit": 20 },
+    { "type": "collection", "id": "collection", "label": "Fallback collection", "info": "Shown only when no products are set above. Also used for the full shop tile." },
+    { "type": "range", "id": "products_to_show", "min": 4, "max": 20, "step": 1, "default": 10, "label": "Max products to show" },
+    { "type": "checkbox", "id": "show_all_tile", "label": "Show \"full shop\" tile", "default": false },
+    { "type": "text", "id": "all_eyebrow", "label": "Tile eyebrow", "default": "Everything" },
+    { "type": "text", "id": "all_title", "label": "Tile title", "default": "The full shop →" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
   ],
-  "presets": [
-    {
-      "name": "Atelier This Season"
-    }
-  ]
+  "presets": [ { "name": "Atelier This Season" } ]
 }
 {% endschema %}

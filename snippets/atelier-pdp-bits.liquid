@@ -1,0 +1,132 @@
+{%- liquid
+  assign mf = product.metafields.atelier
+-%}
+<style>
+.atl-dl{display:grid;grid-template-columns:9rem 1fr;gap:.6rem 1.2rem;margin:0;font-size:1.4rem}
+.atl-dl dt{color:rgba(var(--color-foreground),.6)}
+.atl-dl dd{margin:0}
+@media(max-width:749px){.atl-dl{grid-template-columns:7rem 1fr}}
+</style>
+{%- case part -%}
+{%- when 'style' -%}<style>
+#MainContent{--font-heading-family:{{ settings.type_header_font.family }},{{ settings.type_header_font.fallback_families }};--font-heading-style:{{ settings.type_header_font.style }};--font-heading-weight:{{ settings.type_header_font.weight }};--font-body-family:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }};--font-body-style:{{ settings.type_body_font.style }};--font-body-weight:{{ settings.type_body_font.weight }};--font-body-weight-bold:{{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};font-family:var(--font-body-family)}#MainContent h1,#MainContent h2,#MainContent h3,#MainContent h4,#MainContent h5,#MainContent .h0,#MainContent .h1,#MainContent .h2,#MainContent .h3,#MainContent .h4,#MainContent .h5{letter-spacing:calc(var(--font-heading-scale)*.06rem)}
+.atl-dims{margin:0 0 2.4rem;padding:0;border:0}.atl-dims[data-size]:not(.is-on){display:none}.atl-dims svg{display:block;width:100%;max-width:38rem;height:auto;margin:.4rem 0 0;color:rgb(var(--color-foreground))}.atl-dims g.sh *{vector-effect:non-scaling-stroke}.atl-dims text{font-family:var(--font-body-family);font-size:11px;fill:currentColor;letter-spacing:.04em}.atl-dims__cap{display:flex;gap:2.4rem;margin:.6rem 0 0;font-size:1.2rem;color:rgba(var(--color-foreground),.7)}.atl-dims__cap b{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:1rem;margin-right:.6rem;color:rgba(var(--color-foreground),.6)}
+.atl-eye{font-family:var(--font-body-family);font-size:1.2rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--a-ochre);margin:0 0 1.4rem;line-height:1.2}
+.atl-h1{font-family:var(--font-heading-family);font-weight:400;font-size:clamp(3.4rem,4.6vw,5.4rem);line-height:1.04;letter-spacing:var(--a-display-tracking);margin:0;text-wrap:balance}
+.atl-h1 em{font-style:italic;color:var(--a-ochre)}.atl-h1__sub{display:block;margin-top:.8rem;font-size:.42em;font-style:italic;opacity:.65;letter-spacing:0}
+.atl-rule{display:block;width:4rem;height:2px;background:var(--a-ochre);margin:2rem 0 1.8rem}
+.atl-tag2{font-family:var(--font-heading-family);font-style:italic;font-size:2.1rem;line-height:1.35;color:rgba(var(--color-foreground),.7);margin:0 0 2rem;max-width:42ch}
+.product .price{font-family:var(--font-heading-family)}
+.product .price .price-item{font-size:3.2rem;font-weight:400;letter-spacing:var(--a-display-tracking)}
+.atl-facts2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem 3rem;margin:2rem 0 2.4rem;padding-top:2rem;border-top:1px solid rgba(var(--color-foreground),.2)}
+.atl-facts2 dt{font-size:1rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(var(--color-foreground),.6);margin:0 0 .6rem}
+.atl-facts2 dd{margin:0;font-family:var(--font-heading-family);font-size:1.8rem;line-height:1.25}
+.atl-trust{display:flex;margin:2.4rem 0 0;background:rgba(var(--color-foreground),.05);padding:1.4rem 0}
+.atl-trust div{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:.8rem;padding:0 1rem;border-left:1px solid rgba(var(--color-foreground),.2);min-width:0}
+.atl-trust div:first-child{border-left:0}
+.atl-trust svg{width:2rem;height:2rem;flex-shrink:0;color:var(--a-ochre)}
+.atl-trust span{font-size:1.05rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.3}
+.product .product-form__buttons .button--secondary,.product .product__whatsapp-button{border-radius:0;font-size:1.2rem;letter-spacing:.18em;text-transform:uppercase}
+.product .accordion__title{font-size:1.2rem;letter-spacing:.14em}
+.atl-helpbox{margin:3.2rem 0 0;padding-top:2.4rem;border-top:1px solid rgba(var(--color-foreground),.2)}
+.atl-helpbox p{margin:0}
+.atl-helpbox .atl-eye{margin-bottom:.6rem}
+.atl-helpbox .atl-hsub{font-family:var(--font-heading-family);font-size:2.4rem;line-height:1.15}
+.atl-helpbox .atl-hsub em{font-style:italic;color:var(--a-ochre)}
+@media(max-width:749px){.atl-facts2{gap:1.2rem}.atl-facts2 dd{font-size:1.5rem}.atl-tag2{font-size:1.8rem}.atl-trust span{font-size:.95rem;letter-spacing:.04em}.atl-trust div{flex-direction:column;gap:.4rem;text-align:center;padding:0 .4rem}.product .price .price-item{font-size:2.6rem}}
+@media(min-width:750px){html[data-pdp-d="2"] [id^="MainProduct-"],html[data-pdp-d="2"] [class*="color-scheme-"]:has([id^="MainProduct-"]){background:#f5f2eb!important}html[data-pdp-d="2"] .product__media-wrapper .product__media-item .media{background:#fff}html[data-pdp-d="2"] .product__media-wrapper .media,html[data-pdp-d="2"] .product__media-wrapper img{border-radius:var(--a-radius-image,.6rem)}html[data-pdp-d="2"] .atl-trust{background:#fff}}@media(max-width:749px){html[data-pdp-m="2"] [id^="MainProduct-"],html[data-pdp-m="2"] [class*="color-scheme-"]:has([id^="MainProduct-"]){background:#f5f2eb!important}html[data-pdp-m="2"] .product__media-wrapper .product__media-item .media{background:#fff}html[data-pdp-m="2"] .product__media-wrapper .media,html[data-pdp-m="2"] .product__media-wrapper img{border-radius:var(--a-radius-image,.6rem)}html[data-pdp-m="2"] .atl-trust{background:#fff}}@media(min-width:750px){html[data-pdp-d="3"] [id^="MainProduct-"],html[data-pdp-d="3"] [class*="color-scheme-"]:has([id^="MainProduct-"]){background:#14213d!important;color:#fff;--color-foreground:255,255,255;--color-background:20,33,61}html[data-pdp-d="3"] .product__media-wrapper .media,html[data-pdp-d="3"] .product__media-wrapper img{border-radius:var(--a-radius-image,.6rem)}html[data-pdp-d="3"] .product .product-form__input--pill input[type=radio]+label{color:#fff!important;border-color:rgba(255,255,255,.4)!important}html[data-pdp-d="3"] .product .product-form__input--pill input[type=radio]:checked+label{background:#fff!important;color:#14213d!important}html[data-pdp-d="3"] .product .accordion{border-color:rgba(255,255,255,.2)}html[data-pdp-d="3"] .product .caption-with-letter-spacing,html[data-pdp-d="3"] .product .form__label{color:rgba(255,255,255,.7)!important}html[data-pdp-d="3"] .atl-eye{color:var(--a-ochre-light)}html[data-pdp-d="3"] .atl-h1 em,html[data-pdp-d="3"] .atl-helpbox .atl-hsub em{color:var(--a-ochre-light)}}@media(max-width:749px){html[data-pdp-m="3"] [id^="MainProduct-"],html[data-pdp-m="3"] [class*="color-scheme-"]:has([id^="MainProduct-"]){background:#14213d!important;color:#fff;--color-foreground:255,255,255;--color-background:20,33,61}html[data-pdp-m="3"] .product__media-wrapper .media,html[data-pdp-m="3"] .product__media-wrapper img{border-radius:var(--a-radius-image,.6rem)}html[data-pdp-m="3"] .product .product-form__input--pill input[type=radio]+label{color:#fff!important;border-color:rgba(255,255,255,.4)!important}html[data-pdp-m="3"] .product .product-form__input--pill input[type=radio]:checked+label{background:#fff!important;color:#14213d!important}html[data-pdp-m="3"] .product .accordion{border-color:rgba(255,255,255,.2)}html[data-pdp-m="3"] .product .caption-with-letter-spacing,html[data-pdp-m="3"] .product .form__label{color:rgba(255,255,255,.7)!important}html[data-pdp-m="3"] .atl-eye{color:var(--a-ochre-light)}html[data-pdp-m="3"] .atl-h1 em,html[data-pdp-m="3"] .atl-helpbox .atl-hsub em{color:var(--a-ochre-light)}}</style>
+{%- when 'eyebrow' -%}{%- assign city = mf.origin | split: ',' | first -%}<p class="atl-eye">{{ product.type }}{%- if city != blank %} · {{ city }}{%- endif -%}</p>
+{%- when 'title' -%}{%- assign tparts = product.title | split: ',' -%}{%- assign tmain = tparts[0] -%}{%- assign tw = tmain | split: ' ' -%}<h1 class="atl-h1">{%- for w in tw -%}{%- if forloop.last and tw.size > 1 -%}<em>{{ w }}</em>{%- else -%}{{ w }} {%- endif -%}{%- endfor -%}{%- if tparts.size > 1 -%}<span class="atl-h1__sub">{{ tparts[1] | strip }}</span>{%- endif -%}</h1>
+{%- when 'rule' -%}<span class="atl-rule"></span>
+{%- when 'tagline2' -%}{%- if mf.tagline != blank -%}<p class="atl-tag2">{{ mf.tagline }}</p>{%- endif -%}
+{%- when 'facts2' -%}<dl class="atl-facts2">{%- if mf.material_text != blank -%}<div><dt>Material</dt><dd>{{ mf.material_text }}</dd></div>{%- endif -%}{%- if mf.finish_text != blank -%}<div><dt>Surface</dt><dd>{{ mf.finish_text }}</dd></div>{%- endif -%}{%- if mf.craft != blank -%}<div><dt>Craft</dt><dd>{{ mf.craft | split: ',' | first }}</dd></div>{%- endif -%}{%- assign ocity = mf.origin | split: ',' | first -%}{%- if ocity != blank -%}<div><dt>Made in</dt><dd>{{ ocity }}</dd></div>{%- endif -%}</dl>
+{%- assign sel = product.selected_or_first_available_variant.option1 | downcase -%}
+{%- assign ents = mf.size_text | split: '||' -%}
+{%- for ent in ents -%}
+{%- assign ent = ent | strip -%}
+{%- assign lab = '' -%}{%- assign rest = ent -%}
+{%- if ent contains ': ' -%}{%- assign lab = ent | split: ': ' | first | strip -%}{%- assign rest = ent | remove_first: lab | remove_first: ': ' -%}{%- endif -%}
+{%- assign labd = lab | downcase -%}
+{%- assign sz = rest | replace: '×', 'x' | split: ' · ' -%}
+{%- assign dstr = sz[0] | remove: ' cm' | remove: 'cm' -%}
+{%- assign dp = dstr | split: ' x ' -%}
+{%- if dp.size >= 3 -%}
+{%- assign dl = dp[0] | strip | plus: 0.0 -%}{%- assign db = dp[1] | strip -%}{%- assign dh = dp[2] | strip | plus: 0.0 -%}
+{%- if dl > 0 and dh > 0 -%}
+{%- assign key = product.title | append: ' ' | append: product.type | downcase -%}
+{%- assign shape = 'block' -%}
+{%- if key contains 'tree' -%}{%- assign shape = 'tree' -%}{%- elsif key contains 'ekam' or key contains 'metal urli' -%}{%- assign shape = 'ekam' -%}{%- elsif key contains 'flame' -%}{%- assign shape = 'flame' -%}{%- elsif key contains 'rose' -%}{%- assign shape = 'rose' -%}{%- elsif key contains '3 tier' -%}{%- assign shape = 'tier3' -%}{%- elsif key contains 'flower candle' -%}{%- assign shape = 'flowerstand' -%}{%- elsif key contains 'urli' or key contains 'bowl' -%}{%- assign shape = 'bowl' -%}{%- elsif key contains 'round bud' -%}{%- assign shape = 'bud' -%}{%- elsif key contains 'long-neck' -%}{%- assign shape = 'longneck' -%}{%- elsif key contains 'imber tall' -%}{%- assign shape = 'ovoid' -%}{%- elsif key contains 'aurum' -%}{%- assign shape = 'bottle' -%}{%- elsif key contains 'elio' -%}{%- assign shape = 'cone' -%}{%- elsif key contains 'globe' -%}{%- assign shape = 'globe' -%}{%- elsif key contains 'vase' -%}{%- assign shape = 'vase' -%}{%- elsif key contains 'candle' or key contains 'holder' or key contains 'stand' -%}{%- assign shape = 'stand' -%}{%- endif -%}
+{%- assign r = dl | divided_by: dh -%}
+{%- if r >= 1.3 -%}{%- assign bw = 150.0 -%}{%- assign bh = 150.0 | divided_by: r -%}{%- else -%}{%- assign bh = 115.0 -%}{%- assign bw = r | times: 115.0 -%}{%- endif -%}
+{%- assign bw = bw | at_least: 16 -%}{%- assign bh = bh | at_least: 16 -%}
+{%- assign bx = 300.0 | minus: bw | divided_by: 2.0 -%}
+{%- assign by = 132.0 | minus: bh -%}
+{%- assign sx = bw | divided_by: 100.0 -%}{%- assign sy = bh | divided_by: 100.0 -%}
+{%- assign bxr = bx | plus: bw -%}
+{%- assign hx = bx | minus: 16 -%}{%- assign hlx = bx | minus: 24 -%}
+{%- assign hmid = bh | divided_by: 2.0 | plus: by -%}
+{%- assign bot = by | plus: bh -%}
+<figure class="atl-dims{% if lab == blank or labd == sel %} is-on{% endif %}"{% if lab != blank %} data-size="{{ labd }}"{% endif %}><p class="atl-eye" style="margin-bottom:.4rem">Dimensions{% if lab != blank %} · {{ lab }}{% endif %}</p>
+<svg viewBox="0 0 300 180" role="img" aria-label="{{ product.title | escape }} dimensions: {{ dp[0] | strip }} by {{ db }} by {{ dp[2] | strip }} centimetres">
+<g class="sh" transform="translate({{ bx }} {{ by }}) scale({{ sx }} {{ sy }})" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+{%- case shape -%}
+{%- when 'tree' -%}<path d="M50.0 5.0 A16.0 16.0 0 0 1 75.4 9.6 A13.2 13.2 0 0 1 92.8 22.0 A10.3 10.3 0 0 1 96.5 38.1 A11.5 11.5 0 0 1 85.5 53.0 A14.9 14.9 0 0 1 63.2 61.8 A16.4 16.4 0 0 1 36.8 61.8 A14.9 14.9 0 0 1 14.5 53.0 A11.5 11.5 0 0 1 3.5 38.1 A10.3 10.3 0 0 1 7.2 22.0 A13.2 13.2 0 0 1 24.6 9.6 A16.0 16.0 0 0 1 50.0 5.0Z"/><path fill="none" d="M43 62 Q44 78 36 92 M57 62 Q56 78 64 92"/><rect x="24" y="92" width="52" height="8"/>
+{%- when 'ekam' -%}<path d="M4 0 H96 Q100 0 100 18 C100 58 82 88 66 100 H34 C18 88 0 58 0 18 Q0 0 4 0Z"/><path fill="none" d="M0.5 26 Q50 34 99.5 26"/>
+{%- when 'flame' -%}<path d="M30 100 Q29 82 50 80 Q71 82 70 100Z M29.9 84 Q21.9 62.5 1 50 Q12.6 71.5 37.1 84 Z M35.4 84 Q33 53.4 15 28 Q21 58.6 42.6 84 Z M40.9 84 Q43.6 45.8 30 10 Q30.9 48.2 48.1 84 Z M46.4 84 Q56.5 42 50 0 Q43.5 42 53.6 84 Z M51.9 84 Q69.1 48.2 70 10 Q56.4 45.8 59.1 84 Z M57.4 84 Q79 58.6 85 28 Q67 53.4 64.6 84 Z M62.9 84 Q87.4 71.5 99 50 Q78.1 62.5 70.1 84 Z"/>
+{%- when 'rose' -%}<path d="M28 7 L35 0 L43 7 L50 0 L57 7 L65 0 L72 7 Q70 22 50 26 Q30 22 28 7Z"/><path d="M47 26 H53 V78 H47Z"/><path d="M47 44 Q30 32 14 38 Q30 50 47 50Z M53 36 Q72 22 90 28 Q74 42 53 42Z"/><path d="M0 100 Q6 80 36 74 L50 71 L64 74 Q94 78 100 92 Q76 90 56 97 Q38 102 0 100Z"/>
+{%- when 'flowerstand' -%}<path d="M38 4 Q40.2 14.8 51.2 13 L68.8 13 Q79.8 14.8 82 4 Z"/><path d="M0 42 Q2 52.8 12 51 L28 51 Q38 52.8 40 42 Z"/><path d="M53 38 Q54.5 47.6 62 46 L74 46 Q81.5 47.6 83 38 Z"/><path d="M38 74 Q40.2 84.8 51.2 83 L68.8 83 Q79.8 84.8 82 74 Z"/><path d="M58 10 H62 V76 H58Z"/><path d="M58 22 Q74 12 100 14 Q84 26 60 26Z M58 30 Q40 26 28 38 Q44 40 58 36Z"/><path d="M62 56 Q76 50 92 56 Q78 64 62 62Z M58 50 Q46 44 34 50 Q46 56 58 56Z"/><path fill="none" d="M20 48 Q36 56 58 62 M60 84 Q40 90 24 100 M60 84 Q62 94 56 100 M60 84 Q82 90 94 100"/>
+{%- when 'tier3' -%}<path d="M18 90 H100 V97 H18Z"/><circle cx="20" cy="100" r="2.6"/><circle cx="98" cy="100" r="2.6"/><circle cx="82" cy="100" r="2.6"/><path d="M0 64 Q1.3 72.4 8.1 71 L18.9 71 Q25.6 72.4 27 64 Z"/><path d="M28 28 Q29.4 36.4 36.1 35 L46.9 35 Q53.6 36.4 55 28 Z"/><path d="M66 0 Q67.3 8.4 74.1 7 L84.9 7 Q91.7 8.4 93 0 Z"/><path fill="none" stroke-width="2" d="M13.5 72 C14 84 22 90 34 90 M34 90 C32 74 40 58 48 46 C55 36 62 28 70 18 C74 12 76 9 79.5 7 M41.5 36 C44 40 47 43 50 44 M79.5 8 C90 8 98 14 94 22 C92 26 86 26 85 22"/><path d="M50 52 Q58 44 66 52 Q58 58 50 52Z M62 30 Q70 22 76 30 Q70 36 62 30Z M22 80 Q28 72 36 78 Q30 86 22 80Z"/>
+{%- when 'bowl' -%}<path d="M0 24 H100 L92 60 Q84 88 50 88 Q16 88 8 60Z"/><path fill="none" d="M10 36 H90"/><path d="M34 88 H66 V100 H34Z"/>
+{%- when 'globe' -%}<path d="M38 0 H62 L60 9.9 A50 45.5 0 1 1 40 9.9Z"/>
+{%- when 'bud' -%}<path d="M43 0 H57 L56 16.3 A50 42 0 1 1 44 16.3Z"/>
+{%- when 'longneck' -%}<path d="M45 0 H55 C55.4 8 56 16 57 24 C58.5 34 62 43 72 50 C77 53 81 54.5 85 56 A50 26 0 1 1 15 56 C19 54.5 23 53 28 50 C38 43 41.5 34 43 24 C44 16 44.6 8 45 0Z"/>
+{%- when 'ovoid' -%}<path d="M27 0 H73 L72 3 Q68 6 68 9 C92 14 100 26 100 43 C100 65 86 88 68 100 H32 C14 88 0 65 0 43 C0 26 8 14 32 9 Q32 6 28 3Z"/>
+{%- when 'bottle' -%}<path d="M31.5 0 H68.5 L69.5 14 C77 22 85 30 86 38.5 L100 85 Q100 100 78 100 H22 Q0 100 0 85 L14 38.5 C15 30 23 22 30.5 14Z"/><path fill="none" d="M14 38.5 H86 M4.2 72 H95.8"/>
+{%- when 'cone' -%}<path d="M21 5 C21 1.5 35 0 50 0 C65 0 79 1.5 79 5 L98 82 C100 93 92 100 78 100 H22 C8 100 0 93 2 82Z"/><path fill="none" d="M19 13 Q50 18 81 13 M2.5 89 Q50 96 97.5 89"/><ellipse cx="50" cy="5" rx="28" ry="4.5" fill="none"/>
+{%- when 'vase' -%}<path d="M40 0 H60 L58 16 Q92 32 92 66 Q92 100 70 100 H30 Q8 100 8 66 Q8 32 42 16Z"/>
+{%- when 'stand' -%}<path d="M22 0 H78 L70 20 H30Z"/><rect x="46" y="20" width="8" height="62"/><path d="M18 100 Q22 82 50 80 Q78 82 82 100Z"/>
+{%- else -%}<rect x="0" y="0" width="100" height="100" rx="4"/>
+{%- endcase -%}
+</g>
+<g stroke="var(--a-ochre)" stroke-width="1" fill="none">
+<line x1="{{ bx }}" y1="148" x2="{{ bxr }}" y2="148"/><line x1="{{ bx }}" y1="143" x2="{{ bx }}" y2="153"/><line x1="{{ bxr }}" y1="143" x2="{{ bxr }}" y2="153"/>
+<line x1="{{ hx }}" y1="{{ by }}" x2="{{ hx }}" y2="{{ bot }}"/><line x1="{{ hx | minus: 5 }}" y1="{{ by }}" x2="{{ hx | plus: 5 }}" y2="{{ by }}"/><line x1="{{ hx | minus: 5 }}" y1="{{ bot }}" x2="{{ hx | plus: 5 }}" y2="{{ bot }}"/>
+</g>
+<text x="150" y="168" text-anchor="middle">{% if dp[0] == dp[1] %}Ø {% endif %}{{ dp[0] | strip }} cm</text>
+<text transform="rotate(-90 {{ hlx }} {{ hmid }})" x="{{ hlx }}" y="{{ hmid }}" text-anchor="middle">{{ dp[2] | strip }} cm</text>
+</svg>
+<figcaption class="atl-dims__cap">{%- if dp[0] != dp[1] -%}<span><b>Depth</b>{{ db }} cm</span>{%- endif -%}{%- if sz[1] != blank -%}<span><b>Weight</b>{{ sz[1] | strip | remove: 'kg' | strip }} kg</span>{%- endif -%}</figcaption></figure>
+{%- endif -%}{%- endif -%}
+{%- endfor -%}
+{%- if ents.size > 1 -%}<script>document.addEventListener('change',function(e){var t=e.target;if(!t||!t.matches||!t.matches('variant-selects input[type=radio]'))return;var v=String(t.value).toLowerCase();document.querySelectorAll('.atl-dims[data-size]').forEach(function(f){f.classList.toggle('is-on',f.getAttribute('data-size')===v)})});</script>{%- endif -%}
+{%- when 'trust' -%}{%- capture nrv -%}{%- render 'atelier-returns', part: 'flag', product: product -%}{%- endcapture -%}{%- assign nrv = nrv | strip -%}<div class="atl-trust" data-nr="{{ nrv }}"><div>{{- 'icon-truck.svg' | inline_asset_content -}}<span>Free shipping</span></div><div>{{- 'icon-return.svg' | inline_asset_content -}}<span class="ret-y">Easy 7-day returns</span><span class="ret-n">Replaced if damaged</span></div><div>{{- 'icon-lock.svg' | inline_asset_content -}}<span>Secured by Razorpay</span></div></div>
+{%- when 'helphead' -%}<div class="atl-helpbox"><p class="atl-eye">Questions?</p><p class="atl-hsub">Need help <em>choosing?</em></p></div>
+{%- when 'acc' -%}
+{%- assign want = items | split: ',' -%}
+{%- for it in want -%}
+{%- assign show = false -%}
+{%- case it -%}
+{%- when 'details' -%}{%- assign head = 'Details' -%}{%- assign show = true -%}
+{%- when 'care' -%}{%- assign head = 'Care' -%}{%- if mf.care != blank -%}{%- assign show = true -%}{%- endif -%}
+{%- when 'inbox' -%}{%- assign head = 'In the box' -%}{%- if mf.in_the_box != blank -%}{%- assign show = true -%}{%- endif -%}
+{%- when 'ship' -%}{%- assign head = 'Shipping & Returns' -%}{%- assign show = true -%}
+{%- endcase -%}
+{%- if show -%}
+<div class="product__accordion accordion quick-add-hidden"><details><summary><div class="summary__title"><h2 class="h4 accordion__title">{{ head }}</h2></div>{{- 'icon-caret.svg' | inline_asset_content -}}</summary>
+<div class="accordion__content rte">
+{%- case it -%}
+{%- when 'details' -%}<dl class="atl-dl">
+{%- if mf.material_text != blank -%}<dt>Material</dt><dd>{{ mf.material_text }}</dd>{%- endif -%}
+{%- if mf.finish_text != blank -%}<dt>Finish</dt><dd>{{ mf.finish_text }}</dd>{%- endif -%}
+{%- if mf.craft != blank -%}<dt>Craft</dt><dd>{{ mf.craft }}</dd>{%- endif -%}
+{%- if mf.origin != blank -%}<dt>Made in</dt><dd>{{ mf.origin }}</dd>{%- endif -%}
+{%- if mf.size_text != blank -%}<dt>Size</dt><dd>{{ mf.size_text | replace: ' || ', '<br>' }}</dd>{%- endif -%}
+</dl>
+{%- when 'care' -%}<p>{{ mf.care | newline_to_br }}</p>
+{%- when 'inbox' -%}<p>{{ mf.in_the_box }}</p>
+{%- when 'ship' -%}{%- capture nrv -%}{%- render 'atelier-returns', part: 'flag', product: product -%}{%- endcapture -%}{%- assign nrv = nrv | strip -%}{%- render 'atelier-returns', part: 'body', nr: nrv, product: product -%}
+{%- endcase -%}
+</div></details></div>
+{%- endif -%}
+{%- endfor -%}
+{%- endcase -%}

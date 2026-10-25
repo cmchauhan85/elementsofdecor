@@ -1,57 +1,202 @@
 {% comment %}
-  Compact milestone-incentive line for the PDP, shown near the buy buttons
-  so Buy Now shoppers (who skip the cart page entirely) still see the same
-  gift-tier incentive as the cart's milestone ribbon.
+  Rendered right after the buy-buttons form on the PDP.
+  The old gift-tier incentive line was removed on 11 Oct 2026 (placeholders).
 
-  Reads the shared `reward_tier` metaobject (single source of truth with
-  the cart ribbon and the Complete-the-Look tool) — no data duplicated
-  here. Renders nothing if the metaobject doesn't exist yet.
+  Now also holds the back-in-stock capture card. It is a REAL Shopify contact form
+  ({% raw %}{% form 'contact' %}{% endraw %}) so Shopify adds its captcha token itself; a hand-built
+  fetch() to /contact is rejected with "Missing CAPTCHA token". Hidden until the
+  selected variant is sold out (atelier-pdp-sticky.js toggles it and fills the
+  hidden product/variant fields on submit). Submissions land in the store contact
+  inbox. Only rendered when the product has at least one sold-out variant.
 
-  Estimates "if you buy this now": cart total + this product's current
-  variant price, at page load. Doesn't live-recompute on quantity/variant
-  change (would need JS) — directionally correct for the common qty-1 case.
+  Also renders the natural-materials note (14 Oct 2026). Text comes from the product metafield
+  atelier.material_note (Shopify admin > product > Metafields > Material note). When that is blank
+  the general placeholder text below is shown. To hide the note on a product, tick the metafield
+  atelier.hide_material_note ("Hide material note"). atelier-pdp-sticky.js moves the note under the
+  "Hand-finished" microcopy.
 
-  Accepts:
-  - product: {Object} the current product.
+  Also adds a green "5% off" label under the "Set of 2" size pill (14 Oct 2026). Set of 2 variants are virtual
+  (built from two single variants, priced at their sum minus 5%) and are excluded from the bundle
+  discounts, so this label is the only discount message for them.
 
-  Usage:
-  {% render 'atelier-pdp-milestone', product: product %}
+  Also shows the size of EACH piece when "Set of 2" is selected (14 Oct 2026). The product metafield
+  atelier.size_text carries an extra entry such as "Set of 2: 6 inch + 9 inch"; the page then shows the
+  dimension figures of those two sizes and lists both sizes in the one-line size under the price.
+
+  Also holds the desktop gallery thumbnail row (decided 14 Oct 2026, option B): one row, 5 visible, arrows
+  for the rest. Phones keep their own swipe row.
+
+  Also holds the phone tap-target sizes for the PDP (14 Oct 2026): buttons and links at least 44px high.
 {% endcomment %}
 {%- liquid
-  assign meta_tiers = shop.metaobjects.reward_tier.values
-  if meta_tiers.size == 0
-    assign skip = true
-  endif
+  assign nm_any = false
+  assign has_set = false
+  for v in product.variants
+    unless v.available
+      assign nm_any = true
+    endunless
+    assign v_start = v.title | slice: 0, 8
+    if v_start == 'Set of 2'
+      assign has_set = true
+    endif
+  endfor
+  assign mat_note = product.metafields.atelier.material_note
+  assign hide_note = product.metafields.atelier.hide_material_note.value
+  assign set_parts = ''
+  assign size_ents = product.metafields.atelier.size_text | split: '||'
+  for ent in size_ents
+    assign e = ent | strip
+    assign e_start = e | downcase | slice: 0, 8
+    if e_start == 'set of 2' and e contains ': '
+      assign set_parts = e | split: ': ' | last | strip | downcase | replace: ' + ', '|'
+    endif
+  endfor
 -%}
-{%- unless skip -%}
-  {%- liquid
-    assign sorted = meta_tiers | sort: 'threshold'
-    assign variant_price = product.selected_or_first_available_variant.price | default: 0
-    assign projected_total = cart.total_price | plus: variant_price | divided_by: 100.0
-
-    assign next_threshold = 0
-    assign next_label = ''
-    for t in sorted
-      assign th = t.threshold.value
-      if projected_total < th and next_threshold == 0
-        assign next_threshold = th
-        assign next_label = t.label.value
-      endif
-    endfor
-  -%}
-  {%- if next_threshold > 0 -%}
-    {%- liquid
-      assign remaining = next_threshold | minus: projected_total
-      assign remaining_money = remaining | times: 100 | money
-    -%}
-    <p class="atelier-pdp-milestone">
-      <span class="svg-wrapper">{{- 'icon-discount.svg' | inline_asset_content -}}</span>
-      Add {{ remaining_money }} more (with this item) to unlock <strong>{{ next_label }}</strong>
-    </p>
-  {%- else -%}
-    <p class="atelier-pdp-milestone is-earned">
-      <span class="svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>
-      With this item, you've unlocked every order gift.
-    </p>
-  {%- endif -%}
+{%- unless hide_note -%}
+<div class="pdp-natnote">
+  <strong>A note on natural materials</strong>
+  <span>
+    {%- if mat_note != blank -%}
+      {{ mat_note | escape | newline_to_br }}
+    {%- else -%}
+      Natural materials vary slightly. Small differences in colour, grain and finish are part of what makes each piece one of a kind.
+    {%- endif -%}
+  </span>
+</div>
 {%- endunless -%}
+{%- if has_set -%}
+<style>
+  .pdp-setoff{display:block;margin:.5rem 0 0;font-size:1.3rem;font-weight:700;letter-spacing:.02em;color:#2f6b4f}
+</style>
+<script>
+  (function () {
+    function run() {
+      var vs = document.querySelector('.product__info-container variant-selects');
+      if (!vs) return;
+      [].forEach.call(vs.querySelectorAll('input[type=radio]'), function (i) {
+        if (!/^Set of 2/i.test(i.value)) return;
+        var fs = i.closest('fieldset');
+        if (!fs || fs.parentNode.querySelector('.pdp-setoff')) return;
+        var t = document.createElement('span');
+        t.className = 'pdp-setoff';
+        t.textContent = '5% off';
+        fs.parentNode.insertBefore(t, fs.nextSibling);
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+    document.addEventListener('change', function () { setTimeout(run, 60); });
+  })();
+</script>
+{%- endif -%}
+{%- if has_set and set_parts != blank -%}
+<style>
+  .pdp-size .pdp-size__row{display:block}
+</style>
+<script>
+  (function () {
+    var parts = '{{ set_parts | escape }}'.split('|');
+    function isSetSelected() {
+      var on = false;
+      [].forEach.call(document.querySelectorAll('variant-selects input[type=radio]:checked'), function (i) {
+        if (/^Set of 2/i.test(i.value)) on = true;
+      });
+      return on;
+    }
+    function dimText(f) {
+      var t = f.textContent || '';
+      var nums = (t.match(/[0-9.]+ cm/g) || []).map(function (x) { return x.replace(' cm', ''); });
+      var kg = (t.match(/[0-9.]+ kg/) || [''])[0];
+      if (nums.length < 2) return '';
+      var round = /Ø/.test(t);
+      if (nums.length === 3 && nums[0] === nums[2]) { nums = [nums[0], nums[1]]; round = true; }
+      if (round) nums[0] = 'Ø ' + nums[0];
+      return nums.join(' × ') + ' cm' + (kg ? ' · ' + kg : '');
+    }
+    function apply() {
+      if (!isSetSelected()) return;
+      var figs = [].slice.call(document.querySelectorAll('.atl-dims[data-size]'));
+      figs.forEach(function (f) { f.classList.toggle('is-on', parts.indexOf(f.getAttribute('data-size')) > -1); });
+      var line = document.querySelector('.pdp-size');
+      if (!line) return;
+      var rows = parts.map(function (p) {
+        var f = figs.filter(function (x) { return x.getAttribute('data-size') === p; })[0];
+        return f ? [p, dimText(f)] : null;
+      }).filter(function (r) { return r && r[1]; });
+      if (!rows.length) return;
+      line.hidden = false;
+      line.textContent = '';
+      rows.forEach(function (r, i) {
+        var s = document.createElement('span');
+        s.className = 'pdp-size__row';
+        s.textContent = (i === 0 ? 'Size ' : '') + r[0] + ': ' + r[1];
+        line.appendChild(s);
+      });
+    }
+    function later() { [90, 250].forEach(function (ms) { setTimeout(apply, ms); }); }
+    document.addEventListener('change', function (e) {
+      if (e.target && e.target.matches && e.target.matches('variant-selects input[type=radio]')) later();
+    });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', later); else later();
+    window.addEventListener('load', later);
+  })();
+</script>
+{%- endif -%}
+<style>
+  @media screen and (min-width: 750px) {
+    .thumbnail-slider { position: relative; }
+    .thumbnail-list.slider { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; scroll-snap-type: x mandatory; gap: 1rem !important; scrollbar-width: none; scroll-behavior: smooth; }
+    .thumbnail-list.slider::-webkit-scrollbar { display: none; }
+    .thumbnail-list .thumbnail-list__item { flex: 0 0 calc((100% - 4rem) / 5) !important; max-width: none !important; width: auto !important; scroll-snap-align: start; }
+    .gm-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 3.6rem; height: 3.6rem; border: 1px solid #d9d0c3; border-radius: 50%; background: #fff; color: #14213d; font-size: 1.8rem; line-height: 1; cursor: pointer; box-shadow: 0 2px 8px rgba(20,33,61,.15); }
+    .gm-arrow--l { left: -1.4rem; }
+    .gm-arrow--r { right: -1.4rem; }
+  }
+  @media screen and (max-width: 749px) { .gm-arrow { display: none; } }
+
+  /* Phone tap targets: at least 44px high */
+  @media screen and (max-width: 749px) {
+    body .product__buy-buttons button { min-height: 4.8rem !important; }
+    body .atelier-pdp-sticky .atelier-pdp-sticky__submit, body .atelier-pdp-sticky .atelier-pdp-sticky__buy { height: 44px !important; }
+    body .atelier-delivery-estimate__input, body .atelier-delivery-estimate__submit { min-height: 4.4rem; }
+    html body .product__info-container a.product__whatsapp-button.button.button--secondary { min-height: 44px !important; display: inline-flex; align-items: center; }
+    body .slider-button { min-width: 4.4rem; min-height: 4.4rem; }
+    body .abx-btn.cl-add { min-height: 4.4rem; padding-inline: 1.4rem; }
+  }
+</style>
+<script>
+  (function () {
+    function arrows() {
+      var sl = document.querySelector('.thumbnail-slider');
+      var list = sl && sl.querySelector('.thumbnail-list');
+      if (!sl || !list || sl.querySelector('.gm-arrow')) return;
+      [['l', '‹', -1], ['r', '›', 1]].forEach(function (a) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'gm-arrow gm-arrow--' + a[0];
+        b.textContent = a[1];
+        b.setAttribute('aria-label', a[0] === 'l' ? 'Previous images' : 'More images');
+        b.addEventListener('click', function () { list.scrollBy({ left: a[2] * list.clientWidth * 0.8, behavior: 'smooth' }); });
+        sl.appendChild(b);
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrows); else arrows();
+  })();
+</script>
+{%- if nm_any -%}
+  <div class="atl-nm" data-nm hidden>
+    {%- form 'contact', id: 'AtlNotifyMe', class: 'atl-nm__form', return_to: product.url -%}
+      <div class="atl-nm__ask">
+        <p class="atl-nm__t">Sold out right now</p>
+        <p class="atl-nm__s">Leave your email and we’ll tell you the day it’s back.</p>
+        <input type="hidden" name="contact[Product]" value="{{ product.title | escape }}" data-nm-product>
+        <input type="hidden" name="contact[body]" value="Notify me when back in stock: {{ product.title | escape }}" data-nm-body>
+        <div class="atl-nm__row">
+          <input class="atl-nm__in" type="email" name="contact[email]" placeholder="Your email" autocomplete="email" required aria-label="Email for back-in-stock alert">
+          <button class="atl-nm__b" type="submit">Notify me</button>
+        </div>
+        <p class="atl-nm__err" hidden></p>
+      </div>
+      <p class="atl-nm__ok" hidden>Done — we’ll email you the day it’s back.</p>
+    {%- endform -%}
+  </div>
+{%- endif -%}

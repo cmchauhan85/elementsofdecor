@@ -27,9 +27,6 @@
     "more": {
       "type": "atelier-notes",
       "settings": {
-        "eyebrow": "More from the field",
-        "title": "More from the field",
-        "posts_to_show": 3,
         "color_scheme": "scheme-1"
       }
     }

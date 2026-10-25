@@ -20,12 +20,16 @@
           }
         },
         "title": {
-          "type": "title",
-          "settings": {}
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'title' %}"
+          }
         },
         "rating": {
-          "type": "rating",
-          "settings": {}
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"jdgm-widget jdgm-preview-badge\" data-id=\"{{ product.id }}\">{{ product.metafields.judgeme.badge }}</div>"
+          }
         },
         "price": {
           "type": "price",
@@ -41,13 +45,6 @@
             "heading_2": "Easy returns",
             "icon_3": "lock",
             "heading_3": "Secured by Razorpay"
-          }
-        },
-        "material_notice": {
-          "type": "text",
-          "settings": {
-            "text": "Handmade from natural materials — wood grain, stone veining, and finish can vary slightly from piece to piece. This is a mark of genuine craftsmanship, not a flaw.",
-            "text_style": "subtitle"
           }
         },
         "variant_picker": {
@@ -68,13 +65,6 @@
             "show_gift_card_recipient": true
           }
         },
-        "whatsapp_button": {
-          "type": "whatsapp_button",
-          "settings": {
-            "label": "Chat with us on WhatsApp",
-            "message": "Hi! I'm interested in"
-          }
-        },
         "dispatch": {
           "type": "dispatch",
           "settings": {
@@ -87,6 +77,31 @@
             "label": "Check delivery estimate"
           }
         },
+        "whatsapp_button": {
+          "type": "whatsapp_button",
+          "settings": {
+            "label": "Shop on WhatsApp",
+            "message": "Hi! I'm interested in"
+          }
+        },
+        "call_button": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign call_no = settings.whatsapp_number | remove: ' ' | remove: '-' | remove: '+' -%}{%- if call_no != blank -%}<a href=\"tel:+{{ call_no }}\" class=\"product__whatsapp-button button button--secondary atl-call-btn\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z\"/></svg>&nbsp;Shop on Phone Call</a><style>.product__whatsapp-button{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;box-sizing:border-box}.atl-call-btn{margin-top:1rem}</style>{%- endif -%}"
+          }
+        },
+        "store_visit": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"atl-pdp-note\"><strong>Visit our experience store</strong><span>Aranya Vilas, Udaipur.</span></div><style>.atl-pdp-note{display:flex;flex-direction:column;gap:.3rem;margin:1.6rem 0 0;padding:1.2rem 1.6rem;border-left:2px solid rgba(var(--color-foreground),.35);font-size:1.4rem;line-height:1.5}.atl-pdp-note strong{font-weight:600;letter-spacing:.02em}.atl-pdp-box{margin:1.6rem 0 0;padding:1.6rem;background:rgba(var(--color-foreground),.05);font-size:1.3rem;line-height:1.6}.atl-pdp-box strong{display:block;margin-bottom:.4rem;font-size:1.4rem}.atl-pdp-box a{text-decoration:underline;text-underline-offset:3px}</style>"
+          }
+        },
+        "bulk_gst": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"atl-pdp-box\"><strong>Need bulk pricing or a GST invoice?</strong>For bulk or corporate orders, message us on WhatsApp at +91 63530 52025 or write to <a href=\"mailto:support@elementsofdecor.com\">support@elementsofdecor.com</a>. For a GST invoice, email your GST details and order ID to the same address.</div>"
+          }
+        },
         "description": {
           "type": "description",
           "settings": {}
@@ -97,39 +112,97 @@
             "share_label": "Share"
           }
         },
-        "care": {
-          "type": "collapsible_tab",
+        "badge": {
+          "type": "custom_liquid",
           "settings": {
-            "heading": "Care",
-            "icon": "washing",
-            "content": "<p>Wipe with a clean dry cloth. Avoid prolonged exposure to water or acidic liquids, which can etch the surface. For marble, a food-safe stone sealer applied once a year keeps the material looking its best. For brass, a light coat of mineral oil returns the warm lustre.</p>"
+            "custom_liquid": "<script>(function(){var h=document.documentElement;h.setAttribute('data-pdp-d','2');h.setAttribute('data-pdp-m','1')})()</script><style>@media(max-width:749px){.product slider-component[id^='GalleryViewer'] .product__media-list{margin:0!important;padding:0!important;column-gap:0!important}.product .product__media-list .product__media-item{width:100%!important;min-width:100%!important;max-width:100%!important;margin:0!important;padding:0!important}.product .product__media-wrapper .media{height:0!important;padding-top:100%!important;padding-bottom:0!important;border-radius:0!important;background:#fff}.product .product__media-wrapper .media>img,.product .product__media-wrapper .media>video{object-fit:contain!important;border-radius:0!important}}.product a.product__whatsapp-button,.product .atl-call-btn{background:none!important;box-shadow:none!important;border:0!important;width:auto!important;min-height:0!important;display:inline-flex!important;justify-content:flex-start!important;padding:.6rem 0!important;margin:.4rem 1.8rem 0 0!important;color:rgb(var(--color-foreground))!important;font-size:1.3rem!important;text-decoration:underline;text-underline-offset:.4rem}.product a.product__whatsapp-button::before,.product a.product__whatsapp-button::after,.product .atl-call-btn::before,.product .atl-call-btn::after{display:none!important}.atelier-pdp-crumb{display:none!important}.product .price__sale s,.product .price__sale .price-item--regular,.product .price__badge-sale,.atelier-pdp-sticky s,.atelier-pdp-sticky .price__badge-sale{display:none!important}.atl-lives{margin:0 0 2.4rem}.atl-lives ul{display:flex;flex-wrap:wrap;gap:.8rem;margin:.4rem 0 0;padding:0;list-style:none}.atl-lives li{padding:.6rem 1.3rem;border:1px solid #d9d0c3;border-radius:2rem;background:#fff;font-size:1.3rem;line-height:1.2;color:#14213d}</style>"
           }
         },
-        "shipping": {
-          "type": "collapsible_tab",
+        "style": {
+          "type": "custom_liquid",
           "settings": {
-            "heading": "Shipping & Returns",
-            "icon": "truck",
-            "content": "<p>All our pieces are held as ready stock — not made to order — so orders ship within 2-4 business days of purchase. Each piece is carefully packed and cushioned for transit. If something arrives damaged, contact us within 48 hours with photos and we'll arrange a replacement or refund. Once an item sells out, it's removed from sale until the next batch of stock arrives.</p>"
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'style', opt: '1' %}"
+          }
+        },
+        "eyebrow": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'eyebrow' %}"
+          }
+        },
+        "rule": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'rule' %}"
+          }
+        },
+        "tagline2": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'tagline2' %}"
+          }
+        },
+        "facts2": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'facts2' %}"
+          }
+        },
+        "trust": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'trust' %}"
+          }
+        },
+        "helphead": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'helphead' %}"
+          }
+        },
+        "acc": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{% render 'atelier-pdp-bits', part: 'acc', items: 'details,care,inbox,ship' %}"
+          }
+        },
+        "lives": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "{%- assign raw = product.metafields.atelier.styling | newline_to_br | replace: '<br />', ',' | split: ',' -%}{%- capture lis -%}{%- for i in raw -%}{%- assign t = i | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}{%- endcapture -%}{%- if lis != blank -%}<div class=\"atl-lives\"><p class=\"atl-eye\">Where it lives</p><ul>{{ lis }}</ul></div>{%- endif -%}"
+          }
+        },
+        "vsel": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<style>.product .product-form__input--pill input[type=radio]:checked+label.atelier-swatch-dot{background:none!important;color:inherit!important;border:0!important;box-shadow:none!important}.product fieldset.product-form__input--pill legend[data-val]::after{content:' \\00b7  ' attr(data-val);color:#14213d;font-weight:600;letter-spacing:.06em;text-transform:none;font-size:1.3rem}.product .atelier-design-selector legend::after{content:none!important}.product variant-selects .product-form__input{margin:0 0 2.2rem}.product .product-form__input--pill input.disabled+label.atelier-swatch-dot .atelier-swatch-dot__circle{opacity:.35}.product .product-form__input--pill input.disabled+label.atelier-swatch-dot .atelier-swatch-dot__name{text-decoration:line-through;opacity:.6}html[data-vs=\"1\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input[type=radio]+label:not(.atelier-swatch-dot){background:#fff!important;border:1px solid #d9d0c3!important;border-radius:0!important;color:#14213d!important;min-width:8rem;padding:1.1rem 1.6rem!important;box-shadow:none!important}html[data-vs=\"1\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input[type=radio]:checked+label:not(.atelier-swatch-dot){border-color:#14213d!important;box-shadow:inset 0 0 0 1px #14213d!important;background:#fff!important;color:#14213d!important}html[data-vs=\"1\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input[type=radio]:checked+label .product-option__price{color:#cf4a25!important;opacity:1!important}html[data-vs=\"1\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input.disabled+label:not(.atelier-swatch-dot){opacity:.5;background:#f5f2eb!important}html[data-vs=\"1\"] .product label.atelier-swatch-dot{margin:.8rem 1.8rem .4rem 0!important}html[data-vs=\"1\"] .product .atelier-swatch-dot__circle{width:4.4rem;height:4.4rem}html[data-vs=\"1\"] .product .atelier-design-selector .atelier-swatch-dot__circle{width:6.4rem;height:6.4rem;border-radius:.6rem}html[data-vs=\"1\"] .product .atelier-design-selector{margin-top:2.2rem;padding-top:2rem}html[data-vs=\"2\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector):not(:has(.atelier-swatch-dot)){display:grid!important;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1rem}html[data-vs=\"2\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) legend{grid-column:1/-1}html[data-vs=\"2\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input[type=radio]+label:not(.atelier-swatch-dot){display:flex!important;flex-direction:column!important;align-items:flex-start!important;text-align:left!important;gap:.5rem!important;margin:0!important;padding:1.4rem 1.6rem!important;border:1px solid #d9d0c3!important;border-radius:.6rem!important;background:#fff!important;font-family:var(--font-heading-family)!important;font-size:2rem!important;font-weight:400!important;color:#14213d!important;box-shadow:none!important}html[data-vs=\"2\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input[type=radio]+label .product-option__price{font-family:var(--font-body-family);font-size:1.3rem}html[data-vs=\"2\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input[type=radio]:checked+label:not(.atelier-swatch-dot){border-color:#cf4a25!important;box-shadow:inset 0 0 0 1px #cf4a25!important;background:rgba(207,74,37,.05)!important}html[data-vs=\"2\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input[type=radio]:checked+label .product-option__price{color:#cf4a25!important;opacity:1!important}html[data-vs=\"2\"] .product fieldset.product-form__input--pill:not(.atelier-design-selector) input.disabled+label:not(.atelier-swatch-dot){opacity:.5;background:#f5f2eb!important}html[data-vs=\"2\"] .product label.atelier-swatch-dot{margin:.8rem 1rem .4rem 0!important;padding:1rem 1.2rem!important;border:1px solid #d9d0c3!important;border-radius:.6rem!important;background:#fff!important}html[data-vs=\"2\"] .product input[type=radio]:checked+label.atelier-swatch-dot{border:1px solid #cf4a25!important;box-shadow:inset 0 0 0 1px #cf4a25!important;background:rgba(207,74,37,.05)!important}html[data-vs=\"2\"] .product .atelier-swatch-dot__circle{width:4.8rem;height:4.8rem;outline:0!important}html[data-vs=\"2\"] .product .atelier-design-selector .product-form__radio-group{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(8.8rem,1fr));gap:1rem!important}html[data-vs=\"2\"] .product .atelier-design-selector .atelier-swatch-dot{padding:.8rem!important;border:1px solid #d9d0c3!important;border-radius:.6rem!important;margin:0!important;background:#fff!important}html[data-vs=\"2\"] .product .atelier-design-selector .atelier-swatch-dot.is-current{border-color:#cf4a25!important;box-shadow:inset 0 0 0 1px #cf4a25!important}html[data-vs=\"2\"] .product .atelier-design-selector .atelier-swatch-dot__circle{width:100%;height:auto;aspect-ratio:1;border-radius:.4rem;outline:0!important}</style><script>(function(){var h=document.documentElement;h.setAttribute('data-vs-d','2');h.setAttribute('data-vs-m','1');var mq=window.matchMedia('(min-width:750px)');function sync(){h.setAttribute('data-vs',h.getAttribute(mq.matches?'data-vs-d':'data-vs-m'))}sync();mq.addEventListener?mq.addEventListener('change',sync):mq.addListener(sync);function clean(v){return String(v).replace(/\\s*\\([^)]*\\)\\s*$/,'').trim()}function short(v){var p=clean(v).split(/\\s*&\\s*/);if(p.length>1){var q=p.filter(function(x){return !/^gold$/i.test(x)});if(q.length)return q.join(' & ')}return clean(v)}function ap(){document.querySelectorAll('variant-selects fieldset.product-form__input--pill').forEach(function(fs){var l=fs.querySelector('legend'),c=fs.querySelector('input:checked');if(!l||!c)return;var lab=fs.querySelector('label[for=\"'+c.id+'\"]');var isSw=lab&&lab.classList.contains('atelier-swatch-dot');var v;if(isSw){v=clean(c.value)}else{if(lab&&lab.firstChild&&lab.firstChild.nodeType===3){var t=lab.firstChild.textContent.trim();v=t}else{v=c.value}}l.setAttribute('data-val',v)});document.querySelectorAll('variant-selects label.atelier-swatch-dot').forEach(function(lb){var i=document.getElementById(lb.getAttribute('for'));if(!i)return;var full=clean(i.value),sh=short(i.value);lb.title=full;var sr=lb.querySelector('span[style]');if(sr&&sr.textContent!==full)sr.textContent=full;var nm=lb.querySelector('.atelier-swatch-dot__name');if(nm&&nm.textContent!==sh)nm.textContent=sh})}var tm;function sch(){clearTimeout(tm);tm=setTimeout(ap,60)}function init(){ap();setTimeout(ap,400);new MutationObserver(sch).observe(document.querySelector('product-info')||document.body,{childList:true,subtree:true})}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})()</script>"
           }
         }
       },
       "block_order": [
-        "vendor",
+        "badge",
+        "vsel",
+        "style",
+        "eyebrow",
         "title",
+        "rule",
+        "tagline2",
         "rating",
         "price",
-        "trust_badges",
-        "material_notice",
+        "facts2",
+        "lives",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "whatsapp_button",
+        "trust",
         "dispatch",
         "delivery_estimate",
         "description",
-        "care",
-        "shipping",
+        "acc",
+        "helphead",
+        "whatsapp_button",
+        "call_button",
+        "bulk_gst",
         "share"
       ],
       "settings": {
@@ -145,16 +218,12 @@
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
-        "padding_bottom": 12
+        "padding_bottom": 24
       }
     },
     "story": {
       "type": "atelier-pdp-story",
-      "settings": {
-        "title": "Every piece has a story.",
-        "body": "<p>Every piece begins as a question — what does this material want to become? Stone has grain, memory, weight. We don’t fight it. We find the form already inside it, then spend weeks coaxing it out. The same is true of metal, worked by hand until it holds a shape it was never forced into.</p><p>Nothing here is stamped from a mould at scale. Every piece that reaches your home was touched, individually, by someone who knew what they were making — and why it mattered to make it well.</p>",
-        "color_scheme": "scheme-2"
-      }
+      "settings": {}
     },
     "specs": {
       "type": "atelier-specs",
@@ -196,21 +265,32 @@
     },
     "material": {
       "type": "atelier-pdp-material",
+      "settings": {}
+    },
+    "store": {
+      "type": "atelier-store-trust",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "custom-liquid",
       "settings": {
-        "default_title": "Marble remembers.",
-        "default_body": "<p>Our white marble is hand-carved in Udaipur, Rajasthan, by artisans working in a stone-carving tradition generations deep. Each block carries millions of years of geological compression rendered visible as veining. We choose only slabs with a particular warmth in their undertone — not pure white, but the ivory that ages gracefully in a lived-in home.</p>",
-        "image": "shopify://shop_images/ChatGPT_Image_Jul_5_2026_03_06_46_PM.png",
-        "stat1_number": "One artisan",
-        "stat1_label": "Start to finish",
-        "stat2_number": "Ready stock",
-        "stat2_label": "Not made to order",
-        "color_scheme": "scheme-3"
+        "custom_liquid": "<div class=\"page-width\" style=\"padding-top:4rem;padding-bottom:4rem\"><div id=\"judgeme_product_reviews\" class=\"jdgm-widget jdgm-review-widget\" data-id=\"{{ product.id }}\">{{ product.metafields.judgeme.widget }}</div></div>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "pairs": {
       "type": "atelier-pairs",
       "settings": {
-        "color_scheme": "scheme-1"
+        "layout": "b",
+        "fallback_collection": "best-sellers"
+      }
+    },
+    "recent": {
+      "type": "atelier-recently-viewed",
+      "settings": {
+        "products_to_show": 4
       }
     }
   },
@@ -219,6 +299,9 @@
     "story",
     "specs",
     "material",
-    "pairs"
+    "store",
+    "pairs",
+    "reviews",
+    "recent"
   ]
 }
