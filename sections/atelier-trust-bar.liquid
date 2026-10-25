@@ -1,38 +1,73 @@
 {{ 'section-atelier-trust-bar.css' | asset_url | stylesheet_tag }}
 
-<div class="atelier-trust-bar color-{{ section.settings.color_scheme }} a-section">
-  <div class="page-width">
+{%- if section.settings.style == 'marquee' -%}
+  <div class="atelier-trust-bar atelier-trust-bar--marquee color-{{ section.settings.color_scheme }}">
     {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
-      <div class="atelier-block__head">
-        {%- if section.settings.eyebrow != blank -%}
-          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
-        {%- endif -%}
-        {%- if section.settings.title != blank -%}
-          <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
-        {%- endif -%}
+      <div class="page-width">
+        <div class="atelier-block__head">
+          {%- if section.settings.eyebrow != blank -%}
+            {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
+        </div>
       </div>
     {%- endif -%}
-
-    <ul class="atelier-trust-bar__grid list-unstyled" role="list">
+    <div class="atelier-trust-bar__marquee-wrap" aria-hidden="true">
+      <div class="atelier-trust-bar__track">
+        {%- for i in (1..2) -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'badge' and block.settings.label != blank -%}
+              <span class="atelier-trust-bar__marquee-item">
+                <span class="atelier-trust-bar__marquee-dot" aria-hidden="true"></span>{{ block.settings.label }}
+              </span>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    <span class="visually-hidden">
       {%- for block in section.blocks -%}
-        {%- if block.type == 'badge' -%}
-          <li
-            class="atelier-trust-bar__item{% if block.settings.hide_on_mobile %} atelier-trust-bar__item--desktop-only{% endif %}"
-            {{ block.shopify_attributes }}
-          >
-            {%- render 'icon-accordion', icon: block.settings.icon -%}
-            <div class="atelier-trust-bar__copy">
-              <strong class="atelier-trust-bar__label">{{ block.settings.label }}</strong>
-              {%- if block.settings.subtext != blank -%}
-                <span class="atelier-trust-bar__subtext">{{ block.settings.subtext }}</span>
-              {%- endif -%}
-            </div>
-          </li>
-        {%- endif -%}
+        {%- if block.type == 'badge' and block.settings.label != blank -%}{{ block.settings.label }}. {%- endif -%}
       {%- endfor -%}
-    </ul>
+    </span>
   </div>
-</div>
+{%- else -%}
+  <div class="atelier-trust-bar color-{{ section.settings.color_scheme }} a-section">
+    <div class="page-width">
+      {%- if section.settings.eyebrow != blank or section.settings.title != blank -%}
+        <div class="atelier-block__head">
+          {%- if section.settings.eyebrow != blank -%}
+            {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="atelier-block__title">{{ section.settings.title }}</h2>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <ul class="atelier-trust-bar__grid list-unstyled" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'badge' -%}
+            <li
+              class="atelier-trust-bar__item{% if block.settings.hide_on_mobile %} atelier-trust-bar__item--desktop-only{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- render 'icon-accordion', icon: block.settings.icon -%}
+              <div class="atelier-trust-bar__copy">
+                <strong class="atelier-trust-bar__label">{{ block.settings.label }}</strong>
+                {%- if block.settings.subtext != blank -%}
+                  <span class="atelier-trust-bar__subtext">{{ block.settings.subtext }}</span>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
 
 {% schema %}
 {
@@ -41,6 +76,16 @@
   "class": "section",
   "max_blocks": 8,
   "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "badges", "label": "Badges (icon + label)" },
+        { "value": "marquee", "label": "Scrolling marquee (text only)" }
+      ],
+      "default": "badges"
+    },
     {
       "type": "text",
       "id": "eyebrow",

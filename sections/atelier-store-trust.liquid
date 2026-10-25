@@ -1,0 +1,53 @@
+{%- liquid
+  assign img = section.settings.image
+-%}
+<style>
+.atl-st{background:#fff;border-top:1px solid #d9d0c3;border-bottom:1px solid #d9d0c3;color:#14213d;padding:2.6rem 0}
+.atl-st__in{display:flex;align-items:center;justify-content:center;gap:2.4rem}
+.atl-st__media{flex:0 0 auto;width:12rem;height:8.4rem;border-radius:.6rem;overflow:hidden;background:#f5f2eb;display:flex;align-items:center;justify-content:center;color:#cf4a25}
+.atl-st__media img{width:100%;height:100%;object-fit:cover;object-position:48% 72%;display:block}
+.atl-st__media svg{width:3.2rem;height:3.2rem}
+.atl-st__copy{min-width:0;max-width:52rem}
+.atl-st__eye{margin:0 0 .6rem;font-size:1.2rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#cf4a25;line-height:1.2}
+.atl-st__h{margin:0;font-family:var(--font-heading-family);font-weight:400;font-size:2.4rem;line-height:1.15}
+.atl-st__h em{font-style:italic;color:#cf4a25}
+.atl-st__p{margin:.6rem 0 0;font-size:1.4rem;line-height:1.55;color:rgba(20,33,61,.78)}
+.atl-st__link{display:inline-block;margin-top:.8rem;font-size:1.3rem;font-weight:600;letter-spacing:.06em;color:#14213d;text-decoration:underline;text-underline-offset:.4rem}
+.atl-st__link:hover{color:#cf4a25}
+@media(max-width:749px){.atl-st{padding:2rem 0}.atl-st__in{gap:1.4rem;align-items:flex-start}.atl-st__media{width:9rem;height:9rem}.atl-st__h{font-size:2rem}.atl-st__p{font-size:1.3rem}}
+</style>
+<div class="atl-st">
+  <div class="page-width atl-st__in">
+    <div class="atl-st__media">
+      {%- if img != blank -%}
+        {{ img | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240, 480', alt: 'Elements of Decor experience store at Aranya Vilas, Udaipur' }}
+      {%- else -%}
+        <img src="https://cdn.shopify.com/s/files/1/0813/9600/7137/files/eod-store-shelf-pieces.jpg?v=1791702320&width=480" srcset="https://cdn.shopify.com/s/files/1/0813/9600/7137/files/eod-store-shelf-pieces.jpg?v=1791702320&width=240 240w, https://cdn.shopify.com/s/files/1/0813/9600/7137/files/eod-store-shelf-pieces.jpg?v=1791702320&width=480 480w" sizes="120px" width="480" height="270" loading="lazy" alt="Elements of Decor experience store at Aranya Vilas, Udaipur">
+      {%- endif -%}
+    </div>
+    <div class="atl-st__copy">
+      <p class="atl-st__eye">{{ section.settings.eyebrow }}</p>
+      <h2 class="atl-st__h">{{ section.settings.heading }}</h2>
+      <p class="atl-st__p">{{ section.settings.text }}</p>
+      {%- if section.settings.link_label != blank -%}
+        <a class="atl-st__link" href="{{ section.settings.link_url | default: '/pages/visit-our-store' }}">{{ section.settings.link_label }} &rarr;</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Store trust strip",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Store photo" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "See it in person" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Visit us in <em>Udaipur.</em>" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Our experience store at Aranya Vilas. Hold the pieces, feel the weight, see the finish for yourself." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Plan your visit" },
+    { "type": "url", "id": "link_url", "label": "Link" }
+  ],
+  "presets": [{ "name": "Store trust strip" }]
+}
+{% endschema %}

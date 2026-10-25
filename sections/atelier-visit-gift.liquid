@@ -1,0 +1,149 @@
+{%- assign sid = section.id -%}
+{%- style -%}
+  .vg-grid { display: grid; gap: 1.6rem; }
+  .vg-panel { position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit; min-width: 0; }
+  .vg-media { overflow: hidden; border-radius: var(--a-radius-image); background: var(--a-stone); aspect-ratio: 16 / 10; position: relative; }
+  .vg-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+  .vg-panel:hover .vg-media img { transform: scale(1.04); }
+  .vg-ph { position: absolute; inset: 0; display: grid; place-items: center; background: repeating-linear-gradient(135deg, rgba(var(--color-foreground), .035) 0 1px, transparent 1px 14px), var(--a-stone); }
+  .vg-ph span { font-family: var(--font-heading-family); font-size: 4rem; letter-spacing: .08em; color: rgba(var(--color-foreground), .35); }
+  .vg-ph i { position: absolute; inset: 14% 12%; border: 1px solid rgba(var(--color-foreground), .25); }
+  .vg-ph i::before, .vg-ph i::after { content: ''; position: absolute; background: rgba(var(--color-foreground), .25); }
+  .vg-ph i::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+  .vg-ph i::after { top: 50%; left: 0; right: 0; height: 1px; }
+  .vg-body { padding: 1.6rem 0 0; display: flex; flex-direction: column; align-items: flex-start; gap: .8rem; }
+  .vg-eyebrow { font-size: 1.1rem; letter-spacing: .18em; text-transform: uppercase; color: var(--a-ochre); }
+  .vg-title { font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(2.4rem, 2.6vw, 3.2rem); line-height: 1.15; margin: 0; }
+  .vg-title em { font-style: italic; color: var(--a-ochre); }
+  .vg-text { margin: 0; font-size: 1.5rem; line-height: 1.6; color: var(--a-muted); max-width: 52rem; }
+  .vg-cta { margin-top: .6rem; font-size: 1.2rem; letter-spacing: .12em; text-transform: uppercase; color: var(--a-ochre); border-bottom: 1px solid currentColor; padding-bottom: .15rem; transition: letter-spacing .2s; }
+  .vg-panel:hover .vg-cta { letter-spacing: .16em; }
+  .vg-arrow { display: none; }
+
+  /* 2: split bands */
+  .vg-sec[data-v="2"] .vg-grid { gap: 0; }
+  .vg-sec[data-v="2"] .vg-panel { padding: 2.4rem 0; border-top: 1px solid var(--a-hairline); }
+  .vg-sec[data-v="2"] .vg-panel:last-child { border-bottom: 1px solid var(--a-hairline); }
+  .vg-sec[data-v="2"] .vg-media { order: -1; margin-bottom: 0; }
+  /* 3: tiles */
+  .vg-sec[data-v="3"] .vg-media { display: none; }
+  .vg-sec[data-v="3"] .vg-panel { background: rgba(var(--color-foreground), .06); border: 1px solid rgba(var(--color-foreground), .14); border-radius: 1.6rem; padding: 2.8rem; min-height: 24rem; justify-content: space-between; }
+  .vg-sec[data-v="3"] .vg-body { padding: 0; flex: 1; }
+  .vg-sec[data-v="3"] .vg-title { font-size: clamp(2.8rem, 3.2vw, 4rem); }
+  .vg-sec[data-v="3"] .vg-cta { display: none; }
+  .vg-sec[data-v="3"] .vg-arrow { display: grid; place-items: center; align-self: flex-end; width: 4.4rem; height: 4.4rem; border: 1px solid var(--a-ochre); border-radius: 50%; color: var(--a-ochre); font-size: 1.8rem; transition: background-color .2s, color .2s; }
+  .vg-sec[data-v="3"] .vg-panel:hover .vg-arrow { background: var(--a-ochre); color: #fff; }
+  /* 4: slim bars */
+  .vg-sec[data-v="4"] .vg-grid { gap: 0; }
+  .vg-sec[data-v="4"] .vg-media, .vg-sec[data-v="4"] .vg-text, .vg-sec[data-v="4"] .vg-cta { display: none; }
+  .vg-sec[data-v="4"] .vg-panel { flex-direction: row; align-items: center; justify-content: space-between; gap: 1.6rem; padding: 2.2rem 0; border-top: 1px solid var(--a-hairline); }
+  .vg-sec[data-v="4"] .vg-panel:last-child { border-bottom: 1px solid var(--a-hairline); }
+  .vg-sec[data-v="4"] .vg-body { padding: 0; gap: .4rem; }
+  .vg-sec[data-v="4"] .vg-arrow { display: grid; place-items: center; flex: 0 0 auto; width: 4rem; height: 4rem; border: 1px solid var(--a-ochre); border-radius: 50%; color: var(--a-ochre); transition: background-color .2s, color .2s; }
+  .vg-sec[data-v="4"] .vg-panel:hover .vg-arrow { background: var(--a-ochre); color: #fff; }
+
+  @media screen and (min-width: 750px) {
+    .vg-sec[data-v="1"] .vg-grid, .vg-sec[data-v="3"] .vg-grid { grid-template-columns: 1fr 1fr; gap: 2.4rem; }
+    .vg-sec[data-v="1"] .vg-media { aspect-ratio: 4 / 3; }
+    .vg-sec[data-v="2"] .vg-panel { flex-direction: row; align-items: center; gap: 6rem; padding: 4rem 0; }
+    .vg-sec[data-v="2"] .vg-media { flex: 0 0 46%; aspect-ratio: 16 / 10; }
+    .vg-sec[data-v="2"] .vg-body { padding: 0; flex: 1; gap: 1.2rem; }
+    .vg-sec[data-v="2"] .vg-panel:nth-child(even) { flex-direction: row-reverse; }
+    .vg-sec[data-v="4"] .vg-title { font-size: clamp(2.8rem, 3.4vw, 4.2rem); }
+  }
+  .vg-sw { display: none; position: sticky; top: 7rem; z-index: 20; justify-content: center; margin-bottom: 1.6rem; }
+  .vg-sw.is-on { display: flex; }
+  .vg-sw__in { display: flex; flex-direction: column; align-items: center; gap: .4rem; background: #1b2540; color: #fff; padding: .7rem 1rem; border-radius: 1.8rem; font-size: 1.2rem; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+  .vg-sw__row { display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: .3rem; }
+  .vg-sw__row.is-off { opacity: .45; }
+  .vg-sw__row b { font-weight: 600; margin-right: .5rem; }
+  .vg-sw__in button { all: unset; cursor: pointer; padding: .3rem .8rem; border-radius: 999px; }
+  .vg-sw__in button[aria-pressed="true"] { background: var(--a-ochre); }
+{%- endstyle -%}
+
+<div class="vg-sec color-{{ section.settings.color_scheme }} a-section" id="vg-{{ sid }}" data-v="{{ section.settings.layout_v }}" data-dv="{{ section.settings.layout_v }}" data-mv="{{ section.settings.layout_m }}">
+  <script>(function(){var r=document.getElementById('vg-{{ sid }}');if(r)r.setAttribute('data-v',innerWidth>=750?r.getAttribute('data-dv'):r.getAttribute('data-mv'));})();</script>
+  <div class="page-width">
+    <div class="vg-sw" id="VgSw-{{ sid }}"><div class="vg-sw__in">
+      <div class="vg-sw__row" data-for="d"><b>Desktop</b><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div>
+      <div class="vg-sw__row" data-for="m"><b>Mobile</b><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div>
+    </div></div>
+    <div class="vg-grid">
+      <a class="vg-panel" href="{{ section.settings.p1_link | default: '#' }}">
+        <div class="vg-media">{%- if section.settings.p1_image != blank -%}{{ section.settings.p1_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '500, 800, 1000', alt: section.settings.p1_title | escape }}{%- else -%}<div class="vg-ph"><i></i><span>ED</span></div>{%- endif -%}</div>
+        <div class="vg-body">
+          <span class="vg-eyebrow">{{ section.settings.p1_eyebrow }}</span>
+          <h2 class="vg-title">{{ section.settings.p1_title }}</h2>
+          <p class="vg-text">{{ section.settings.p1_text }}</p>
+          <span class="vg-cta">{{ section.settings.p1_cta }}</span>
+        </div>
+        <span class="vg-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="vg-panel" href="{{ section.settings.p2_link | default: '#' }}">
+        <div class="vg-media">{%- if section.settings.p2_image != blank -%}{{ section.settings.p2_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '500, 800, 1000', alt: section.settings.p2_title | escape }}{%- else -%}<div class="vg-ph"><i></i><span>ED</span></div>{%- endif -%}</div>
+        <div class="vg-body">
+          <span class="vg-eyebrow">{{ section.settings.p2_eyebrow }}</span>
+          <h2 class="vg-title">{{ section.settings.p2_title }}</h2>
+          <p class="vg-text">{{ section.settings.p2_text }}</p>
+          <span class="vg-cta">{{ section.settings.p2_cta }}</span>
+        </div>
+        <span class="vg-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var root = document.getElementById('vg-{{ sid }}'), sw = document.getElementById('VgSw-{{ sid }}');
+  if (!root) return;
+  function apply(){
+    var d = innerWidth >= 750;
+    root.setAttribute('data-v', d ? root.getAttribute('data-dv') : root.getAttribute('data-mv'));
+    if (sw) sw.querySelectorAll('.vg-sw__row').forEach(function(row){
+      var isD = row.getAttribute('data-for') === 'd';
+      row.classList.toggle('is-off', isD !== d);
+      row.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.v === root.getAttribute(isD ? 'data-dv' : 'data-mv') ? 'true' : 'false'); });
+    });
+  }
+  window.addEventListener('resize', apply);
+  try {
+    var qs = new URLSearchParams(location.search);
+    var preview = (window.Shopify && Shopify.theme && Shopify.theme.role !== 'main') || qs.has('vg');
+    if (sw && preview) {
+      sw.classList.add('is-on');
+      sw.querySelectorAll('.vg-sw__row').forEach(function(row){
+        var key = row.getAttribute('data-for') === 'd' ? 'data-dv' : 'data-mv';
+        row.querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){ root.setAttribute(key, b.dataset.v); apply(); }); });
+      });
+    }
+  } catch (e) {}
+  apply();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Atelier visit + gifting",
+  "tag": "section",
+  "settings": [
+    { "type": "select", "id": "layout_v", "label": "Desktop design", "options": [ { "value": "1", "label": "1 - Twin image cards" }, { "value": "2", "label": "2 - Split bands" }, { "value": "3", "label": "3 - Text tiles" }, { "value": "4", "label": "4 - Slim bars" } ], "default": "1" },
+    { "type": "select", "id": "layout_m", "label": "Mobile design", "options": [ { "value": "1", "label": "1 - Image cards" }, { "value": "2", "label": "2 - Image + text bands" }, { "value": "3", "label": "3 - Text tiles" }, { "value": "4", "label": "4 - Slim bars" } ], "default": "1" },
+    { "type": "header", "content": "Experience Store" },
+    { "type": "text", "id": "p1_eyebrow", "label": "Eyebrow", "default": "Experience Store" },
+    { "type": "inline_richtext", "id": "p1_title", "label": "Title", "default": "See the pieces, <em>in person.</em>" },
+    { "type": "textarea", "id": "p1_text", "label": "Text", "default": "A glass-walled space at the reception of Aranya Vilas, Udaipur. Pick things up, feel the weight of the marble and the finish of the brass, and see how the elements sit together." },
+    { "type": "text", "id": "p1_cta", "label": "Link label", "default": "Plan your visit →" },
+    { "type": "url", "id": "p1_link", "label": "Link" },
+    { "type": "image_picker", "id": "p1_image", "label": "Image" },
+    { "type": "header", "content": "Gifting" },
+    { "type": "text", "id": "p2_eyebrow", "label": "Eyebrow", "default": "Gifting" },
+    { "type": "inline_richtext", "id": "p2_title", "label": "Title", "default": "Gifts that <em>feel,</em> not just look." },
+    { "type": "textarea", "id": "p2_text", "label": "Text", "default": "Handcrafted marble, brass and metal pieces, arriving in our kraft gift box with the ED monogram and a blush thank-you card. For housewarmings, weddings, festivals and teams." },
+    { "type": "text", "id": "p2_cta", "label": "Link label", "default": "Gift in bulk →" },
+    { "type": "url", "id": "p2_link", "label": "Link" },
+    { "type": "image_picker", "id": "p2_image", "label": "Image" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [ { "name": "Atelier visit + gifting" } ]
+}
+{% endschema %}

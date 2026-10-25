@@ -13,92 +13,247 @@
       "type": "atelier-hero",
       "settings": {
         "image": "shopify://shop_images/ChatGPT_Image_May_13_2026_10_23_54_AM.png",
-        "height": "medium",
+        "height": "full",
+        "split_image_caption": "Workshop · Mumbai",
         "eyebrow": "Manifesto · No. 01",
         "heading_line_1": "Home is not styled.",
         "heading_line_2": "It is felt.",
-        "cta_label": "Check our latest designs",
+        "materials_line": "Stone · Metal · Wood · Ceramic · Fabric · Fragrance",
+        "subtext": "Handcrafted urlis, vases and candle stands for every corner of your home.",
+        "cta_label": "Shop New Arrivals",
         "cta_link": "shopify://collections/urlis-bowls",
         "color_scheme": "scheme-1"
+      }
+    },
+    "home_base": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>#MainContent{--font-heading-family:{{ settings.type_header_font.family }},{{ settings.type_header_font.fallback_families }};--font-heading-style:{{ settings.type_header_font.style }};--font-heading-weight:{{ settings.type_header_font.weight }};--font-body-family:{{ settings.type_body_font.family }},{{ settings.type_body_font.fallback_families }};--font-body-style:{{ settings.type_body_font.style }};--font-body-weight:{{ settings.type_body_font.weight }};--font-body-weight-bold:{{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};font-family:var(--font-body-family)}#MainContent h1,#MainContent h2,#MainContent h3,#MainContent h4,#MainContent h5,#MainContent .h0,#MainContent .h1,#MainContent .h2,#MainContent .h3,#MainContent .h4,#MainContent .h5{letter-spacing:calc(var(--font-heading-scale)*.06rem)}#MainContent .a-section{padding-inline:0;padding-block:2.7rem}@media screen and (min-width:750px){#MainContent .a-section{padding-block:3.6rem}}html:has(.atelier-hero--over) .section-header.atl-hero-under .header-wrapper{background:var(--atelier-header-tint,rgba(27,25,22,.2));backdrop-filter:blur(10px) saturate(1.1);--color-foreground:255,255,255;transition:background-color .25s}html:has(.atelier-hero--over) .section-header.atl-hero-under .header{border-bottom-color:rgba(255,255,255,.22)}html:has(.atelier-hero--over) .section-header.atl-hero-under .header__heading-logo{filter:brightness(0) invert(1)}#MainContent .atelier-hero__subtext{font-size:1.7rem;line-height:1.5;font-weight:600;font-style:normal;max-width:32ch;opacity:1;color:#fff;text-shadow:0 1px 3px rgba(20,14,8,.55),0 2px 18px rgba(20,14,8,.5)}#MainContent .atelier-hero__materials{text-shadow:0 1px 3px rgba(20,14,8,.5),0 2px 14px rgba(20,14,8,.45)}@media screen and (min-width:750px){#MainContent .atelier-hero__subtext{font-size:2rem;max-width:46ch}}</style><script>(function(){var h=document.querySelector('.section-header'),hero=document.querySelector('.atelier-hero--over');if(!h||!hero)return;function u(){var b=h.getBoundingClientRect().bottom,r=hero.getBoundingClientRect();h.classList.toggle('atl-hero-under',r.top<b&&r.bottom>b)}addEventListener('scroll',u,{passive:true});addEventListener('resize',u);u()})();</script>",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "trust_bar": {
       "type": "atelier-trust-bar",
       "blocks": {
-        "b1": { "type": "badge", "settings": { "icon": "truck", "label": "Free shipping", "subtext": "On every order" } },
-        "b2": { "type": "badge", "settings": { "icon": "return", "label": "Easy 7-day returns", "subtext": "No questions asked" } },
-        "b3": { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments", "hide_on_mobile": true } },
-        "b4": { "type": "badge", "settings": { "icon": "leaf", "label": "Handmade, naturally varied", "subtext": "Wood grain, stone veining, and finish differ slightly piece to piece" } }
+        "b1": {"type": "badge", "settings": {"icon": "truck", "label": "Free shipping", "subtext": "On every order", "hide_on_mobile": false}},
+        "b2": {"type": "badge", "settings": {"icon": "return", "label": "Easy 7-day returns", "subtext": "Simple, photo or video process", "hide_on_mobile": false}},
+        "b3": {"type": "badge", "settings": {"icon": "lock", "label": "Secured by Razorpay", "subtext": "100% protected payments", "hide_on_mobile": true}},
+        "b4": {"type": "badge", "settings": {"icon": "leaf", "label": "Handmade, naturally varied", "subtext": "Wood grain, stone veining, and finish differ slightly piece to piece", "hide_on_mobile": false}}
       },
       "block_order": ["b1", "b2", "b3", "b4"],
-      "settings": {
-        "color_scheme": "scheme-1"
-      }
+      "settings": {"style": "marquee", "eyebrow": "", "title": "", "color_scheme": "scheme-1"}
     },
     "browse": {
       "type": "atelier-browse",
       "blocks": {
-        "el_stone": { "type": "card", "settings": { "collection": "stone", "mode": "element", "show_element": false } },
-        "el_metal": { "type": "card", "settings": { "collection": "metal", "mode": "element", "show_element": false } },
-        "el_ceramic": { "type": "card", "settings": { "collection": "ceramic", "mode": "element", "show_element": false } },
-        "el_wood": { "type": "card", "settings": { "collection": "wood", "mode": "element", "show_element": false } },
-        "el_fabric": { "type": "card", "settings": { "collection": "fabric", "mode": "element", "show_element": false } },
-        "el_wax": { "type": "card", "settings": { "collection": "candles", "mode": "element", "show_element": false, "title_override": "Wax" } },
-        "ob_urlis": { "type": "card", "settings": { "collection": "urlis-bowls", "mode": "object", "show_element": false } },
-        "ob_vases": { "type": "card", "settings": { "collection": "decorative-vases", "mode": "object", "show_element": true } },
-        "ob_lighting": { "type": "card", "settings": { "collection": "candle-stands-holders", "mode": "object", "show_element": true } },
-        "ob_trays": { "type": "card", "settings": { "collection": "trays-stands", "mode": "object", "show_element": true } },
-        "ob_wall": { "type": "card", "settings": { "collection": "wall-tabletop", "mode": "object", "show_element": true } },
-        "ob_candles": { "type": "card", "settings": { "collection": "candles", "mode": "object", "show_element": false } }
+        "el_stone": {"type": "card", "settings": {"collection": "stone", "mode": "element", "show_element": false, "title_override": ""}},
+        "el_metal": {"type": "card", "settings": {"collection": "metal", "mode": "element", "show_element": false, "title_override": ""}},
+        "el_ceramic": {"type": "card", "settings": {"collection": "ceramic", "mode": "element", "show_element": false, "title_override": ""}},
+        "el_wood": {"type": "card", "settings": {"collection": "wood", "mode": "element", "show_element": false, "title_override": ""}},
+        "el_fabric": {"type": "card", "settings": {"collection": "fabric", "mode": "element", "show_element": false, "title_override": ""}},
+        "el_wax": {"type": "card", "settings": {"collection": "candles", "mode": "element", "show_element": false, "title_override": "Fragrance"}},
+        "ob_urlis": {"type": "card", "settings": {"collection": "urlis-bowls", "mode": "object", "show_element": false, "title_override": ""}},
+        "ob_vases": {"type": "card", "settings": {"collection": "decorative-vases", "mode": "object", "show_element": true, "title_override": ""}},
+        "ob_lighting": {"type": "card", "settings": {"collection": "candle-stands-holders", "mode": "object", "show_element": true, "title_override": "Candle Stands"}},
+        "ob_trays": {"type": "card", "settings": {"collection": "trays-stands", "mode": "object", "show_element": true, "title_override": ""}},
+        "ob_wall": {"type": "card", "settings": {"collection": "wall-tabletop", "mode": "object", "show_element": true, "title_override": ""}},
+        "ob_candles": {"type": "card", "settings": {"collection": "candles", "mode": "object", "show_element": false, "title_override": "Candles"}}
       },
       "block_order": ["el_stone", "el_metal", "el_ceramic", "el_wood", "el_fabric", "el_wax", "ob_urlis", "ob_vases", "ob_lighting", "ob_trays", "ob_wall", "ob_candles"],
-      "settings": {
-        "lead": "Shop by",
-        "element_label": "Element",
-        "object_label": "Object",
-        "element_caption": "By material – the way we make them.",
-        "object_caption": "By what it is – the familiar way to shop.",
-        "element_status_text": "",
-        "object_status_text": "",
-        "color_scheme": "scheme-2"
-      }
+      "settings": {"heading_lead": "Shop by", "heading_accent": "category", "color_scheme": "scheme-2"}
     },
-    "philosophy": {
-      "type": "atelier-philosophy",
+    "ceramic_banner": {
+      "type": "atelier-ceramic-banner",
       "settings": {
-        "eyebrow": "Our Philosophy",
-        "quote": "Every material we choose — stone, wood, clay, cloth — is curated to bring balance and natural beauty into your space.",
-        "attribution": "— The Elements of Decor family",
-        "show_mandala": true,
-        "color_scheme": "scheme-3"
-      }
-    },
-    "this_season": {
-      "type": "atelier-this-season",
-      "settings": {
-        "eyebrow": "Best Sellers",
-        "title": "Considered, <em>not collected.</em>",
-        "best_sellers": ["gid://shopify/Product/9477182619873", "gid://shopify/Product/9479391150305", "gid://shopify/Product/9485966541025", "gid://shopify/Product/9485889339617", "gid://shopify/Product/9477421990113"],
-        "collection": "best-sellers",
-        "products_to_show": 10,
-        "show_all_tile": false,
-        "all_eyebrow": "Everything",
-        "all_title": "The full shop →",
-        "color_scheme": "scheme-1"
+        "image": "shopify://shop_images/imber-range-banner-bright.jpg",
+        "image_alt": "Four Imber ceramic vases in Ocean Blue and Earthy Brown",
+        "eyebrow": "New · Ceramic",
+        "title": "Imber. Hand-carved in Khurja.",
+        "text": "Four vases, each carved by hand. Made to hold dried stems or stand on their own.",
+        "cta_label": "Shop the Imber family",
+        "link": "shopify://collections/ceramic"
       }
     },
     "atelier_this_season_r8jXX7": {
       "type": "atelier-this-season",
       "settings": {
+        "layout": "rail",
+        "heading_lead": "New",
+        "heading_accent": "additions",
+        "subtext": "Freshly made, just added to the shop.",
+        "card_style": "boxed",
         "eyebrow": "New Additions",
-        "title": "Explore the full collection.",
-        "best_sellers": ["gid://shopify/Product/9484720996577", "gid://shopify/Product/9536126648545", "gid://shopify/Product/9536126615777", "gid://shopify/Product/9536126714081", "gid://shopify/Product/9479407698145", "gid://shopify/Product/9486089486561", "gid://shopify/Product/9423365996769", "gid://shopify/Product/9423034745057"],
+        "title": "Just arrived, made by hand.",
+        "best_sellers": [
+          "elements-of-decor-aurum-hand-etched-brass-vase",
+          "ekam-metal-urli-10-inch",
+          "imber-tall-ceramic-vase-ocean-blue",
+          "flame-bowl-tealight-holder-handcrafted-metal-lotus-candle-holder-home-decor-gifting",
+          "flower-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "ruffle-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+          "elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes",
+          "flower",
+          "elio-dual-tone-vase-set-of-2",
+          "elio-dual-tone-vase-6-inch"
+        ],
         "collection": "gifting-edit",
         "products_to_show": 10,
-        "show_all_tile": false,
+        "show_all_tile": true,
         "all_eyebrow": "Everything",
         "all_title": "The full shop →",
         "color_scheme": "scheme-1"
+      }
+    },
+    "this_season": {
+      "type": "atelier-best-sellers",
+      "settings": {
+        "heading_lead": "Most",
+        "heading_accent": "loved",
+        "link_label": "View all →",
+        "card_style": "boxed",
+        "best_sellers": [
+          "elements-of-decor-aurum-hand-etched-brass-vase",
+          "elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes",
+          "ekam-metal-urli-10-inch",
+          "padma-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual"
+        ],
+        "collection": "best-sellers",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "elements": {
+      "type": "atelier-elements",
+      "blocks": {
+        "e_stone": {"type": "element", "settings": {"collection": "stone", "title_override": ""}},
+        "e_metal": {"type": "element", "settings": {"collection": "metal", "title_override": ""}},
+        "e_ceramic": {"type": "element", "settings": {"collection": "ceramic", "title_override": ""}},
+        "e_wood": {"type": "element", "settings": {"collection": "wood", "title_override": ""}},
+        "e_fabric": {"type": "element", "settings": {"collection": "fabric", "title_override": ""}},
+        "e_wax": {"type": "element", "settings": {"collection": "candles", "title_override": "Fragrance"}}
+      },
+      "block_order": ["e_stone", "e_metal", "e_ceramic", "e_wood", "e_fabric", "e_wax"],
+      "disabled": true,
+      "settings": {"heading_lead": "Shop by", "heading_accent": "element", "color_scheme": "scheme-2"}
+    },
+    "philosophy": {
+      "type": "atelier-philosophy",
+      "settings": {
+        "eyebrow": "Our Philosophy",
+        "headline": "Some rooms just feel right. <em>There's a reason.</em>",
+        "body": "<p>We learned the reason at home, watching our mother and sister turn ordinary corners into rooms people remember. It was never about one standout piece. It was how the elements met: stone against metal, wood beside cloth, a little fragrance to finish. We gave that instinct a name, the Six Elements, and made every piece to work inside it.</p>",
+        "attribution": "— The Elements of Decor family",
+        "p1_title": "One formula",
+        "p1_text": "Stone, metal, wood, ceramic, fabric and fragrance. Bring a few together and a corner finds its balance.",
+        "p2_title": "Made by hands that know the material",
+        "p2_text": "Every piece is handmade in the Indian craft hub for its material, so no two are exactly alike.",
+        "p3_title": "Designed to sit together",
+        "p3_text": "Nothing here stands alone. Each piece is made to join the others, so a home comes together without a designer.",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "reels": {
+      "type": "atelier-reels-feature",
+      "settings": {
+        "eyebrow": "In the details",
+        "title": "Seen in <em>motion.</em>",
+        "video_1": "shopify://files/videos/EOD REEL 01 (1).mp4",
+        "caption_1": "The little details that make a space feel like home.",
+        "video_2": "shopify://files/videos/1.mp4",
+        "caption_2": "Hand-carved ceramic, wheel-thrown in Khurja.",
+        "product_2": "imber-tall-ceramic-vase-ocean-blue",
+        "soon_title_2": "Ceramic vases",
+        "tag_2": "",
+        "link_2": "",
+        "video_3": "shopify://files/videos/Bring a touch of nature inspired elegance to your space with stone decor pieces that makes every.mp4",
+        "caption_3": "Nature-inspired elegance, carved in stone.",
+        "product_3": "padma-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual",
+        "soon_title_3": "",
+        "tag_3": "Shop stone",
+        "link_3": "shopify://collections/stone",
+        "video_4": "shopify://files/videos/eod reel (1) (1).mp4",
+        "caption_4": "Every festive corner deserves a touch of magic.",
+        "product_4": "3-tier-cascading-candle-stand-botanical-vine-pillar-votive-tealight-compatible",
+        "soon_title_4": "",
+        "tag_4": "Shop the festive edit",
+        "link_4": "shopify://collections/festive-edit",
+        "show_placeholders": false,
+        "cta_label": "Follow @elements.of.decor",
+        "link": "https://www.instagram.com/elements.of.decor",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "rooms": {
+      "type": "atelier-rooms",
+      "blocks": {
+        "r1": {"type": "room", "settings": {"collection": "living-room"}},
+        "r2": {"type": "room", "settings": {"collection": "dining"}},
+        "r3": {"type": "room", "settings": {"collection": "puja"}},
+        "r4": {"type": "room", "settings": {"collection": "bedroom"}}
+      },
+      "block_order": ["r1", "r2", "r3", "r4"],
+      "settings": {"heading_lead": "Shop by", "heading_accent": "room", "color_scheme": "scheme-1"}
+    },
+    "visit_store": {
+      "type": "atelier-band",
+      "settings": {
+        "image_side": "left",
+        "image_count": "3",
+        "image_1": "shopify://shop_images/eod-store-lounge.jpg",
+        "caption_1": "The Experience Store",
+        "image_2": "shopify://shop_images/eod-store-shelf-pieces.jpg",
+        "caption_2": "The pieces, up close",
+        "image_3": "shopify://shop_images/eod-aranya-vilas-gate.jpg",
+        "caption_3": "Aranya Vilas",
+        "eyebrow": "Experience Store",
+        "title": "See the pieces, <em>in person.</em>",
+        "meta": "Situated at Aranya Vilas, Udaipur",
+        "text": "Step in from the reception and the pieces are right there. Pick things up, feel the weight of the marble and the finish of the brass, and see how the elements sit together.",
+        "cta_label": "Plan your visit →",
+        "link": "shopify://pages/visit-our-store",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "notes": {
+      "type": "atelier-notes",
+      "settings": {
+        "heading_lead": "Notes from the",
+        "heading_accent": "workshop",
+        "subtext": "Stories, styling guides and the craft behind each piece.",
+        "link_label": "Read all stories →",
+        "blog": "news",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "gift_band": {
+      "type": "atelier-band",
+      "settings": {
+        "image_side": "right",
+        "image_count": "1",
+        "image_1": "shopify://shop_images/DSC09413_Shopify_1.jpg",
+        "caption_1": "",
+        "caption_2": "",
+        "caption_3": "",
+        "eyebrow": "Gifting",
+        "title": "Gifts that <em>feel,</em> not just look.",
+        "meta": "",
+        "text": "Handcrafted marble, brass and metal pieces, arriving in our kraft gift box with the ED monogram and a blush thank-you card. For housewarmings, weddings, festivals and teams.",
+        "cta_label": "Gift in bulk →",
+        "link": "shopify://pages/corporate-gifting",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "tool_teaser": {
+      "type": "atelier-tool-teaser",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Phase Two · Spring 2026",
+        "title": "Design your space, <em>element by element.</em>",
+        "chips": "Console, Side table, Corner, Sofa side, Dehleez",
+        "cta_label": "Notify me",
+        "cta_link": "",
+        "color_scheme": "scheme-2"
       }
     },
     "open_box_sale": {
@@ -120,40 +275,9 @@
         "color_scheme": "scheme-4"
       }
     },
-    "tool_teaser": {
-      "type": "atelier-tool-teaser",
-      "settings": {
-        "eyebrow": "Phase Two · Spring 2026",
-        "title": "Design your space, <em>element by element.</em>",
-        "chips": "Console, Side table, Corner, Sofa side, Dehleez",
-        "cta_label": "Notify me",
-        "cta_link": "",
-        "color_scheme": "scheme-2"
-      }
-    },
-    "notes": {
-      "type": "atelier-notes",
-      "settings": {
-        "eyebrow": "Stories",
-        "title": "Notes from the Atelier",
-        "blog": "news",
-        "posts_to_show": 3,
-        "color_scheme": "scheme-1"
-      }
-    },
-    "gratitude": {
-      "type": "atelier-gratitude",
-      "disabled": true,
-      "settings": {
-        "mark": "EoD",
-        "elements": "Stone, Metal, Wood, Ceramic, Fabric",
-        "title": "Thank you.",
-        "note": "<p>A beautiful space is never accidental. Thank you for letting our work into your home.</p>",
-        "color_scheme": "scheme-2"
-      }
-    },
     "open_box_sale_LDqbeT": {
       "type": "open-box-sale",
+      "disabled": true,
       "name": "Open Box Sale",
       "settings": {
         "eyebrow": "Limited Stock",
@@ -170,7 +294,37 @@
         "view_all_label": "Shop all open box",
         "color_scheme": ""
       }
+    },
+    "gratitude": {
+      "type": "atelier-gratitude",
+      "disabled": true,
+      "settings": {
+        "mark": "EoD",
+        "elements": "Stone, Metal, Wood, Ceramic, Fabric",
+        "title": "Thank you.",
+        "note": "<p>A beautiful space is never accidental. Thank you for letting our work into your home.</p>",
+        "color_scheme": "scheme-2"
+      }
     }
   },
-  "order": ["hero", "trust_bar", "browse", "philosophy", "this_season", "atelier_this_season_r8jXX7", "open_box_sale", "tool_teaser", "notes", "gratitude", "open_box_sale_LDqbeT"]
+  "order": [
+    "hero",
+    "home_base",
+    "trust_bar",
+    "browse",
+    "ceramic_banner",
+    "atelier_this_season_r8jXX7",
+    "this_season",
+    "elements",
+    "philosophy",
+    "reels",
+    "rooms",
+    "visit_store",
+    "notes",
+    "gift_band",
+    "tool_teaser",
+    "open_box_sale",
+    "open_box_sale_LDqbeT",
+    "gratitude"
+  ]
 }

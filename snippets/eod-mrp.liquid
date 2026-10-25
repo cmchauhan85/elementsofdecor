@@ -1,0 +1,50 @@
+{%- comment -%} MRP on the PDP, always stated (Legal Metrology). MRP above price: struck-through MRP next to the selling price, on the page and in the sticky bar. MRP equal to price: the note line states the MRP. MRP is the variant metafield atelier.mrp (whole rupees, inclusive of taxes). {%- endcomment -%}
+{%- capture mp -%}
+{%- for v in product.variants -%}{{ v.id }}:{{ v.metafields.atelier.mrp.value | default: 0 }}:{{ v.price | divided_by: 100 }},{%- endfor -%}
+{%- endcapture -%}
+<style>
+.product__price-block{display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem 1.4rem}
+.eod2-row{display:inline-flex;align-items:baseline;gap:.8rem;margin:0}
+.eod2-mrp{font-family:var(--font-heading-family);font-size:2.2rem;color:rgba(var(--color-foreground),.55);text-decoration:line-through;text-decoration-thickness:1px}
+.eod2-lab{font-size:1.2rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(var(--color-foreground),.6)}
+.eod2-note{margin:.6rem 0 0;font-size:1.3rem;color:rgba(var(--color-foreground),.7)}
+.atelier-pdp-sticky__price{display:inline-flex;align-items:baseline;gap:.6rem;white-space:nowrap}
+.eod2-smrp{display:inline-flex;align-items:baseline;gap:.4rem;font-size:1.3rem;color:rgba(var(--color-foreground),.6)}
+.eod2-smrp s{text-decoration:line-through;text-decoration-thickness:1px}
+.eod2-smrp i{font-style:normal;font-size:1rem;letter-spacing:.12em;text-transform:uppercase}
+@media(max-width:749px){.eod2-mrp{font-size:1.8rem}.eod2-smrp{font-size:1.1rem}.eod2-smrp i{display:none}.atelier-pdp-sticky__price{gap:.4rem}}
+</style>
+<script>
+(function(){
+var M={};"{{ mp | strip | strip_newlines }}".split(',').forEach(function(s){var a=s.split(':');if(a.length==3)M[a[0]]=[+a[1],+a[2]]});
+function fmt(n){return '₹'+n.toLocaleString('en-IN')}
+function vid(){var i=document.querySelector('product-info input[name=id],form[action*="/cart/add"] input[name=id]');return i&&i.value}
+var last='';
+function sticky(d){
+  var sp=document.querySelector('.atelier-pdp-sticky__price');if(!sp)return;
+  var sm=sp.querySelector('.eod2-smrp');
+  if(d[0]>d[1]){
+    var h='<i>MRP</i><s>'+fmt(d[0])+'</s>';
+    if(!sm){sm=document.createElement('span');sm.className='eod2-smrp';sm.innerHTML=h;sp.appendChild(sm)}
+    else if(sm.innerHTML!==h){sm.innerHTML=h}
+  }else if(sm){sm.remove()}
+}
+function render(){
+  var blk=document.querySelector('.product__price-block');if(!blk)return;
+  var d=M[vid()];if(!d)return;
+  sticky(d);
+  var key=vid();
+  var row=blk.querySelector('.eod2-row'),note=document.querySelector('.eod2-note');
+  if(row&&note&&last===key)return;
+  last=key;
+  if(!row){row=document.createElement('span');row.className='eod2-row';blk.appendChild(row)}
+  if(!note){note=document.createElement('p');note.className='eod2-note';blk.parentNode.insertBefore(note,blk.nextSibling)}
+  var tail='Inclusive of all taxes · Free shipping';
+  if(d[0]>d[1]){row.innerHTML='<span class="eod2-lab">MRP</span><s class="eod2-mrp">'+fmt(d[0])+'</s>';note.textContent=tail}
+  else if(d[0]>0){row.innerHTML='';note.textContent='MRP '+fmt(d[0])+' · '+tail}
+  else{row.innerHTML='';note.textContent=tail}
+  document.querySelectorAll('.product__info-container *').forEach(function(e){if(e.children.length===0&&/^\s*Taxes included\.?\s*$/i.test(e.textContent)){e.style.display='none'}});
+}
+setInterval(render,500);render();
+})();
+</script>

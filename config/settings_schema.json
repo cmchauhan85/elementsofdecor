@@ -102,29 +102,29 @@
     ]
   },
   {
-    "name": "Atelier accent",
+    "name": "Ink & Coral accent",
     "settings": [
       {
         "type": "paragraph",
-        "content": "The Atelier design uses exactly one accent colour (ochre). These tokens drive eyebrows, rules, active states and prices-on-dark across the theme."
+        "content": "The Ink & Coral design uses exactly one accent colour (coral) — the only colour allowed on a primary button. These tokens drive eyebrows, rules, active states, and CTAs across the theme."
       },
       {
         "type": "color",
         "id": "atelier_ochre",
-        "label": "Ochre accent",
-        "default": "#b88a3a"
+        "label": "Coral accent (action)",
+        "default": "#cf4a25"
       },
       {
         "type": "color",
         "id": "atelier_ochre_light",
-        "label": "Ochre light (on dark)",
-        "default": "#e8c89a"
+        "label": "Coral bright (hover)",
+        "default": "#e8613c"
       },
       {
         "type": "color",
         "id": "atelier_muted",
-        "label": "Muted text",
-        "default": "#7a766e"
+        "label": "Muted text (slate)",
+        "default": "#55607a"
       }
     ]
   },

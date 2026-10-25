@@ -1,0 +1,83 @@
+{{ 'atelier-box-card.css' | asset_url | stylesheet_tag }}
+<style>
+#rm-wrap .rm__head{display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 0 2.2rem}
+#rm-wrap .rm__title{font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.6rem,3.4vw,3.6rem);line-height:1.15;margin:0}
+#rm-wrap .rm__title em{font-style:italic;color:var(--a-ochre)}
+#rm-wrap .rm__rule{width:4rem;height:2px;background:var(--a-ochre);margin-top:1.2rem}
+#rm-wrap .rm__tabs{display:flex;gap:1rem;justify-content:center;overflow-x:auto;scrollbar-width:none;margin-bottom:2.4rem}
+#rm-wrap .rm__tabs::-webkit-scrollbar{display:none}
+#rm-wrap .rm__tab{font:inherit;cursor:pointer;white-space:nowrap;color:#14213d;background:none;min-height:44px;padding:.8rem 1.8rem;border:1px solid #d9d0c3;border-radius:999px;font-size:1.4rem}
+#rm-wrap .rm__tab.is-on{background:#14213d;color:#f5f2eb;border-color:#14213d}
+#rm-wrap .rm__panel{display:none}
+#rm-wrap .rm__panel.is-on{display:block}
+#rm-wrap .rm__rail{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:.4rem}
+#rm-wrap .rm__rail::-webkit-scrollbar{display:none}
+#rm-wrap .abs-card{flex:0 0 64%;scroll-snap-align:start;display:flex;flex-direction:column;text-decoration:none;color:inherit;min-width:0}
+#rm-wrap .abs-media{position:relative;overflow:hidden;background:var(--a-stone);border-radius:var(--a-radius-image);aspect-ratio:1/1}
+#rm-wrap .abs-media img{width:100%;height:100%;object-fit:cover}
+#rm-wrap .abs-info{margin-top:1.2rem}
+#rm-wrap .abs-name{font-family:var(--font-body-family);font-size:1.4rem;font-weight:400;line-height:1.35;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#rm-wrap .abs-price{margin:.4rem 0 0;font-size:1.4rem;color:var(--a-muted)}
+#rm-wrap .abs-price s{opacity:.6;margin-right:.4rem}
+#rm-wrap .abs-num{display:none}
+#rm-wrap .rm__foot{display:flex;align-items:center;justify-content:center;margin-top:2.4rem}
+#rm-wrap .rm__all{font-size:1.2rem;letter-spacing:.12em;text-transform:uppercase;color:var(--a-ochre);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:.1rem}
+#rm-wrap .rm__arrows{display:none}
+@media(min-width:750px){#rm-wrap .rm__rail{gap:1.6rem}#rm-wrap .abs-card{flex-basis:calc((100% - 4.8rem)/4)}#rm-wrap .rm__foot{justify-content:space-between}#rm-wrap .rm__arrows{display:flex;gap:.8rem}#rm-wrap .rm__arr{width:4.4rem;height:4.4rem;border:1px solid #d9d0c3;border-radius:50%;background:transparent;color:#14213d;font-size:1.8rem;cursor:pointer}#rm-wrap .rm__arr:hover{background:#14213d;color:#f5f2eb}#rm-wrap .rm__foot:before{content:'';width:9rem}}
+</style>
+<div class='rm color-{{ section.settings.color_scheme }} a-section' id='rm-wrap'>
+  <div class='page-width'>
+    <div class='rm__head'><h2 class='rm__title'>{{ section.settings.heading_lead }} <em>{{ section.settings.heading_accent }}</em></h2><span class='rm__rule' aria-hidden='true'></span></div>
+    <div class='rm__tabs' role='tablist'>
+      {%- for block in section.blocks -%}
+        {%- assign c = block.settings.collection -%}
+        {%- if c != blank -%}
+          <button type='button' role='tab' class='rm__tab{% if forloop.first %} is-on{% endif %}' data-room='{{ block.id }}'>{{ c.title }}</button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class='rm__panels'>
+      {%- for block in section.blocks -%}
+        {%- assign c = block.settings.collection -%}
+        {%- if c != blank -%}
+          <div class='rm__panel{% if forloop.first %} is-on{% endif %}' data-room='{{ block.id }}'>
+            <div class='rm__rail'>
+              {%- for product in c.products limit: 10 -%}{% render 'atelier-bs-card', product: product, boxed: true %}{%- endfor -%}
+            </div>
+            <div class='rm__foot'><a class='rm__all' href='{{ c.url }}'>View all {{ c.title }} &rarr;</a><div class='rm__arrows'><button type='button' class='rm__arr' data-d='p' aria-label='Previous'>&larr;</button><button type='button' class='rm__arr' data-d='n' aria-label='Next'>&rarr;</button></div></div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var w=document.getElementById('rm-wrap');if(!w)return;
+  w.addEventListener('click',function(e){
+    var t=e.target.closest('.rm__tab');
+    if(t){var r=t.getAttribute('data-room');
+      w.querySelectorAll('.rm__tab').forEach(function(x){x.classList.toggle('is-on',x===t)});
+      w.querySelectorAll('.rm__panel').forEach(function(p){var on=p.getAttribute('data-room')===r;p.classList.toggle('is-on',on);if(on)p.querySelector('.rm__rail').scrollLeft=0});return}
+    var a=e.target.closest('.rm__arr');
+    if(a){var rail=a.closest('.rm__panel').querySelector('.rm__rail');rail.scrollBy({left:(a.getAttribute('data-d')==='n'?1:-1)*rail.clientWidth*.9,behavior:'smooth'})}
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Atelier Rooms",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading_lead", "label": "Heading - plain part", "default": "Shop by" },
+    { "type": "text", "id": "heading_accent", "label": "Heading - accent word", "default": "room" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    { "type": "room", "name": "Room", "settings": [ { "type": "collection", "id": "collection", "label": "Room collection" } ] }
+  ],
+  "max_blocks": 6,
+  "presets": [ { "name": "Atelier Rooms", "blocks": [ { "type": "room" }, { "type": "room" }, { "type": "room" }, { "type": "room" } ] } ]
+}
+{% endschema %}

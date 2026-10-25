@@ -1,30 +1,31 @@
 {{ 'section-atelier-collection.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'atelier-shop-by.js' | asset_url }}" defer="defer"></script>
+{{ 'atelier-box-card.css' | asset_url | stylesheet_tag }}
+<script src='{{ 'atelier-shop-by.js' | asset_url }}' defer='defer'></script>
+
+{%- comment -%}Combined Element + Object filter (19 Oct 2026): the chip rows can be combined, e.g. Stone + Urlis & Bowls. The state lives in the URL: the collection in the path is one selection and ?with=<handle> is the other. The script at the bottom filters the cards and rewrites the chip links and counts.{%- endcomment -%}
+<style>
+  .plp-filtering .atelier-plp__grid{visibility:hidden}
+  .atelier-chip.is-none{opacity:.45;pointer-events:none;cursor:not-allowed}
+</style>
+<script>if(/[?&]with=/.test(location.search)){document.documentElement.classList.add('plp-filtering');setTimeout(function(){document.documentElement.classList.remove('plp-filtering')},2500)}</script>
 
 {%- liquid
   assign mode = 'element'
   if request.get.shop_by == 'object'
     assign mode = 'object'
   endif
-
+  assign groups = 'element,object' | split: ','
   assign sort_by = collection.sort_by | default: collection.default_sort_by
-
-  assign el_key  = section.settings.element_filter_key
-  assign cat_key = section.settings.category_filter_key
-
-  assign element_filter  = null
+  assign element_filter = null
   assign category_filter = null
-
   for f in collection.filters
-    if f.param_name == el_key
+    if f.param_name == section.settings.element_filter_key
       assign element_filter = f
-    elsif f.param_name == cat_key
+    elsif f.param_name == section.settings.category_filter_key
       assign category_filter = f
     endif
   endfor
-
   assign per_page = section.settings.products_per_page
-
   assign active_label = null
   if mode == 'element' and element_filter
     for v in element_filter.active_values
@@ -35,322 +36,269 @@
       assign active_label = v.label
     endfor
   endif
-
-  assign active_count = 0
-  for f in collection.filters
-    assign active_count = active_count | plus: f.active_values.size
+  assign el_menu = section.settings.element_nav_menu
+  assign obj_menu = section.settings.object_nav_menu
+  assign el_all_url = section.settings.element_all_url | default: '/collections/all'
+  assign obj_all_url = section.settings.object_all_url | default: '/collections/all'
+  assign all_active = true
+  for link in linklists[el_menu].links
+    assign lh = link.url | split: '/collections/' | last
+    if lh == collection.handle
+      assign all_active = false
+    endif
+  endfor
+  for link in linklists[obj_menu].links
+    assign lh = link.url | split: '/collections/' | last
+    if lh == collection.handle
+      assign all_active = false
+    endif
   endfor
 
-  assign el_menu  = section.settings.element_nav_menu
-  assign obj_menu = section.settings.object_nav_menu
+  comment
+    Curated product order (decided 14 Oct 2026, option B): a urli, a vase and a candle stand in the first rows.
+    Applies on the default sort only; any other sort (price, newest) shows the plain order.
+    New products are not listed here, so they appear after these, in the default order.
+  endcomment
+  assign curated = ',flower-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual,oria-hammered-silver-globe-vase,elements-of-decor-aurum-hand-etched-brass-vase,3-tier-cascading-candle-stand-botanical-vine-pillar-votive-tealight-compatible,ruffle-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual,elio-minimalist-dual-tone-decorative-vase-steel-blue-gold-set-of-2-sizes,rose-candle-stand-hand-forged-metal-rose-tealight-holder,lotus-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual,padma-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual,flame-bowl-tealight-holder-handcrafted-metal-lotus-candle-holder-home-decor-gifting,ekam-metal-urli-10-inch,scalloped-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual,rounded-lotus-urli-handcrafted-white-marble-decorative-bowl-for-flowers-ritual,aurum-hand-etched-brass-finish-vase-15-inch,flower,the-aurelia-tree,'
+  assign curated_list = curated | split: ','
+  assign use_curated = false
+  if sort_by == collection.default_sort_by
+    assign use_curated = true
+  endif
 -%}
 
-<div class="atelier-plp color-{{ section.settings.color_scheme }} a-section">
-  <div class="page-width">
+<div class='atelier-plp color-{{ section.settings.color_scheme }} a-section'>
+  <div class='page-width'>
+
+    {%- if section.settings.banner_image != blank -%}
+      {%- assign banner_alt = section.settings.heading | strip_html | default: collection.title | escape -%}
+      <div class='atelier-plp__banner'>
+        {{ section.settings.banner_image | image_url: width: 2000 | image_tag: loading: 'eager', sizes: '100vw', widths: '750, 1100, 1500, 2000', alt: banner_alt }}
+      </div>
+    {%- endif -%}
 
     {%- if section.settings.show_breadcrumb -%}
-      <nav class="atelier-plp__crumb" aria-label="breadcrumb">
-        <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t | default: 'Home' }}</a>
-        <span aria-hidden="true"> / </span>
+      <nav class='atelier-plp__crumb' aria-label='breadcrumb'>
+        <a href='{{ routes.root_url }}'>Home</a>
+        <span aria-hidden='true'> / </span>
         <span>{{ collection.title }}</span>
       </nav>
     {%- endif -%}
 
-    <h1 class="atelier-plp__head">
+    <h1 class='atelier-plp__head'>
       {%- if section.settings.heading != blank -%}{{ section.settings.heading }}{%- else -%}{{ collection.title }}{%- endif -%}
     </h1>
 
-    {%- comment %} Shop By band {% endcomment -%}
-    <div class="atelier-plp__band">
-      <div class="atelier-plp__band-left">
-        {% render 'atelier-shop-by-switch', mode: mode, base_url: collection.url %}
-        <span class="atelier-browse__caption" data-mode-when="element" {% if mode != 'element' %}hidden{% endif %}>{{ section.settings.element_caption }}</span>
-        <span class="atelier-browse__caption" data-mode-when="object" {% if mode != 'object' %}hidden{% endif %}>{{ section.settings.object_caption }}</span>
+    {%- comment -%}20 Oct 2026: the old Shop by Element | Object switch was removed. Both chip rows (By Element, By Object) are always visible and combine, so the switch showed Element twice. The band keeps the element caption and the status text.{%- endcomment -%}
+    <div class='atelier-plp__band'>
+      <div class='atelier-plp__band-left'>
+        <span class='atelier-browse__caption'>{{ section.settings.element_caption }}</span>
       </div>
-      {%- liquid
-        if mode == 'object'
-          assign band_status = section.settings.object_status_text
-        else
-          assign band_status = section.settings.element_status_text
-        endif
-      -%}
+      {%- assign band_status = section.settings.element_status_text -%}
       {%- if band_status != blank -%}
-        <div class="atelier-browse__status">
-          <span class="atelier-browse__rule" aria-hidden="true"></span>
-          <span class="atelier-browse__caption">{{ band_status }}</span>
+        <div class='atelier-browse__status'>
+          <span class='atelier-browse__rule' aria-hidden='true'></span>
+          <span class='atelier-browse__caption'>{{ band_status }}</span>
         </div>
       {%- endif -%}
     </div>
 
-    {%- comment %} Filter bar: scrollable chip rail + sort {% endcomment -%}
-    <div class="atelier-plp__filter-bar">
-      {%- assign chip_modes = 'element,object' | split: ',' -%}
-      {%- for m in chip_modes -%}
+    <div class='atelier-plp__filter-bar'>
+      {%- for m in groups -%}
         {%- if m == 'element' -%}{%- assign chip_filter = element_filter -%}{%- else -%}{%- assign chip_filter = category_filter -%}{%- endif -%}
-        <div class="atelier-plp__chips a-rail" data-mode-grid="{{ m }}" {% if mode != m %}hidden{% endif %}>
-          <a href="{{ collection.url }}?shop_by={{ m }}" class="atelier-chip{% unless chip_filter.active_values.size > 0 %} is-active{% endunless %}">
-            {{ 'products.facets.all' | t | default: 'All' }}<span class="atelier-chip__count">{{ collection.all_products_count }}</span>
-          </a>
+        {%- comment -%}On an empty (coming soon) collection the All chip points at the whole shop and shows its count, instead of 0 (fixed 15 Oct 2026).{%- endcomment -%}
+        {%- assign chip_all_count = collection.all_products_count -%}
+        {%- assign chip_all_url = collection.url | append: '?shop_by=' | append: m -%}
+        {%- assign chip_all_on = true -%}
+        {%- if chip_all_count == 0 -%}
+          {%- assign chip_all_count = collections.all.all_products_count -%}
+          {%- assign chip_all_url = '/collections/all' -%}
+          {%- assign chip_all_on = false -%}
+        {%- endif -%}
+        <div class='atelier-plp__chips a-rail' data-mode-grid='{{ m }}' {% if mode != m %}hidden{% endif %}>
+          <a href='{{ chip_all_url }}' class='atelier-chip{% if chip_all_on and chip_filter.active_values.size == 0 %} is-active{% endif %}'>All<span class='atelier-chip__count'>{{ chip_all_count }}</span></a>
           {%- if chip_filter -%}
             {%- for value in chip_filter.values -%}
-              <a
-                href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
-                class="atelier-chip{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-soon{% endif %}"
-              >{{ value.label }}<span class="atelier-chip__count">{{ value.count }}</span></a>
+              <a href='{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}' class='atelier-chip{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-soon{% endif %}'>{{ value.label }}<span class='atelier-chip__count'>{{ value.count }}</span></a>
             {%- endfor -%}
           {%- endif -%}
         </div>
       {%- endfor -%}
 
-      <form class="atelier-plp__sort" method="get" action="{{ collection.url }}">
-        {%- if request.get.shop_by != blank -%}
-          <input type="hidden" name="shop_by" value="{{ request.get.shop_by }}">
-        {%- endif -%}
-        {%- for f in collection.filters -%}
-          {%- for v in f.active_values -%}
-            <input type="hidden" name="{{ f.param_name }}" value="{{ v.value }}">
-          {%- endfor -%}
-        {%- endfor -%}
-        <label class="atelier-plp__sort-label">
-          <span class="atelier-plp__sort-prefix">Sort:</span>
-          <select class="atelier-plp__sort-select" name="sort_by" onchange="this.form.submit()">
+      <form class='atelier-plp__sort' method='get' action='{{ collection.url }}'>
+        {%- if request.get.shop_by != blank -%}<input type='hidden' name='shop_by' value='{{ request.get.shop_by }}'>{%- endif -%}
+        {%- for f in collection.filters -%}{%- for v in f.active_values -%}<input type='hidden' name='{{ f.param_name }}' value='{{ v.value }}'>{%- endfor -%}{%- endfor -%}
+        <label class='atelier-plp__sort-label'>
+          <span class='atelier-plp__sort-prefix'>Sort:</span>
+          <select class='atelier-plp__sort-select' name='sort_by' onchange='this.form.submit()'>
+            {%- if use_curated -%}<option value='{{ collection.default_sort_by }}' selected>Featured</option>{%- endif -%}
             {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+              {%- unless use_curated and option.value == collection.default_sort_by -%}
+                <option value='{{ option.value }}'{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+              {%- endunless -%}
             {%- endfor -%}
           </select>
         </label>
       </form>
     </div>
 
-    {%- comment %} Mobile inline nav — always-visible chip rows below 990 px {% endcomment -%}
     {%- if el_menu != blank or obj_menu != blank -%}
-      <div class="atelier-plp__mobile-nav">
-        {%- liquid
-          assign el_all_url  = section.settings.element_all_url  | default: '/collections/all'
-          assign obj_all_url = section.settings.object_all_url | default: '/collections/all'
-          assign all_active  = true
-          for link in linklists[el_menu].links
-            assign lh = link.url | split: '/collections/' | last
-            if lh == collection.handle
-              assign all_active = false
-            endif
-          endfor
-          for link in linklists[obj_menu].links
-            assign lh = link.url | split: '/collections/' | last
-            if lh == collection.handle
-              assign all_active = false
-            endif
-          endfor
-        -%}
-        {%- if el_menu != blank -%}
-          <div class="atelier-plp__mobile-nav-row">
-            <span class="atelier-plp__mobile-nav-label">{{ section.settings.element_nav_label }}</span>
-            <div class="atelier-plp__mobile-nav-chips a-rail">
-              <a href="{{ el_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All<span class="atelier-chip__count">{{ collection.all_products_count }}</span></a>
-              {%- for link in linklists[el_menu].links -%}
-                {%- assign link_handle = link.url | split: '/collections/' | last -%}
-                {%- assign is_current = false -%}
-                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
-                {%- assign link_coll = collections[link_handle] -%}
-                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}{%- if link_coll.all_products_count > 0 -%}<span class="atelier-chip__count">{{ link_coll.all_products_count }}</span>{%- endif -%}</a>
-              {%- endfor -%}
+      <div class='atelier-plp__mobile-nav'>
+        {%- for g in groups -%}
+          {%- if g == 'element' -%}{%- assign g_menu = el_menu -%}{%- assign g_label = section.settings.element_nav_label -%}{%- assign g_all = el_all_url -%}{%- else -%}{%- assign g_menu = obj_menu -%}{%- assign g_label = section.settings.object_nav_label -%}{%- assign g_all = obj_all_url -%}{%- endif -%}
+          {%- assign g_all_handle = g_all | split: '/collections/' | last -%}
+          {%- assign g_all_coll = collections[g_all_handle] -%}
+          {%- if g_menu != blank -%}
+            <div class='atelier-plp__mobile-nav-row'>
+              <span class='atelier-plp__mobile-nav-label'>{{ g_label }}</span>
+              <div class='atelier-plp__mobile-nav-chips a-rail'>
+                {%- comment -%}The All chip links to g_all (the whole shop), so its count is that collection's count, not the page you are on (fixed 15 Oct 2026).{%- endcomment -%}
+                {%- if g_all_coll != blank -%}{%- assign g_all_count = g_all_coll.all_products_count -%}{%- else -%}{%- assign g_all_count = collection.all_products_count -%}{%- endif -%}
+                <a href='{{ g_all }}' class='atelier-chip{% if all_active %} is-active{% endif %}' data-chip-group='{{ g }}' data-chip-handle='' data-chip-title='All' data-chip-base='{{ g_all_count }}'>All<span class='atelier-chip__count'>{{ g_all_count }}</span></a>
+                {%- for link in linklists[g_menu].links -%}
+                  {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                  {%- assign link_coll = collections[link_handle] -%}
+                  <a href='{{ link.url }}' class='atelier-chip{% if link_handle == collection.handle %} is-active{% endif %}{% if link_coll.all_products_count == 0 %} is-soon{% endif %}'{% if link_handle == collection.handle %} aria-current='page'{% endif %} data-chip-group='{{ g }}' data-chip-handle='{{ link_handle }}' data-chip-title='{{ link.title | escape }}' data-chip-base='{{ link_coll.all_products_count }}'>{{ link.title }}{%- if link_coll.all_products_count > 0 -%}<span class='atelier-chip__count'>{{ link_coll.all_products_count }}</span>{%- endif -%}</a>
+                {%- endfor -%}
+              </div>
             </div>
-          </div>
-        {%- endif -%}
-        {%- if obj_menu != blank -%}
-          <div class="atelier-plp__mobile-nav-row">
-            <span class="atelier-plp__mobile-nav-label">{{ section.settings.object_nav_label }}</span>
-            <div class="atelier-plp__mobile-nav-chips a-rail">
-              <a href="{{ obj_all_url }}" class="atelier-chip{% if all_active %} is-active{% endif %}">All<span class="atelier-chip__count">{{ collection.all_products_count }}</span></a>
-              {%- for link in linklists[obj_menu].links -%}
-                {%- assign link_handle = link.url | split: '/collections/' | last -%}
-                {%- assign is_current = false -%}
-                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
-                {%- assign link_coll = collections[link_handle] -%}
-                <a href="{{ link.url }}" class="atelier-chip{% if is_current %} is-active{% endif %}" {% if is_current %}aria-current="page"{% endif %}>{{ link.title }}{%- if link_coll.all_products_count > 0 -%}<span class="atelier-chip__count">{{ link_coll.all_products_count }}</span>{%- endif -%}</a>
-              {%- endfor -%}
-            </div>
-          </div>
-        {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
       </div>
     {%- endif -%}
 
-    {%- comment %} Mobile filter button — only shown when price filter is enabled {% endcomment -%}
     {%- if section.settings.show_price_filter -%}
-      <div class="atelier-plp__mobilebar">
-        <button class="atelier-plp__refine-btn" id="atelier-refine-btn" aria-controls="atelier-sidebar" aria-expanded="false">
-          <span aria-hidden="true">≡</span>
-          {{ 'products.facets.filter_button' | t | default: 'Filter' }}
-        </button>
+      <div class='atelier-plp__mobilebar'>
+        <button class='atelier-plp__refine-btn' id='atelier-refine-btn' aria-controls='atelier-sidebar' aria-expanded='false'><span aria-hidden='true'>≡</span> Filter</button>
       </div>
     {%- endif -%}
 
-    {%- comment %} Body: sidebar column + product grid {% endcomment -%}
-    <div class="atelier-plp__body">
+    <div class='atelier-plp__body'>
 
-      <aside class="atelier-plp__sidebar" id="atelier-sidebar">
-        <div class="atelier-plp__sidebar-head">
+      <aside class='atelier-plp__sidebar' id='atelier-sidebar'>
+        <div class='atelier-plp__sidebar-head'>
           {% render 'atelier-eyebrow', text: 'Discover' %}
-          <button class="atelier-plp__sidebar-close" id="atelier-sidebar-close" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}">✕</button>
+          <button class='atelier-plp__sidebar-close' id='atelier-sidebar-close' aria-label='Close'>✕</button>
         </div>
 
-        {%- if el_menu != blank -%}
-          {%- liquid
-            assign el_all_handle = section.settings.element_all_url | default: '/collections/all' | split: '/collections/' | last
-            assign el_all_coll   = collections[el_all_handle]
-          -%}
-          <div class="atelier-plp__nav-group">
-            {% render 'atelier-eyebrow', text: section.settings.element_nav_label %}
-            <ul class="atelier-plp__nav-list">
-              <li>
-                <a href="{{ section.settings.element_all_url | default: '/collections/all' }}"
-                   class="atelier-plp__nav-link{% if all_active %} is-current{% endif %}">
-                  <span>All</span>
-                  <span class="atelier-plp__nav-right">
-                    {%- if el_all_coll != blank -%}
-                      <span class="atelier-plp__nav-count">{{ el_all_coll.all_products_count }}</span>
-                    {%- endif -%}
-                    {%- if all_active -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
-                  </span>
-                </a>
-              </li>
-              {%- for link in linklists[el_menu].links -%}
-                {%- assign link_handle = link.url | split: '/collections/' | last -%}
-                {%- assign is_current  = false -%}
-                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
-                {%- assign link_coll   = collections[link_handle] -%}
+        {%- for g in groups -%}
+          {%- if g == 'element' -%}{%- assign g_menu = el_menu -%}{%- assign g_label = section.settings.element_nav_label -%}{%- assign g_all = el_all_url -%}{%- else -%}{%- assign g_menu = obj_menu -%}{%- assign g_label = section.settings.object_nav_label -%}{%- assign g_all = obj_all_url -%}{%- endif -%}
+          {%- if g_menu != blank and mode == g -%}
+            {%- assign g_all_handle = g_all | split: '/collections/' | last -%}
+            {%- assign g_all_coll = collections[g_all_handle] -%}
+            <div class='atelier-plp__nav-group'>
+              {% render 'atelier-eyebrow', text: g_label %}
+              <ul class='atelier-plp__nav-list'>
                 <li>
-                  <a href="{{ link.url }}"
-                     class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
-                     {% if is_current %}aria-current="page"{% endif %}>
-                    <span>{{ link.title }}</span>
-                    <span class="atelier-plp__nav-right">
-                      {%- if link_coll != blank -%}
-                        <span class="atelier-plp__nav-count">{{ link_coll.all_products_count }}</span>
-                      {%- endif -%}
-                      {%- if is_current -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
+                  <a href='{{ g_all }}' class='atelier-plp__nav-link{% if all_active %} is-current{% endif %}'>
+                    <span>All</span>
+                    <span class='atelier-plp__nav-right'>
+                      {%- if g_all_coll != blank -%}<span class='atelier-plp__nav-count'>{{ g_all_coll.all_products_count }}</span>{%- endif -%}
+                      {%- if all_active -%}<span class='atelier-plp__nav-arrow' aria-hidden='true'>→</span>{%- endif -%}
                     </span>
                   </a>
                 </li>
-              {%- endfor -%}
-            </ul>
-          </div>
-        {%- endif -%}
-
-        {%- if obj_menu != blank -%}
-          {%- liquid
-            assign obj_all_handle = section.settings.object_all_url | default: '/collections/all' | split: '/collections/' | last
-            assign obj_all_coll   = collections[obj_all_handle]
-          -%}
-          <div class="atelier-plp__nav-group">
-            {% render 'atelier-eyebrow', text: section.settings.object_nav_label %}
-            <ul class="atelier-plp__nav-list">
-              <li>
-                <a href="{{ section.settings.object_all_url | default: '/collections/all' }}"
-                   class="atelier-plp__nav-link{% if all_active %} is-current{% endif %}">
-                  <span>All</span>
-                  <span class="atelier-plp__nav-right">
-                    {%- if obj_all_coll != blank -%}
-                      <span class="atelier-plp__nav-count">{{ obj_all_coll.all_products_count }}</span>
-                    {%- endif -%}
-                    {%- if all_active -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
-                  </span>
-                </a>
-              </li>
-              {%- for link in linklists[obj_menu].links -%}
-                {%- assign link_handle = link.url | split: '/collections/' | last -%}
-                {%- assign is_current  = false -%}
-                {%- if link_handle == collection.handle -%}{%- assign is_current = true -%}{%- endif -%}
-                {%- assign link_coll   = collections[link_handle] -%}
-                <li>
-                  <a href="{{ link.url }}"
-                     class="atelier-plp__nav-link{% if is_current %} is-current{% endif %}"
-                     {% if is_current %}aria-current="page"{% endif %}>
-                    <span>{{ link.title }}</span>
-                    <span class="atelier-plp__nav-right">
-                      {%- if link_coll != blank -%}
-                        <span class="atelier-plp__nav-count">{{ link_coll.all_products_count }}</span>
-                      {%- endif -%}
-                      {%- if is_current -%}<span class="atelier-plp__nav-arrow" aria-hidden="true">→</span>{%- endif -%}
-                    </span>
-                  </a>
-                </li>
-              {%- endfor -%}
-            </ul>
-          </div>
-        {%- endif -%}
+                {%- for link in linklists[g_menu].links -%}
+                  {%- assign link_handle = link.url | split: '/collections/' | last -%}
+                  {%- assign link_coll = collections[link_handle] -%}
+                  <li>
+                    <a href='{{ link.url }}' class='atelier-plp__nav-link{% if link_handle == collection.handle %} is-current{% endif %}'{% if link_handle == collection.handle %} aria-current='page'{% endif %}>
+                      <span>{{ link.title }}</span>
+                      <span class='atelier-plp__nav-right'>
+                        {%- if link_coll != blank -%}<span class='atelier-plp__nav-count'>{{ link_coll.all_products_count }}</span>{%- endif -%}
+                        {%- if link_handle == collection.handle -%}<span class='atelier-plp__nav-arrow' aria-hidden='true'>→</span>{%- endif -%}
+                      </span>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
 
         {%- if section.settings.show_price_filter -%}
           {%- for f in collection.filters -%}
-            {%- if f.type == 'price_range' -%}
-              {% render 'atelier-facet-group', filter: f %}
-            {%- endif -%}
+            {%- if f.type == 'price_range' -%}{% render 'atelier-facet-group', filter: f %}{%- endif -%}
           {%- endfor -%}
         {%- endif -%}
       </aside>
 
-      <div class="atelier-plp__main">
+      <div class='atelier-plp__main'>
         {%- paginate collection.products by per_page -%}
 
           {%- assign showing = paginate.current_offset | plus: collection.products.size -%}
-          <div class="atelier-plp__grid-head">
-            {%- if active_label != blank -%}
-              <span class="atelier-plp__active-label">{{ active_label }}.</span>
-            {%- else -%}
-              <span></span>
-            {%- endif -%}
-            <span class="atelier-plp__count">Showing {{ showing }} of {{ paginate.items }}</span>
+          {%- if collection.products.size > 0 -%}
+          <div class='atelier-plp__grid-head'>
+            {%- if active_label != blank -%}<span class='atelier-plp__active-label'>{{ active_label }}.</span>{%- else -%}<span></span>{%- endif -%}
+            <span class='atelier-plp__count'>Showing {{ showing }} of {{ paginate.items }}</span>
           </div>
+          {%- endif -%}
 
-          <div class="atelier-plp__grid">
-            {%- for product in collection.products -%}
-              {%- assign num = forloop.index | prepend: '0' | slice: -2, 2 -%}
-              {% render 'atelier-product-card', product: product, number: num %}
-
-              {%- if section.settings.editorial_after > 0 and forloop.index == section.settings.editorial_after and section.settings.editorial_title != blank -%}
-                <div class="atelier-plp__editorial">
-                  <div class="atelier-plp__editorial-body">
-                    {% render 'atelier-eyebrow', text: section.settings.editorial_eyebrow, ochre: true %}
-                    <p class="atelier-plp__editorial-title">{{ section.settings.editorial_title }}</p>
-                    {%- if section.settings.editorial_link != blank -%}
-                      <a href="{{ section.settings.editorial_link }}" class="atelier-plp__editorial-cta">{{ section.settings.editorial_cta }}</a>
-                    {%- endif -%}
-                  </div>
-                  {%- if section.settings.editorial_image != blank -%}
-                    <div class="atelier-plp__editorial-media">
-                      {{
-                        section.settings.editorial_image
-                        | image_url: width: 800
-                        | image_tag:
-                          loading: 'lazy',
-                          widths: '400, 600, 800',
-                          alt: section.settings.editorial_title | escape
-                      }}
-                    </div>
-                  {%- endif -%}
+          {%- capture editorial_html -%}
+            {%- if section.settings.editorial_after > 0 and section.settings.editorial_title != blank -%}
+              <div class='atelier-plp__editorial'>
+                <div class='atelier-plp__editorial-body'>
+                  {% render 'atelier-eyebrow', text: section.settings.editorial_eyebrow, ochre: true %}
+                  <p class='atelier-plp__editorial-title'>{{ section.settings.editorial_title }}</p>
+                  {%- if section.settings.editorial_link != blank -%}<a href='{{ section.settings.editorial_link }}' class='atelier-plp__editorial-cta'>{{ section.settings.editorial_cta }}</a>{%- endif -%}
                 </div>
-              {%- endif -%}
+                {%- if section.settings.editorial_image != blank -%}
+                  <div class='atelier-plp__editorial-media'>
+                    {{ section.settings.editorial_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', alt: section.settings.editorial_title | escape }}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endcapture -%}
+
+          {%- if collection.products.size == 0 -%}
+            <div class='atelier-plp__empty' style='text-align:center;padding:6rem 1.6rem 8rem;'>
+              <p style='font-size:2rem;margin:0 0 1rem;'>{{ collection.title }} is coming soon.</p>
+              <p style='margin:0 0 2.4rem;opacity:.75;'>We are still making this one. Meanwhile, here is everything that is ready now.</p>
+              <a href='/collections/all' class='button'>See the full shop</a>
+            </div>
+          {%- else -%}
+          <div class='atelier-plp__grid'>
+            {%- assign n = 0 -%}
+            {%- if use_curated and paginate.current_page == 1 -%}
+              {%- for h in curated_list -%}
+                {%- for product in collection.products -%}
+                  {%- if product.handle == h -%}
+                    {%- assign n = n | plus: 1 -%}
+                    {% render 'atelier-bs-card', product: product, boxed: true %}
+                    {%- if n == section.settings.editorial_after %}{{ editorial_html }}{% endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endfor -%}
+              {%- for product in collection.products -%}
+                {%- assign tok = product.handle | prepend: ',' | append: ',' -%}
+                {%- unless curated contains tok -%}
+                  {%- assign n = n | plus: 1 -%}
+                  {% render 'atelier-bs-card', product: product, boxed: true %}
+                  {%- if n == section.settings.editorial_after %}{{ editorial_html }}{% endif -%}
+                {%- endunless -%}
+              {%- endfor -%}
             {%- else -%}
-              <p>{{ 'sections.collection_template.empty' | t }}</p>
-            {%- endfor -%}
+              {%- for product in collection.products -%}
+                {%- assign n = n | plus: 1 -%}
+                {% render 'atelier-bs-card', product: product, boxed: true %}
+                {%- if n == section.settings.editorial_after and paginate.current_page == 1 %}{{ editorial_html }}{% endif -%}
+              {%- endfor -%}
+            {%- endif -%}
           </div>
 
-          <div class="atelier-plp__more">
+          <div class='atelier-plp__more'>
             {%- if paginate.current_page > 1 -%}
-              {%- if paginate.current_page == 2 -%}
-                {%- assign prev_url = collection.url -%}
-              {%- else -%}
-                {%- assign prev_page = paginate.current_page | minus: 1 -%}
-                {%- assign prev_url = collection.url | append: '?page=' | append: prev_page -%}
-              {%- endif -%}
-              <a href="{{ prev_url }}" class="button">← Previous page</a>
+              {%- if paginate.current_page == 2 -%}{%- assign prev_url = collection.url -%}{%- else -%}{%- assign prev_page = paginate.current_page | minus: 1 -%}{%- assign prev_url = collection.url | append: '?page=' | append: prev_page -%}{%- endif -%}
+              <a href='{{ prev_url }}' class='button'>← Previous page</a>
             {%- endif -%}
             {%- if paginate.next.is_link -%}
-              <a href="{{ paginate.next.url }}" class="button">{{ section.settings.more_label }}</a>
+              <a href='{{ paginate.next.url }}' class='button'>{{ section.settings.more_label }}</a>
             {%- else -%}
               <p>{{ section.settings.end_label }}</p>
             {%- endif -%}
           </div>
+          {%- endif -%}
 
         {%- endpaginate -%}
       </div>
@@ -359,7 +307,24 @@
   </div>
 </div>
 
-<div class="atelier-plp__overlay" id="atelier-overlay" aria-hidden="true"></div>
+<div class='atelier-plp__overlay' id='atelier-overlay' aria-hidden='true'></div>
+
+{%- comment -%}Product handles in each Element / Object collection, so the script can combine two selections (e.g. Stone + Urlis & Bowls) and count them.{%- endcomment -%}
+{%- capture plp_map -%}
+  {%- assign first_c = true -%}
+  {%- for g in groups -%}
+    {%- if g == 'element' -%}{%- assign gm = el_menu -%}{%- else -%}{%- assign gm = obj_menu -%}{%- endif -%}
+    {%- if gm != blank -%}
+      {%- for link in linklists[gm].links -%}
+        {%- assign lh = link.url | split: '/collections/' | last -%}
+        {%- unless first_c -%},{%- endunless -%}
+        {%- assign first_c = false -%}
+        "{{ lh }}":[{%- for p in collections[lh].products limit: 50 -%}"{{ p.handle }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+<script type='application/json' id='atelier-plp-map'>{ {{ plp_map | strip_newlines }} }</script>
 
 <script>
   (() => {
@@ -386,196 +351,147 @@
   })();
 </script>
 
+<script>
+  (function () {
+    var root = document.documentElement;
+    try {
+      var mapEl = document.getElementById('atelier-plp-map');
+      var chips = [].slice.call(document.querySelectorAll('.atelier-plp__mobile-nav a.atelier-chip[data-chip-group]'));
+      if (!mapEl || !chips.length) return;
+      var map = JSON.parse(mapEl.textContent);
+      var cur = {{ collection.handle | json }};
+      var curUrl = {{ collection.url | json }};
+      var groupOf = {}, title = {};
+      chips.forEach(function (c) {
+        var h = c.getAttribute('data-chip-handle');
+        if (h) { groupOf[h] = c.getAttribute('data-chip-group'); title[h] = c.getAttribute('data-chip-title'); }
+      });
+      var curGroup = groupOf[cur] || null;
+      var m = location.search.match(/[?&]with=([a-z0-9-]+)/);
+      var wh = m ? m[1] : null;
+      if (wh && (!groupOf[wh] || groupOf[wh] === curGroup || !map[wh])) wh = null;
+      var sel = { element: null, object: null };
+      if (curGroup) sel[curGroup] = cur;
+      if (wh) sel[groupOf[wh]] = wh;
+
+      function other(g) { return g === 'element' ? 'object' : 'element'; }
+      function inter(a, b) {
+        var s = {};
+        (map[a] || []).forEach(function (x) { s[x] = 1; });
+        return (map[b] || []).filter(function (x) { return s[x]; });
+      }
+      /* Where a chip click should go. If the page's own collection stays selected we stay on it and add ?with=; otherwise we go to the collection that is selected (object first, then element) and keep the other as ?with= */
+      function dest(ns) {
+        var A = ns.element, B = ns.object, primary = null, w = null;
+        if (curGroup && ns[curGroup] === cur) { primary = cur; w = ns[other(curGroup)] || null; }
+        else if (A || B) { primary = B || A; w = (A && B) ? (primary === B ? A : B) : null; }
+        var base = primary === cur ? curUrl : (primary ? '/collections/' + primary : '/collections/all');
+        return base + (w ? '?with=' + w : '');
+      }
+
+      chips.forEach(function (c) {
+        var g = c.getAttribute('data-chip-group');
+        var h = c.getAttribute('data-chip-handle');
+        var base = parseInt(c.getAttribute('data-chip-base'), 10) || 0;
+        if (h && base === 0) return; /* coming-soon collection: leave as it is */
+        var partner = sel[other(g)];
+        var n = partner ? (h ? inter(h, partner).length : (map[partner] || []).length) : base;
+        var active = h ? sel[g] === h : !sel[g];
+        var ns = { element: sel.element, object: sel.object };
+        ns[g] = (h && sel[g] !== h) ? h : null;
+        c.setAttribute('href', dest(ns));
+        c.classList.toggle('is-active', active);
+        if (active) { c.setAttribute('aria-current', 'true'); } else { c.removeAttribute('aria-current'); }
+        var cnt = c.querySelector('.atelier-chip__count');
+        if (!cnt) { cnt = document.createElement('span'); cnt.className = 'atelier-chip__count'; c.appendChild(cnt); }
+        cnt.textContent = n;
+        if (h && partner && n === 0 && !active) {
+          c.classList.add('is-none');
+          c.removeAttribute('href');
+          c.setAttribute('aria-disabled', 'true');
+        }
+      });
+
+      if (wh) {
+        var allow = {};
+        (map[wh] || []).forEach(function (x) { allow[x] = 1; });
+        var grid = document.querySelector('.atelier-plp__grid');
+        var shown = 0;
+        if (grid) {
+          [].slice.call(grid.children).forEach(function (card) {
+            /* the card is itself the link; fall back to a link inside it */
+            var a = card.matches('a[href*="/products/"]') ? card : card.querySelector('a[href*="/products/"]');
+            if (!a) return; /* editorial block etc: leave it visible */
+            var hm = a.getAttribute('href').match(/\/products\/([^\/?#]+)/);
+            var ok = !!(hm && allow[hm[1]]);
+            card.style.display = ok ? '' : 'none';
+            if (ok) shown++;
+          });
+          var ed = grid.querySelector('.atelier-plp__editorial');
+          if (ed) ed.style.display = 'none';
+          if (!shown) {
+            var msg = document.createElement('div');
+            msg.className = 'atelier-plp__empty';
+            msg.style.cssText = 'text-align:center;padding:6rem 1.6rem 8rem;grid-column:1/-1';
+            msg.innerHTML = '<p style="font-size:2rem;margin:0 0 1rem">Nothing in this combination yet.</p><a href="' + curUrl + '" class="button">Clear the filter</a>';
+            grid.appendChild(msg);
+          }
+        }
+        var head = document.querySelector('.atelier-plp__grid-head');
+        if (head) {
+          var lab = head.firstElementChild, cntEl = head.querySelector('.atelier-plp__count');
+          if (lab) { lab.className = 'atelier-plp__active-label'; lab.textContent = (title[sel.element] || '') + ' · ' + (title[sel.object] || '') + '.'; }
+          if (cntEl) cntEl.textContent = 'Showing ' + shown + ' of ' + shown;
+        }
+        var endP = document.querySelector('.atelier-plp__more p');
+        if (endP) endP.textContent = 'That is everything in this selection.';
+        var more = document.querySelector('.atelier-plp__more a.button');
+        if (more) more.style.display = 'none';
+        var form = document.querySelector('.atelier-plp__sort');
+        if (form) {
+          var hi = document.createElement('input');
+          hi.type = 'hidden'; hi.name = 'with'; hi.value = wh;
+          form.appendChild(hi);
+        }
+      }
+    } catch (e) { /* leave the page as the server rendered it */ }
+    finally { root.classList.remove('plp-filtering'); }
+  })();
+</script>
+
 {% schema %}
-{
-  "name": "Atelier collection",
-  "tag": "section",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_breadcrumb",
-      "label": "Show breadcrumb",
-      "default": true
-    },
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "label": "Heading (blank = collection title)",
-      "default": "Stone and Metal. <em>Eleven pieces, in the room now.</em>"
-    },
-    {
-      "type": "header",
-      "content": "Shop By band"
-    },
-    {
-      "type": "text",
-      "id": "element_caption",
-      "label": "Caption — Element mode",
-      "default": "By material – the way we make them."
-    },
-    {
-      "type": "text",
-      "id": "object_caption",
-      "label": "Caption — Object mode",
-      "default": "By what it is – the familiar way to shop."
-    },
-    {
-      "type": "text",
-      "id": "element_status_text",
-      "label": "Status text — Element mode",
-      "info": "Right-side label in the band, e.g. \"FIVE MATERIALS\"",
-      "default": "FIVE MATERIALS"
-    },
-    {
-      "type": "text",
-      "id": "object_status_text",
-      "label": "Status text — Object mode",
-      "default": "FIVE OBJECTS"
-    },
-    {
-      "type": "header",
-      "content": "Discovery sidebar"
-    },
-    {
-      "type": "link_list",
-      "id": "element_nav_menu",
-      "label": "Element navigation menu",
-      "info": "Create a menu in Online Store › Navigation with links to all element collections (Stone, Metal, Ceramic, Wood, Fabric)."
-    },
-    {
-      "type": "text",
-      "id": "element_nav_label",
-      "label": "Element group heading",
-      "default": "By Element"
-    },
-    {
-      "type": "url",
-      "id": "element_all_url",
-      "label": "Element 'All' link",
-      "info": "Where the 'All' chip links to. Defaults to /collections/all."
-    },
-    {
-      "type": "link_list",
-      "id": "object_nav_menu",
-      "label": "Object navigation menu",
-      "info": "Create a menu in Online Store › Navigation with links to all object collections (Urlis & Bowls, Vases, etc.)."
-    },
-    {
-      "type": "text",
-      "id": "object_nav_label",
-      "label": "Object group heading",
-      "default": "By Object"
-    },
-    {
-      "type": "url",
-      "id": "object_all_url",
-      "label": "Object 'All' link",
-      "info": "Where the 'All' chip links to. Defaults to /collections/all."
-    },
-    {
-      "type": "checkbox",
-      "id": "show_price_filter",
-      "label": "Show price filter below nav",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Filters (legacy — for metafield chips)"
-    },
-    {
-      "type": "text",
-      "id": "element_filter_key",
-      "label": "Element filter param",
-      "info": "The storefront filter param for the material axis.",
-      "default": "filter.p.m.atelier.element"
-    },
-    {
-      "type": "text",
-      "id": "category_filter_key",
-      "label": "Category filter param",
-      "info": "The storefront filter param for the object/category axis.",
-      "default": "filter.p.m.atelier.category"
-    },
-    {
-      "type": "text",
-      "id": "refine_label",
-      "label": "Mobile Discover button label",
-      "default": "Discover"
-    },
-    {
-      "type": "header",
-      "content": "Grid"
-    },
-    {
-      "type": "range",
-      "id": "products_per_page",
-      "min": 6,
-      "max": 24,
-      "step": 2,
-      "default": 12,
-      "label": "Products per page"
-    },
-    {
-      "type": "text",
-      "id": "more_label",
-      "label": "Load-more label",
-      "default": "Show the next twelve"
-    },
-    {
-      "type": "text",
-      "id": "end_label",
-      "label": "End-of-shop label",
-      "default": "That's the full shop — for now."
-    },
-    {
-      "type": "header",
-      "content": "Inline editorial slot"
-    },
-    {
-      "type": "range",
-      "id": "editorial_after",
-      "min": 0,
-      "max": 12,
-      "step": 1,
-      "default": 6,
-      "label": "Insert after product #",
-      "info": "0 disables the slot."
-    },
-    {
-      "type": "text",
-      "id": "editorial_eyebrow",
-      "label": "Editorial eyebrow",
-      "default": "Field note"
-    },
-    {
-      "type": "text",
-      "id": "editorial_title",
-      "label": "Editorial title",
-      "default": "Where the brass is folded by hand."
-    },
-    {
-      "type": "text",
-      "id": "editorial_cta",
-      "label": "Editorial link label",
-      "default": "Read the note →"
-    },
-    {
-      "type": "url",
-      "id": "editorial_link",
-      "label": "Editorial link"
-    },
-    {
-      "type": "image_picker",
-      "id": "editorial_image",
-      "label": "Editorial image",
-      "info": "Appears on the right half of the editorial card."
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    }
-  ]
-}
+{"name":"Atelier collection","tag":"section","settings":[
+{"type":"image_picker","id":"banner_image","label":"Banner image","info":"Optional. Shown above the breadcrumb, full width of the page. Leave blank to hide."},
+{"type":"checkbox","id":"show_breadcrumb","label":"Show breadcrumb","default":true},
+{"type":"inline_richtext","id":"heading","label":"Heading (blank = collection title)","default":"Stone and Metal. <em>Eleven pieces, in the room now.</em>"},
+{"type":"header","content":"Shop By band"},
+{"type":"text","id":"element_caption","label":"Caption - Element mode","default":"By material – the way we make them."},
+{"type":"text","id":"object_caption","label":"Caption - Object mode","default":"By what it is – the familiar way to shop."},
+{"type":"text","id":"element_status_text","label":"Status text - Element mode","default":"FIVE MATERIALS"},
+{"type":"text","id":"object_status_text","label":"Status text - Object mode","default":"FIVE OBJECTS"},
+{"type":"header","content":"Discovery sidebar"},
+{"type":"link_list","id":"element_nav_menu","label":"Element navigation menu"},
+{"type":"text","id":"element_nav_label","label":"Element group heading","default":"By Element"},
+{"type":"url","id":"element_all_url","label":"Element All link","info":"Defaults to /collections/all."},
+{"type":"link_list","id":"object_nav_menu","label":"Object navigation menu"},
+{"type":"text","id":"object_nav_label","label":"Object group heading","default":"By Object"},
+{"type":"url","id":"object_all_url","label":"Object All link","info":"Defaults to /collections/all."},
+{"type":"checkbox","id":"show_price_filter","label":"Show price filter below nav","default":false},
+{"type":"header","content":"Filters (legacy)"},
+{"type":"text","id":"element_filter_key","label":"Element filter param","default":"filter.p.m.atelier.element"},
+{"type":"text","id":"category_filter_key","label":"Category filter param","default":"filter.p.m.atelier.category"},
+{"type":"text","id":"refine_label","label":"Mobile Discover button label","default":"Discover"},
+{"type":"header","content":"Grid"},
+{"type":"range","id":"products_per_page","min":6,"max":50,"step":2,"default":12,"label":"Products per page","info":"Keep at 50 so the combined Element + Object filter sees every product."},
+{"type":"text","id":"more_label","label":"Load-more label","default":"Show the next twelve"},
+{"type":"text","id":"end_label","label":"End-of-shop label","default":"That's the full shop – for now."},
+{"type":"header","content":"Inline editorial slot"},
+{"type":"range","id":"editorial_after","min":0,"max":12,"step":1,"default":8,"label":"Insert after product #","info":"0 disables the slot."},
+{"type":"text","id":"editorial_eyebrow","label":"Editorial eyebrow","default":"Field note"},
+{"type":"text","id":"editorial_title","label":"Editorial title","default":"Where the brass is folded by hand."},
+{"type":"text","id":"editorial_cta","label":"Editorial link label","default":"Read the note →"},
+{"type":"url","id":"editorial_link","label":"Editorial link"},
+{"type":"image_picker","id":"editorial_image","label":"Editorial image"},
+{"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"scheme-1"}
+]}
 {% endschema %}

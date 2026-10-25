@@ -95,9 +95,13 @@
       {{ input_dataset }}
     >
     <label for="{{ input_id }}">
-      {{ value -}}
+      {%- if value == 'Set of 2' and product.title contains 'Urli' -%}
+        6 Inch + 9 Inch Set
+      {%- else -%}
+        {{ value -}}
+      {%- endif -%}
       {%- if option.name == 'Size' and value.variant -%}
-        <span class="product-option__price">{{ value.variant.price | money }}</span>
+        <span class="product-option__price">{{ value.variant.price | money_without_trailing_zeros }}</span>
       {%- endif -%}
       {{ label_unavailable }}
     </label>
@@ -118,6 +122,8 @@
     >
       {% if option_disabled -%}
         {{- 'products.product.value_unavailable' | t: option_value: value -}}
+      {%- elsif value == 'Set of 2' and product.title contains 'Urli' -%}
+        6 Inch + 9 Inch Set
       {%- else -%}
         {{- value -}}
       {%- endif %}

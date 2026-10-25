@@ -1,0 +1,230 @@
+{{ 'section-atelier-blog.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign current_tag = current_tags | first
+  assign per_page = section.settings.posts_per_page
+-%}
+
+<div class="atelier-blog color-{{ section.settings.color_scheme }} a-section">
+  <div class="page-width">
+    <div class="atelier-blog__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
+        {%- endif -%}
+        <h1 class="atelier-blog__title">{{ section.settings.title | default: blog.title }}</h1>
+      </div>
+      {%- if section.settings.show_tag_filter and blog.all_tags.size > 0 -%}
+        <div class="atelier-blog__filters a-rail">
+          <a href="{{ blog.url }}" class="atelier-chip{% if current_tag == blank %} is-active{% endif %}">
+            {{ 'products.facets.all' | t | default: 'All' }}
+          </a>
+          {%- for tag in blog.all_tags -%}
+            <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="atelier-chip{% if current_tag == tag %} is-active{% endif %}">
+              {{ tag }}
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- paginate blog.articles by per_page -%}
+      {%- assign show_featured = false -%}
+      {%- if paginate.current_page == 1 and blog.articles.size > 0 -%}
+        {%- assign show_featured = true -%}
+      {%- endif -%}
+
+      {%- if show_featured -%}
+        {%- liquid
+          assign featured = blog.articles.first
+          assign featured_tag = featured.metafields.atelier.element.value
+          if featured_tag == blank
+            assign featured_tag = featured.tags.first
+          endif
+          assign featured_words = featured.content | strip_html | split: ' ' | size
+          assign featured_minutes = featured_words | divided_by: 200 | at_least: 1
+          assign featured_excerpt = featured.excerpt
+          if featured_excerpt == blank
+            assign featured_excerpt = featured.content | strip_html | truncatewords: 28
+          endif
+        -%}
+        <div class="atelier-blog__featured">
+          <a href="{{ featured.url }}" class="atelier-blog__feat-main a-anim">
+            <div class="atelier-blog__feat-media">
+              {%- if featured.image != blank -%}
+                {{
+                  featured.image
+                  | image_url: width: 1200
+                  | image_tag:
+                    loading: 'eager',
+                    sizes: '(min-width: 990px) 66vw, 100vw',
+                    widths: '550, 800, 1200',
+                    alt: featured.title | escape
+                }}
+              {%- endif -%}
+            </div>
+            <div class="atelier-blog__feat-info">
+              <div class="atelier-blog__feat-meta">
+                {%- if featured_tag != blank -%}<span class="atelier-blog__feat-tag">{{ featured_tag }}</span>{%- endif -%}
+                <span class="atelier-blog__feat-time">{{ featured_minutes }} min read</span>
+              </div>
+              <h2 class="atelier-blog__feat-title">{{ featured.title }}</h2>
+              {%- if featured_excerpt != blank -%}
+                <p class="atelier-blog__feat-excerpt">{{ featured_excerpt }}</p>
+              {%- endif -%}
+              <span class="atelier-blog__feat-link">
+                {{ section.settings.read_more_label }} <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+
+          <div class="atelier-blog__aside">
+            {%- for article in blog.articles limit: 2 offset: 1 -%}
+              <a href="{{ article.url }}" class="atelier-blog__aside-card a-anim">
+                <div class="atelier-blog__aside-media">
+                  {%- if article.image != blank -%}
+                    {{
+                      article.image
+                      | image_url: width: 700
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '(min-width: 990px) 33vw, 100vw',
+                        widths: '350, 500, 700',
+                        alt: article.title | escape
+                    }}
+                  {%- endif -%}
+                </div>
+                <div class="atelier-blog__aside-body">
+                  {%- liquid
+                    assign aside_tag = article.metafields.atelier.element.value
+                    if aside_tag == blank
+                      assign aside_tag = article.tags.first
+                    endif
+                  -%}
+                  {%- if aside_tag != blank -%}<p class="atelier-blog__aside-tag">{{ aside_tag }}</p>{%- endif -%}
+                  <h3 class="atelier-blog__aside-title">{{ article.title }}</h3>
+                </div>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- liquid
+        assign grid_offset = 0
+        if show_featured
+          assign grid_offset = 3
+        endif
+        assign grid_count = blog.articles.size | minus: grid_offset
+        if grid_count > 3
+          assign grid_count = 3
+        endif
+        if grid_count < 1
+          assign grid_count = 1
+        endif
+      -%}
+      <div class="atelier-blog__grid" style="--atelier-blog-grid-cols: {{ grid_count }};">
+        {%- for article in blog.articles offset: grid_offset -%}
+          {%- liquid
+            assign grid_tag = article.metafields.atelier.element.value
+            if grid_tag == blank
+              assign grid_tag = article.tags.first
+            endif
+            assign grid_excerpt = article.excerpt
+            if grid_excerpt == blank
+              assign grid_excerpt = article.content | strip_html | truncatewords: 22
+            endif
+          -%}
+          <a href="{{ article.url }}" class="atelier-blog__card a-anim">
+            <div class="atelier-blog__card-media">
+              {%- if article.image != blank -%}
+                {{
+                  article.image
+                  | image_url: width: 700
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 990px) 33vw, 50vw',
+                    widths: '350, 500, 700',
+                    alt: article.title | escape
+                }}
+              {%- endif -%}
+            </div>
+            <div class="atelier-blog__card-body">
+              {%- if grid_tag != blank -%}<p class="atelier-blog__card-tag">{{ grid_tag }}</p>{%- endif -%}
+              <h3 class="atelier-blog__card-title">{{ article.title }}</h3>
+              {%- if grid_excerpt != blank -%}<p class="atelier-blog__card-excerpt">{{ grid_excerpt }}</p>{%- endif -%}
+            </div>
+          </a>
+        {%- else -%}
+          {%- unless show_featured -%}
+            <p>{{ 'sections.featured_blog.onboarding_content' | t }}</p>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="atelier-blog__more">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="atelier-blog__prev">← {{ 'general.pagination.previous' | t }}</a>
+          {%- endif -%}
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="button">{{ 'general.pagination.next' | t }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Atelier blog",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Stories"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title (blank = blog title)",
+      "default": "Stories from <em>the Workshop</em>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag_filter",
+      "label": "Show tag filter chips",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "read_more_label",
+      "label": "Featured post link label",
+      "default": "Read the note"
+    },
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "min": 6,
+      "max": 18,
+      "step": 1,
+      "default": 9,
+      "label": "Posts per page"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier blog"
+    }
+  ]
+}
+{% endschema %}

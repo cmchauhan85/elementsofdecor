@@ -1,0 +1,89 @@
+{%- comment -%} Image + text band. Used for Experience Store and Gifting. 1 or 3 image slots. {%- endcomment -%}
+<style>
+#bd-{{ section.id }}{padding-block:3rem}
+#bd-{{ section.id }} .bd-in{display:grid;gap:2.4rem;align-items:center}
+#bd-{{ section.id }} .bd-media{display:grid;gap:.8rem;grid-template-columns:1fr 1fr;min-width:0}
+#bd-{{ section.id }} .bd-fig{margin:0;position:relative;overflow:hidden;border-radius:var(--a-radius-image,4px);background:var(--a-stone,#ece7df);min-width:0}
+#bd-{{ section.id }} .bd-fig--main{grid-column:1/-1;aspect-ratio:4/3}
+#bd-{{ section.id }} .bd-fig--sm{aspect-ratio:1/1}
+#bd-{{ section.id }} .bd-media--one .bd-fig--main{aspect-ratio:4/5}
+#bd-{{ section.id }} .bd-fig img{width:100%;height:100%;object-fit:cover;display:block}
+#bd-{{ section.id }} .bd-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading-family);font-size:2.4rem;letter-spacing:.2em;color:var(--a-muted,#8a8378);background:repeating-linear-gradient(135deg,rgba(0,0,0,.025) 0 1px,transparent 1px 10px)}
+#bd-{{ section.id }} .bd-cap{position:absolute;left:.8rem;bottom:.8rem;right:.8rem;font-size:1.1rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+#bd-{{ section.id }} .bd-ph~.bd-cap{color:var(--a-muted,#8a8378);text-shadow:none}
+#bd-{{ section.id }} .bd-txt{text-align:center;min-width:0}
+#bd-{{ section.id }} .bd-eye{font-size:1.2rem;letter-spacing:.22em;text-transform:uppercase;color:var(--a-ochre,#d9603b);margin:0 0 1.2rem}
+#bd-{{ section.id }} .bd-title{font-family:var(--font-heading-family);font-weight:400;font-size:clamp(2.6rem,7vw,4.2rem);line-height:1.12;margin:0;text-wrap:balance}
+#bd-{{ section.id }} .bd-title em{color:var(--a-ochre,#d9603b);font-style:italic}
+#bd-{{ section.id }} .bd-rule{display:block;width:4rem;height:2px;background:var(--a-ochre,#d9603b);margin:1.8rem auto}
+#bd-{{ section.id }} .bd-meta{font-size:1.3rem;letter-spacing:.08em;color:var(--a-ink,inherit);margin:0 0 1.2rem;font-weight:500}
+#bd-{{ section.id }} .bd-text{color:var(--a-muted,rgba(var(--color-foreground),.7));font-size:1.5rem;line-height:1.7;margin:0 auto 2.2rem;max-width:46ch}
+#bd-{{ section.id }} .bd-cta{display:inline-block;border:1px solid var(--a-ink,currentColor);padding:1.2rem 2.6rem;font-size:1.2rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:inherit;transition:background .2s,color .2s}
+#bd-{{ section.id }} .bd-cta:hover{background:var(--a-ink,#1b1916);color:#fff}
+@media(min-width:750px){
+#bd-{{ section.id }}{padding-block:5rem}
+#bd-{{ section.id }} .bd-in{grid-template-columns:1.15fr 1fr;gap:6rem}
+#bd-{{ section.id }} .bd-txt{text-align:left;padding-inline:1rem}
+#bd-{{ section.id }} .bd-rule{margin:2rem 0}
+#bd-{{ section.id }} .bd-text{margin-inline:0}
+#bd-{{ section.id }} .bd-media--one{max-width:56rem;width:100%}
+#bd-{{ section.id }}.bd--right .bd-in{grid-template-columns:1fr 1.15fr}
+#bd-{{ section.id }}.bd--right .bd-media{order:2}
+}
+</style>
+<section id="bd-{{ section.id }}" class="bd color-{{ section.settings.color_scheme }} gradient{% if section.settings.image_side == 'right' %} bd--right{% endif %}">
+  <div class="page-width">
+    <div class="bd-in">
+      <div class="bd-media{% if section.settings.image_count == '1' %} bd-media--one{% endif %}">
+        {%- liquid
+          assign n = section.settings.image_count | plus: 0
+        -%}
+        <figure class="bd-fig bd-fig--main">
+          {%- if section.settings.image_1 != blank -%}{{ section.settings.image_1 | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1400', sizes: '(min-width: 750px) 55vw, 100vw', alt: section.settings.caption_1 }}{%- else -%}<span class="bd-ph">ED</span>{%- endif -%}
+          {%- if section.settings.caption_1 != blank -%}<figcaption class="bd-cap">{{ section.settings.caption_1 }}</figcaption>{%- endif -%}
+        </figure>
+        {%- if n > 1 -%}
+        <figure class="bd-fig bd-fig--sm">
+          {%- if section.settings.image_2 != blank -%}{{ section.settings.image_2 | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 750px) 27vw, 50vw', alt: section.settings.caption_2 }}{%- else -%}<span class="bd-ph">ED</span>{%- endif -%}
+          {%- if section.settings.caption_2 != blank -%}<figcaption class="bd-cap">{{ section.settings.caption_2 }}</figcaption>{%- endif -%}
+        </figure>
+        <figure class="bd-fig bd-fig--sm">
+          {%- if section.settings.image_3 != blank -%}{{ section.settings.image_3 | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 750px) 27vw, 50vw', alt: section.settings.caption_3 }}{%- else -%}<span class="bd-ph">ED</span>{%- endif -%}
+          {%- if section.settings.caption_3 != blank -%}<figcaption class="bd-cap">{{ section.settings.caption_3 }}</figcaption>{%- endif -%}
+        </figure>
+        {%- endif -%}
+      </div>
+      <div class="bd-txt">
+        {%- if section.settings.eyebrow != blank -%}<p class="bd-eye">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="bd-title">{{ section.settings.title }}</h2>
+        <span class="bd-rule"></span>
+        {%- if section.settings.meta != blank -%}<p class="bd-meta">{{ section.settings.meta }}</p>{%- endif -%}
+        <p class="bd-text">{{ section.settings.text }}</p>
+        {%- if section.settings.cta_label != blank -%}<a class="bd-cta" href="{{ section.settings.link | default: '#' }}">{{ section.settings.cta_label }}</a>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Image + text band",
+  "settings": [
+    {"type":"select","id":"image_side","label":"Image side (desktop)","options":[{"value":"left","label":"Left"},{"value":"right","label":"Right"}],"default":"left"},
+    {"type":"select","id":"image_count","label":"Number of images","options":[{"value":"1","label":"1"},{"value":"3","label":"3"}],"default":"1"},
+    {"type":"image_picker","id":"image_1","label":"Main image"},
+    {"type":"text","id":"caption_1","label":"Main image caption"},
+    {"type":"image_picker","id":"image_2","label":"Second image"},
+    {"type":"text","id":"caption_2","label":"Second image caption"},
+    {"type":"image_picker","id":"image_3","label":"Third image"},
+    {"type":"text","id":"caption_3","label":"Third image caption"},
+    {"type":"text","id":"eyebrow","label":"Eyebrow"},
+    {"type":"inline_richtext","id":"title","label":"Title","default":"Title <em>accent.</em>"},
+    {"type":"text","id":"meta","label":"Location / detail line"},
+    {"type":"textarea","id":"text","label":"Text"},
+    {"type":"text","id":"cta_label","label":"Button label"},
+    {"type":"url","id":"link","label":"Button link"},
+    {"type":"color_scheme","id":"color_scheme","label":"Color scheme","default":"scheme-2"}
+  ],
+  "presets": [{"name":"Image + text band"}]
+}
+{% endschema %}

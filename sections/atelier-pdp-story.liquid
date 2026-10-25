@@ -1,57 +1,195 @@
-{{ 'section-atelier-pdp-blocks.css' | asset_url | stylesheet_tag }}
-
 {%- liquid
-  assign origin = product.metafields.atelier.story_origin.value
-  assign craft = product.metafields.atelier.story_craft.value
-  assign story_img = section.settings.image | default: product.featured_media
+  assign story = product.metafields.atelier.story
+  assign reel = product.metafields.atelier.reel.value
+  assign city = product.metafields.atelier.origin | split: ',' | first | strip
+  assign f_craft = product.metafields.atelier.craft | strip
+  assign f_mat = product.metafields.atelier.material_text | strip
+  assign f_org = product.metafields.atelier.story_origin | strip
+  assign f_more = ''
+  assign f_time = ''
+  if f_mat == 'White marble' and product.type == 'Urlis & Bowls'
+    assign f_more = 'The white marble comes from Rajsamand, Rajasthan, and each urli is carved by hand from a single block. One piece takes four days to finish.'
+    assign f_time = '4 days per piece'
+  endif
+  assign has_img = false
+  if reel == blank
+    for v in product.variants
+      if v.metafields.atelier.story_image.value != blank
+        assign has_img = true
+      endif
+    endfor
+  endif
+  assign cur_opt = product.selected_or_first_available_variant.option1
 -%}
-
-<div class="atelier-story color-{{ section.settings.color_scheme }} a-section">
-  <div class="page-width">
-    <div class="atelier-story__grid">
-      <div class="atelier-story__media">
-        {%- if story_img != blank -%}
-          {{ story_img | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw', widths: '550, 800, 1200', alt: product.title | escape }}
-        {%- endif -%}
+{%- comment -%} Reviews styling (Judge.me, Ink & Coral). Lives here because this section always renders on the PDP. The Reviews block is hidden until the product has its first review. {%- endcomment -%}
+<style>
+{%- if product.metafields.judgeme.widget == blank -%}
+[id$="__reviews"]{display:none!important}
+{%- endif -%}
+[id$="__reviews"]{background:#fff;border-top:1px solid #d9d0c3}
+.jdgm-rev-widg{border:0!important;padding:0!important;color:#14213d;font-family:var(--font-body-family)}
+.jdgm-rev-widg__title{font-family:var(--font-heading-family)!important;font-weight:400!important;font-size:clamp(2.6rem,3.6vw,3.6rem)!important;color:#14213d;text-align:center}
+.jdgm-rev-widg__summary{border:0!important;padding-bottom:2rem!important}
+.jdgm-star,.jdgm-prev-badge__stars .jdgm-star{color:#cf4a25!important}
+.jdgm-rev-widg__summary-average,.jdgm-rev-widg__summary-text{color:#14213d}
+.jdgm-histogram__bar-content{background:#cf4a25!important}
+.jdgm-histogram__bar{background:#f5f2eb!important;border-radius:99px}
+.jdgm-write-rev-link,.jdgm-write-rev-link:hover,.jdgm-submit-rev,.jdgm-submit-rev:hover{background:#14213d!important;color:#fff!important;border:0!important;border-radius:0!important;letter-spacing:.14em;text-transform:uppercase;font-size:1.2rem!important;padding:1.2rem 2.4rem!important}
+.jdgm-rev{border-top:1px solid #d9d0c3!important;padding:2.2rem 0!important}
+.jdgm-rev__author{font-weight:600;color:#14213d}
+.jdgm-rev__title{font-family:var(--font-heading-family);font-weight:400;font-size:1.9rem;color:#14213d}
+.jdgm-rev__body{color:rgba(20,33,61,.82);line-height:1.65}
+.jdgm-rev__timestamp{color:rgba(20,33,61,.55)}
+.jdgm-rev__buyer-badge,.jdgm-rev__buyer-badge-wrapper{color:#2f6b4f!important}
+.jdgm-rev__pic-img,.jdgm-rev__photo{border-radius:.6rem}
+</style>
+{%- if story != blank or reel != blank -%}
+<style>
+.atl-story{background:#f5f2eb;color:#14213d;padding:6.4rem 0}
+.atl-story__in{display:grid;gap:2.4rem;justify-items:center;text-align:center}
+.atl-story__eye{margin:0;font-size:1.2rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#cf4a25;line-height:1.2}
+.atl-story__h{margin:0;font-family:var(--font-heading-family);font-weight:400;font-size:clamp(3.2rem,4.4vw,4.8rem);line-height:1.08;letter-spacing:var(--a-display-tracking,0);text-wrap:balance}
+.atl-story__h em{font-style:italic;color:#cf4a25}
+.atl-story__rule{display:block;width:4rem;height:2px;background:#cf4a25}
+.atl-story__p{margin:0;max-width:52ch;font-size:1.8rem;line-height:1.65;color:rgba(20,33,61,.82)}
+.atl-story__copy{display:grid;gap:2rem;justify-items:center}
+.atl-reel{position:relative;width:100%;max-width:34rem;aspect-ratio:9/16;border-radius:.6rem;overflow:hidden;background:#14213d}
+.atl-reel video,.atl-reel img{display:block;width:100%;height:100%;object-fit:cover}
+.atl-play{position:absolute;inset:0;margin:auto;width:6.4rem;height:6.4rem;border:0;border-radius:50%;background:#fff;color:#14213d;display:grid;place-items:center;box-shadow:0 .4rem 2rem rgba(20,33,61,.3);cursor:pointer;padding:0}
+.atl-play svg{width:2.2rem;height:2.2rem;margin-left:.3rem}
+.atl-play[hidden]{display:none}
+.atl-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:2rem 3rem;margin:.6rem 0 0;padding:2.2rem 0 0;border-top:1px solid #d9d0c3;width:100%;max-width:64rem;text-align:left}
+.atl-facts div{display:grid;gap:.6rem;align-content:start}
+.atl-facts dt{margin:0;font-size:1.1rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#cf4a25;line-height:1.2}
+.atl-facts dd{margin:0;font-family:var(--font-heading-family);font-size:1.9rem;line-height:1.25}
+.atl-story.has-reel .atl-story__in{grid-template-columns:minmax(0,34rem) minmax(0,1fr);justify-content:center;align-items:center;gap:7rem;text-align:left;justify-items:stretch}
+.atl-story.has-reel .atl-story__copy{justify-items:start}
+.atl-sim{position:relative;width:100%;max-width:46rem;aspect-ratio:1/1;border-radius:.6rem;overflow:hidden;background:#ebe4d6}
+.atl-sim__i{position:absolute;inset:0}
+.atl-sim__i[hidden]{display:none}
+.atl-sim__i img{display:block;width:100%;height:100%;object-fit:cover}
+.atl-story.has-img .atl-story__in{grid-template-columns:minmax(0,46rem) minmax(0,1fr);justify-content:center;align-items:center;gap:7rem;text-align:left;justify-items:stretch}
+.atl-story.has-img .atl-story__copy{justify-items:start}
+@media(max-width:749px){.atl-story{padding:4.4rem 0}.atl-story.has-reel .atl-story__in,.atl-story.has-img .atl-story__in{grid-template-columns:1fr;gap:2.8rem;justify-items:center}.atl-story.has-reel .atl-story__copy,.atl-story.has-img .atl-story__copy{justify-items:start;width:100%}.atl-story__p{font-size:1.6rem}.atl-facts{grid-template-columns:1fr;gap:1.4rem}.atl-facts div{grid-template-columns:9rem 1fr;align-items:baseline;gap:1.2rem}.atl-facts dd{font-size:1.7rem}}
+{%- if reel != blank -%}
+.eod-fv{position:fixed;left:2rem;bottom:2rem;z-index:40;display:inline-flex;align-items:center;gap:0;height:5.6rem;padding:0 1.8rem 0 0;border:0;border-radius:99rem;background:#fff;color:#14213d;box-shadow:0 .4rem 1.2rem rgba(0,0,0,.25);cursor:pointer;font-family:var(--font-body-family);transition:transform .15s}
+.eod-fv:hover{transform:scale(1.04)}
+.eod-fv__t{position:relative;flex:none;width:5.6rem;height:5.6rem;border-radius:50%;overflow:hidden;border:.3rem solid #fff;box-sizing:border-box;background:#14213d}
+.eod-fv__t img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.eod-fv__p{position:absolute;inset:0;margin:auto;width:2.4rem;height:2.4rem;border-radius:50%;background:rgba(255,255,255,.94);color:#14213d;display:grid;place-items:center}
+.eod-fv__p svg{width:1rem;height:1rem;margin-left:.15rem}
+.eod-fv__l{font-size:1.1rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1;margin-left:.2rem}
+@media(max-width:749px){.eod-fv{left:1.5rem;bottom:1.5rem;height:5rem;padding-right:1.5rem}.eod-fv__t{width:5rem;height:5rem}}
+.eod-vid{padding:0;border:0;border-radius:.6rem;background:#14213d;max-width:92vw;max-height:92vh;overflow:hidden}
+.eod-vid::backdrop{background:rgba(20,33,61,.74)}
+.eod-vid video{display:block;max-height:84vh;max-width:92vw;width:auto;height:auto}
+.eod-vid__x{position:absolute;top:.8rem;right:.8rem;z-index:2;width:4rem;height:4rem;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#14213d;font-size:2.4rem;line-height:1;cursor:pointer;padding:0}
+{%- endif -%}
+</style>
+<div class="atl-story{% if reel != blank %} has-reel{% elsif has_img %} has-img{% endif %}">
+  <div class="page-width atl-story__in">
+    {%- if reel != blank -%}
+      <div class="atl-reel">{{ reel | video_tag: image_size: '720x', controls: false, preload: 'none', playsinline: true, muted: false, loop: false }}<button type="button" class="atl-play" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></button></div>
+    {%- endif -%}
+    {%- if has_img -%}
+      <div class="atl-sim" data-atl-sim>
+        {%- for v in product.variants -%}
+          {%- assign sv = v.metafields.atelier.story_image.value -%}
+          {%- if sv != blank -%}
+            <div class="atl-sim__i"{% if v.option1 != cur_opt %} hidden{% endif %} data-owner="{{ v.option1 | escape }}">{{ sv | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '480, 720, 1000', sizes: '(min-width: 750px) 46rem, 90vw', alt: sv.alt }}</div>
+          {%- endif -%}
+        {%- endfor -%}
       </div>
-      <div class="atelier-story__copy">
-        {%- if section.settings.eyebrow != blank -%}
-          {% render 'atelier-eyebrow', text: section.settings.eyebrow, ochre: true %}
-        {%- endif -%}
-        <h2 class="atelier-story__title">{{ section.settings.title }}</h2>
-        {%- if section.settings.body != blank -%}
-          <div class="atelier-story__body">{{ section.settings.body }}</div>
-        {%- endif -%}
-
-        {%- if origin != blank or craft != blank -%}
-          <dl class="atelier-story__stats">
-            {%- if origin != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_origin }}</dt><dd>{{ origin }}</dd></div>{%- endif -%}
-            {%- if craft != blank -%}<div class="atelier-story__stat"><dt>{{ section.settings.label_craft }}</dt><dd>{{ craft }}</dd></div>{%- endif -%}
-          </dl>
-        {%- endif -%}
-
-        {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
-          <a href="{{ section.settings.cta_link }}" class="atelier-chip" style="display:inline-block">{{ section.settings.cta_label }}</a>
-        {%- endif -%}
-      </div>
+    {%- endif -%}
+    <div class="atl-story__copy">
+      <p class="atl-story__eye">{{ section.settings.eyebrow }}</p>
+      <h2 class="atl-story__h">{%- if city != blank -%}Made by hand in <em>{{ city }}.</em>{%- else -%}Made by <em>hand.</em>{%- endif -%}</h2>
+      <span class="atl-story__rule"></span>
+      {%- if story != blank -%}<p class="atl-story__p">{{ story }}</p>{%- endif -%}
+      {%- if f_more != blank -%}<p class="atl-story__p">{{ f_more }}</p>{%- endif -%}
+      {%- if f_craft != blank or f_mat != blank or f_org != blank -%}
+        <dl class="atl-facts">
+          {%- if f_craft != blank -%}<div><dt>Craft</dt><dd>{{ f_craft }}</dd></div>{%- endif -%}
+          {%- if f_mat != blank -%}<div><dt>Material</dt><dd>{{ f_mat }}</dd></div>{%- endif -%}
+          {%- if f_org != blank -%}<div><dt>Made in</dt><dd>{{ f_org }}</dd></div>{%- endif -%}
+          {%- if f_time != blank -%}<div><dt>Time</dt><dd>{{ f_time }}</dd></div>{%- endif -%}
+        </dl>
+      {%- endif -%}
     </div>
   </div>
 </div>
+{%- if reel != blank -%}
+<template id="eod-reel-tpl">{{ reel | video_tag: image_size: '720x', controls: true, preload: 'metadata', playsinline: true, muted: false, loop: false }}</template>
+<script>
+(function(){
+  var reel=document.querySelector('.atl-reel');
+  if(reel){
+    var v=reel.querySelector('video'),p=reel.querySelector('.atl-play');
+    if(v&&p){
+      p.addEventListener('click',function(){v.controls=true;p.hidden=true;var r=v.play();if(r&&r.catch)r.catch(function(){p.hidden=false})});
+      v.addEventListener('ended',function(){v.controls=false;p.hidden=false});
+    }
+  }
+  var tpl=document.getElementById('eod-reel-tpl');
+  function openVid(){
+    var d=document.getElementById('eod-vd');
+    if(!d){
+      d=document.createElement('dialog');d.id='eod-vd';d.className='eod-vid';
+      d.innerHTML='<button type="button" class="eod-vid__x" aria-label="Close">&times;</button>';
+      document.body.appendChild(d);
+      d.addEventListener('click',function(e){if(e.target===d||(e.target.classList&&e.target.classList.contains('eod-vid__x')))d.close()});
+      d.addEventListener('close',function(){var x=d.querySelector('video');if(x){x.pause();x.remove()}});
+    }
+    var n=tpl.content.firstElementChild.cloneNode(true);
+    d.appendChild(n);d.showModal();
+    n.controls=true;var r=n.play();if(r&&r.catch)r.catch(function(){});
+  }
+  function fv(){
+    var pv=document.querySelector('.atl-reel video');
+    if(!tpl||!pv||!pv.poster||document.querySelector('.eod-fv'))return;
+    var f=document.createElement('button');f.type='button';f.className='eod-fv';f.setAttribute('aria-label','Watch video');
+    f.innerHTML='<span class="eod-fv__t"><img alt=""><span class="eod-fv__p"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span></span><span class="eod-fv__l">Watch</span>';
+    f.querySelector('img').src=pv.poster;
+    f.addEventListener('click',openVid);document.body.appendChild(f);
+    function pos(){var wa=document.querySelector('.whatsapp-bubble');if(wa)f.style.bottom=getComputedStyle(wa).bottom}
+    pos();setInterval(pos,400);addEventListener('resize',pos);
+  }
+  fv();
+})();
+</script>
+{%- endif -%}
+{%- if has_img -%}
+<script>
+(function(){
+  var box=document.querySelector('[data-atl-sim]');
+  if(!box) return;
+  function cur(){var r=document.querySelector('variant-selects input[type=radio]:checked');if(r)return r.value;var s=document.querySelector('variant-selects select');return s?s.value:null;}
+  function ap(){var c=cur();if(!c)return;box.querySelectorAll('.atl-sim__i').forEach(function(el){el.hidden=el.getAttribute('data-owner')!==c;});}
+  document.addEventListener('change',function(e){var t=e.target;if(t&&t.closest&&t.closest('variant-selects')){[0,250,800].forEach(function(ms){setTimeout(ap,ms);});}});
+  ap();
+})();
+</script>
+{%- endif -%}
+{%- endif -%}
 
+{%- render 'eod-mrp' -%}
+<style>
+.atl-facts2,.product__microcopy,[id$="__material"]{display:none!important}
+#MainContent{display:flex;flex-direction:column}
+#MainContent>[id$="__main"]{order:0}
+#MainContent>[id$="__story"]{order:1}
+#MainContent>[id$="__specs"]{order:2}
+#MainContent>[id$="__pairs"]{order:4}
+#MainContent>[id$="__store"]{order:5}
+#MainContent>[id$="__reviews"]{order:6}
+#MainContent>[id$="__recent"]{order:7}
+</style>
 {% schema %}
 {
   "name": "Atelier PDP story",
   "tag": "section",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Image (blank = product image)" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Story" },
-    { "type": "inline_richtext", "id": "title", "label": "Title", "default": "Marble <em>remembers.</em>" },
-    { "type": "richtext", "id": "body", "label": "Body" },
-    { "type": "text", "id": "label_origin", "label": "Stat 1 label", "default": "Origin" },
-    { "type": "text", "id": "label_craft", "label": "Stat 2 label", "default": "Craft" },
-    { "type": "text", "id": "cta_label", "label": "Link label", "default": "Read the field note" },
-    { "type": "url", "id": "cta_link", "label": "Link" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-2" }
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The story" }
   ],
   "presets": [{ "name": "Atelier PDP story" }]
 }

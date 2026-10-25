@@ -1,0 +1,26 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "atelier-visit-page",
+      "settings": {
+        "image_1": "shopify://shop_images/eod-store-lounge.jpg",
+        "image_2": "shopify://shop_images/eod-store-shelf-pieces.jpg",
+        "image_3": "shopify://shop_images/eod-aranya-vilas-gate.jpg",
+        "hours": "10 AM to 8 PM",
+        "address": "Aranya Vilas, Udaipur, Rajasthan",
+        "maps_url": "https://maps.app.goo.gl/6fPnhY2pFNfpELjz7",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": ["main"]
+}

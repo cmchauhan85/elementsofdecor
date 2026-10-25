@@ -37,16 +37,27 @@
   font-weight: 300;
 }
 
-/* Checkout button — ink, square */
+/* Checkout button — the one coral action on the cart page, square. */
 .cart__ctas .cart__checkout-button,
 .cart__dynamic-checkout-buttons {
   border-radius: 0;
 }
 .cart__ctas .cart__checkout-button {
-  background: rgb(var(--color-foreground, 27, 25, 22));
-  color: rgb(var(--color-background, 250, 247, 241));
+  background: var(--a-ochre);
+  color: #ffffff;
+  border-color: var(--a-ochre);
   font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight-bold);
   letter-spacing: 0.04em;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.cart__ctas .cart__checkout-button:hover {
+  background: var(--a-ochre-light);
+  border-color: var(--a-ochre-light);
+}
+.cart__ctas .cart__checkout-button:active {
+  background: var(--a-ochre-deep);
+  border-color: var(--a-ochre-deep);
 }
 
 /* Element tag on cart line items */
@@ -282,7 +293,7 @@
 .atelier-coupon-offer.is-eligible {
   opacity: 1;
   border-color: var(--a-ochre);
-  background: rgba(184, 138, 58, 0.06);
+  background: rgba(207, 74, 37, 0.06);
 }
 .atelier-coupon-offer__desc {
   margin: 0 0 0.3rem;
@@ -492,4 +503,40 @@
   letter-spacing: 0.03em;
   color: var(--a-ink);
   min-width: 3.2ch;
+}
+
+/* Trust signals directly under the checkout button — reassurance right
+   where purchase hesitation happens, not several sections down the page. */
+.cart__checkout-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.15rem;
+  color: var(--a-muted);
+}
+.cart__checkout-trust li {
+  position: relative;
+  padding-left: 1.2rem;
+}
+.cart__checkout-trust li:first-child {
+  padding-left: 0;
+}
+.cart__checkout-trust li:first-child::before {
+  content: none;
+}
+.cart__checkout-trust li::before {
+  content: '';
+  position: absolute;
+  left: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--a-ochre);
 }

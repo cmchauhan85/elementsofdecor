@@ -8,7 +8,6 @@
 
   Accepts:
     collection      {collection} - the collection to render (required)
-    number          {string}     - the "01" index label
     show_element    {boolean}    - show the element tag bottom-right (object mode)
     coming_label    {string}     - text for the coming-soon pill (already translated)
     title_override  {string}     - optional display name override (falls back to collection.title)
@@ -47,7 +46,6 @@
           alt: display_name | escape
       }}
     {%- endif -%}
-    {%- if number != blank -%}<span class="atelier-card__n">{{ number }}</span>{%- endif -%}
     {%- if is_soon -%}
       <span class="atelier-card__soon">{{ coming }}</span>
     {%- elsif show_element and element_tag != blank -%}

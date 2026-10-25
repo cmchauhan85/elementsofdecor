@@ -12,26 +12,37 @@
     "atelier-collection": {
       "type": "atelier-collection",
       "settings": {
+        "banner_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_05_09_30_PM.png",
         "show_breadcrumb": true,
-        "element_status_text": "TWO OF SIX LIVE · FOUR COMING SOON",
+        "heading": "",
+        "element_caption": "By material – the way we make them.",
+        "object_caption": "By what it is – the familiar way to shop.",
+        "element_status_text": "THREE OF SIX LIVE · THREE COMING SOON",
         "object_status_text": "FOUR OF SIX LIVE · TWO COMING SOON",
-        "products_per_page": 12,
-        "editorial_after": 6,
-        "editorial_eyebrow": "Field note",
-        "editorial_title": "The stone was never really still.",
-        "editorial_cta": "Read the note →",
-        "editorial_link": "/blogs/news/the-stone-was-never-really-still",
-        "editorial_image": "shopify://shop_images/ChatGPT_Image_Jul_5_2026_03_25_43_PM.png",
-        "color_scheme": "scheme-1",
         "element_nav_menu": "shop-by-element",
         "element_nav_label": "By Element",
         "element_all_url": "/collections/all",
         "object_nav_menu": "shop-by-object",
         "object_nav_label": "By Object",
         "object_all_url": "/collections/all",
-        "show_price_filter": false
+        "show_price_filter": false,
+        "element_filter_key": "filter.p.m.atelier.element",
+        "category_filter_key": "filter.p.m.atelier.category",
+        "refine_label": "Discover",
+        "products_per_page": 50,
+        "more_label": "Show more",
+        "end_label": "That's the full shop — for now.",
+        "editorial_after": 8,
+        "editorial_eyebrow": "Field note",
+        "editorial_title": "The stone was never really still.",
+        "editorial_cta": "Read the note →",
+        "editorial_link": "/blogs/news/the-stone-was-never-really-still",
+        "editorial_image": "shopify://shop_images/ChatGPT_Image_Jul_5_2026_03_25_43_PM.png",
+        "color_scheme": "scheme-1"
       }
     }
   },
-  "order": ["atelier-collection"]
+  "order": [
+    "atelier-collection"
+  ]
 }

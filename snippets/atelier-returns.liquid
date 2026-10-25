@@ -1,0 +1,25 @@
+{%- comment -%} Returns logic. nr=1 (not returnable for change of mind): Imber ceramics, and the 12 inch marble urli. All other pieces are returnable. {%- endcomment -%}
+{%- if part == 'flag' -%}
+{%- assign nr = 0 -%}
+{%- assign tl = product.title | downcase -%}
+{%- if tl contains 'imber' or tl contains 'ceramic' or tl contains 'glass' -%}{%- assign nr = 1 -%}{%- endif -%}
+{%- if product.type == 'Urlis & Bowls' and tl contains 'urli' -%}
+{%- unless tl contains 'ekam' -%}
+{%- assign v = product.selected_or_first_available_variant -%}
+{%- if v.option1 contains '12' or v.option2 contains '12' or v.option3 contains '12' -%}{%- assign nr = 1 -%}{%- endif -%}
+{%- endunless -%}
+{%- endif -%}
+{{- nr -}}
+{%- elsif part == 'body' -%}
+<div class="atl-ret" data-nr="{{ nr }}">
+<style>.atl-ret[data-nr="1"] .ret-y,.atl-ret[data-nr="0"] .ret-n,.atl-trust[data-nr="1"] .ret-y,.atl-trust[data-nr="0"] .ret-n{display:none}.atl-ret p{margin:0 0 1rem}.atl-ret p:last-child{margin:0}.atl-ret .ret-flag{padding:1rem 1.2rem;background:rgba(207,74,37,.08);border-left:3px solid #cf4a25;color:#14213d}</style>
+<p class="ret-n ret-flag"><strong>Non-returnable item.</strong> This piece is fragile and heavy, so it cannot be returned for a change of mind. Please check the size and finish before you order. If it arrives damaged, defective or wrong, we will make it right (below).</p>
+<p><strong>Shipping.</strong> Every piece is ready stock and leaves us within 1 to 3 business days. Delivery is free across India and takes 4 to 7 business days after dispatch. Each piece is packed in multi-layer protective material.</p>
+<p class="ret-y"><strong>Changed your mind?</strong> Return it within 7 days of delivery, unused. Please keep the original packaging: we can only accept a return with the protective thermocol box and the outer box it came in, where the piece was supplied with them. Email <a href="mailto:support@elementsofdecor.com">support@elementsofdecor.com</a> with your order number first. We arrange a home pickup, and a flat fee of ₹199 is deducted from your refund.</p>
+<p><strong>Damaged, defective or wrong item?</strong> Email us within 48 hours of delivery with a photo or video. For fragile pieces an unboxing video, starting with the sealed package, helps us resolve it fastest. We review within 2 business days and you choose a free replacement or a full refund.</p>
+<p><strong>Handmade variation.</strong> Small differences in veining, grain, glaze or patina are part of a handmade piece and are not defects.</p>
+<p><strong>Cancel or refund.</strong> Cancel free any time before your order ships. Refunds go to your original payment method, or by UPI or bank transfer for cash on delivery, within 5 to 7 business days of us receiving and inspecting the piece.</p>
+<p><a href="/pages/shipping-returns">Read the full policy</a></p>
+<script>(function(){var T={{ product.title | downcase | json }},U={{ product.type | json }}==='Urlis & Bowls'&&T.indexOf('ekam')<0;function f(){var n=/imber|ceramic|glass/.test(T)?1:0;if(U)document.querySelectorAll('variant-selects input[type=radio]:checked').forEach(function(r){if(/^12\b/.test(r.value))n=1});document.querySelectorAll('.atl-ret,.atl-trust').forEach(function(e){e.setAttribute('data-nr',n)})}document.addEventListener('change',function(e){if(e.target&&e.target.matches&&e.target.matches('variant-selects input[type=radio]'))f()})})();</script>
+</div>
+{%- endif -%}

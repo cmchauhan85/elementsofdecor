@@ -40,7 +40,7 @@
     return null;
   }
 
-  /* ── Init ─────────────────────────────────────────────────────────────── */
+  /* ── Init ─────────────────────────────────────────────────────────────────── */
   function init(infoEl) {
     var dataEl = infoEl.querySelector('[id^="AtelierVariantImages-"]');
     if (!dataEl) return;
@@ -107,6 +107,24 @@
       });
     });
   }
+
+  /* Dawn re-renders the picker when a variant is chosen, which wipes the
+     swatches. Re-apply whenever a colour fieldset has unconverted labels. */
+  function needs(el) {
+    var f = el.querySelectorAll('.product-form__input--pill');
+    for (var i = 0; i < f.length; i++) {
+      var lg = f[i].querySelector('legend');
+      if (lg && COLOR_OPTION_RE.test(lg.textContent) && f[i].querySelector('label:not(.atelier-swatch-dot)')) return true;
+    }
+    return false;
+  }
+  var tmr;
+  new MutationObserver(function () {
+    clearTimeout(tmr);
+    tmr = setTimeout(function () {
+      document.querySelectorAll('product-info').forEach(function (el) { if (needs(el)) init(el); });
+    }, 50);
+  }).observe(document.body, { childList: true, subtree: true });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', run);

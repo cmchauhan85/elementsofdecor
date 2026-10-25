@@ -1,0 +1,230 @@
+{%- comment -%}
+  Atelier footer (Pure Home + Living layout, ported from the Dwell build):
+  newsletter -> Follow us on + Instagram/Facebook -> logo + SHOP / COMPANY / HELP / POLICIES / CONTACT -> payment icons -> copyright bar.
+  Desktop: logo column + 5 evenly spread columns. Mobile (<750px): accordions with + and dividers.
+{%- endcomment -%}
+
+{%- liquid
+  assign ig = section.settings.instagram_url | default: settings.social_instagram_link
+  assign fb = section.settings.facebook_url | default: settings.social_facebook_link
+-%}
+
+<footer class="af color-{{ section.settings.color_scheme }} gradient" data-af>
+  <div class="af__news">
+    {%- if section.settings.newsletter_heading != blank -%}
+      <h2 class="af__h">{{ section.settings.newsletter_heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.newsletter_text != blank -%}
+      <p class="af__newstext">{{ section.settings.newsletter_text | escape }}</p>
+    {%- endif -%}
+    {%- form 'customer', id: 'AtelierFooterNewsletter', class: 'af__form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <label class="visually-hidden" for="AtelierFooterEmail">Email</label>
+      <input id="AtelierFooterEmail" class="af__input" type="email" name="contact[email]" autocomplete="email" placeholder="Enter your email" required value="{{ form.email }}">
+      <button type="submit" class="af__submit">{{ section.settings.newsletter_button | default: 'Subscribe' | escape }}</button>
+      {%- if form.posted_successfully? -%}
+        <p class="af__msg" role="status">Thanks for subscribing.</p>
+      {%- elsif form.errors -%}
+        <p class="af__msg af__msg--err" role="alert">{{ form.errors.messages['email'] | default: 'Please check your email address.' }}</p>
+      {%- endif -%}
+    {%- endform -%}
+
+    {%- if ig != blank or fb != blank -%}
+      <div class="af__follow">
+        <span class="af__h">{{ section.settings.follow_text | default: 'Follow us on' | escape }}</span>
+        <div class="af__icons">
+          {%- if ig != blank -%}
+            <a href="{{ ig }}" class="af__ig" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="0.9" fill="currentColor" stroke="none"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if fb != blank -%}
+            <a href="{{ fb }}" class="af__ig" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 21v-8h2.7l.5-3.2h-3.2V7.9c0-.9.4-1.6 1.7-1.6h1.6V3.4c-.3 0-1.3-.2-2.4-.2-2.5 0-4.1 1.5-4.1 4.2v2.4H8.6V13h2.7v8z"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="af__rule"></div>
+
+  <div class="af__main page-width">
+    <div class="af__logo">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {%- if settings.logo != blank -%}
+          {{ settings.logo | image_url: width: 480 | image_tag: class: 'af__logo-img', alt: shop.name, widths: '240, 360, 480', loading: 'lazy' }}
+        {%- else -%}
+          <span class="af__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <div class="af__cols">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          assign h_key = 'col' | append: i | append: '_heading'
+          assign m_key = 'col' | append: i | append: '_menu'
+          assign heading = section.settings[h_key]
+          assign menu = section.settings[m_key]
+        -%}
+        {%- if menu != blank and menu.links.size > 0 -%}
+          <details class="af__col" open>
+            <summary class="af__sum"><span class="af__colh">{{ heading | escape }}</span><span class="af__plus" aria-hidden="true"></span></summary>
+            <ul class="af__links" role="list">
+              {%- for link in menu.links -%}
+                <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <details class="af__col" open>
+        <summary class="af__sum"><span class="af__colh">{{ section.settings.contact_heading | default: 'CONTACT' | escape }}</span><span class="af__plus" aria-hidden="true"></span></summary>
+        <ul class="af__links" role="list">
+          {%- if section.settings.contact_email != blank -%}
+            <li><a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email | escape }}</a></li>
+          {%- endif -%}
+          {%- if section.settings.contact_whatsapp != blank -%}
+            <li>WhatsApp: {{ section.settings.contact_whatsapp | escape }}</li>
+          {%- endif -%}
+          {%- if section.settings.contact_hours != blank -%}
+            <li>{{ section.settings.contact_hours | escape }}</li>
+          {%- endif -%}
+        </ul>
+      </details>
+    </div>
+  </div>
+
+  {%- if section.settings.show_payment and shop.enabled_payment_types.size > 0 -%}
+    <div class="af__pay page-width">
+      <ul class="af__pay-list" role="list">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  <div class="af__bar">
+    <div class="af__bar-in page-width">
+      <small class="af__copy">&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}</small>
+      {%- if section.settings.show_policies and shop.policies.size > 0 -%}
+        <ul class="af__pol" role="list">
+          {%- for policy in shop.policies -%}
+            <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+<style>
+  .af { --af-line: rgba(var(--color-foreground), 0.16); color: rgb(var(--color-foreground)); }
+  .af a { color: inherit; text-decoration: none; }
+  .af a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .af__h { margin: 0; font-family: var(--font-body-family); font-size: 1.2rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
+  .af__news { text-align: center; padding: 6rem 2rem 4rem; }
+  .af__newstext { margin: 1rem auto 0; font-size: 1.4rem; max-width: 52rem; }
+  .af__form { position: relative; display: flex; align-items: center; flex-wrap: wrap; max-width: 44rem; margin: 2rem auto 0; border-bottom: 1px solid rgba(var(--color-foreground), 0.5); }
+  .af__input { flex: 1 1 0; width: 0; min-width: 0; background: transparent; border: 0; outline: 0; padding: 1rem 0; font: inherit; font-size: 1.4rem; color: inherit; text-align: left; }
+  .af__input::placeholder { color: rgba(var(--color-foreground), 0.55); }
+  .af__submit { flex: 0 0 auto; background: none; border: 0; padding: 1rem 0 1rem 1.6rem; font: inherit; font-size: 1.2rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: inherit; cursor: pointer; }
+  .af__msg { flex: 0 0 100%; margin: 0; padding: 0.8rem 0 0; font-size: 1.3rem; text-align: left; }
+  .af__msg--err { color: #b3261e; }
+  .af__follow { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 3.2rem; }
+  .af__icons { display: flex; align-items: center; justify-content: center; gap: 1.8rem; }
+  .af__ig { display: inline-flex; line-height: 0; }
+  .af__ig svg { width: 2.2rem; height: 2.2rem; }
+  .af__rule { border-top: 1px solid var(--af-line); }
+  .af__main { display: grid; grid-template-columns: 22% minmax(0, 1fr); gap: 4rem; padding-top: 4.8rem; padding-bottom: 3.2rem; align-items: start; }
+  .af__logo-img { display: block; width: 70%; max-width: 18rem; height: auto; }
+  .af__logo-text { font-family: var(--font-heading-family); font-size: 2.4rem; }
+  .af__cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.9fr); gap: 3rem; width: 100%; }
+  .af__col { border: 0; }
+  .af__sum { list-style: none; display: flex; justify-content: space-between; align-items: center; cursor: default; pointer-events: none; }
+  .af__sum::-webkit-details-marker { display: none; }
+  .af__colh { font-size: 1.2rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
+  .af__plus { display: none; }
+  .af__links { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1.2rem; font-size: 1.4rem; line-height: 1.5; overflow-wrap: break-word; }
+  .af__pay { padding-bottom: 2.4rem; }
+  .af__pay-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 1rem; }
+  .af__pay-list .icon { width: 3.8rem; height: 2.4rem; }
+  .af__bar { border-top: 1px solid var(--af-line); }
+  .af__bar-in { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.2rem; padding-top: 2rem; padding-bottom: 2rem; font-size: 1.2rem; }
+  .af__pol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 2rem; }
+  @media screen and (max-width: 989px) {
+    .af__main { grid-template-columns: 1fr; gap: 3rem; }
+    .af__cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media screen and (max-width: 749px) {
+    .af__news { padding: 4.4rem 2rem 3.2rem; }
+    .af__main { gap: 2.4rem; padding-top: 3.2rem; }
+    .af__logo-img { width: 12rem; }
+    .af__cols { display: block; border-top: 1px solid var(--af-line); }
+    .af__col { border-bottom: 1px solid var(--af-line); }
+    .af__sum { pointer-events: auto; cursor: pointer; padding: 1.8rem 0; }
+    .af__plus { display: block; position: relative; width: 1.4rem; height: 1.4rem; }
+    .af__plus::before, .af__plus::after { content: ''; position: absolute; background: currentColor; top: 50%; left: 0; width: 100%; height: 1px; transition: transform 0.2s; }
+    .af__plus::after { transform: rotate(90deg); }
+    .af__col[open] .af__plus::after { transform: rotate(0); }
+    .af__links { margin: 0; padding-bottom: 1.8rem; }
+    .af__bar-in { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-af]');
+    if (!root) return;
+    var mq = window.matchMedia('(max-width: 749px)');
+    function sync() {
+      root.querySelectorAll('details.af__col').forEach(function (d) {
+        d.open = !mq.matches;
+      });
+    }
+    sync();
+    if (mq.addEventListener) mq.addEventListener('change', sync);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Atelier footer",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "header", "content": "Newsletter" },
+    { "type": "text", "id": "newsletter_heading", "label": "Heading", "default": "NEWSLETTER" },
+    { "type": "text", "id": "newsletter_text", "label": "Supporting text (optional)" },
+    { "type": "text", "id": "newsletter_button", "label": "Button label", "default": "Subscribe" },
+    { "type": "header", "content": "Follow us" },
+    { "type": "text", "id": "follow_text", "label": "Label", "default": "Follow us on" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram link", "info": "Blank = Instagram link from theme settings" },
+    { "type": "url", "id": "facebook_url", "label": "Facebook link", "info": "Blank = Facebook link from theme settings" },
+    { "type": "header", "content": "Column 1" },
+    { "type": "text", "id": "col1_heading", "label": "Heading", "default": "SHOP" },
+    { "type": "link_list", "id": "col1_menu", "label": "Menu" },
+    { "type": "header", "content": "Column 2" },
+    { "type": "text", "id": "col2_heading", "label": "Heading", "default": "COMPANY" },
+    { "type": "link_list", "id": "col2_menu", "label": "Menu" },
+    { "type": "header", "content": "Column 3" },
+    { "type": "text", "id": "col3_heading", "label": "Heading", "default": "HELP" },
+    { "type": "link_list", "id": "col3_menu", "label": "Menu" },
+    { "type": "header", "content": "Column 4" },
+    { "type": "text", "id": "col4_heading", "label": "Heading", "default": "POLICIES" },
+    { "type": "link_list", "id": "col4_menu", "label": "Menu" },
+    { "type": "header", "content": "Contact column" },
+    { "type": "text", "id": "contact_heading", "label": "Heading", "default": "CONTACT" },
+    { "type": "text", "id": "contact_email", "label": "Email" },
+    { "type": "text", "id": "contact_whatsapp", "label": "WhatsApp" },
+    { "type": "text", "id": "contact_hours", "label": "Hours" },
+    { "type": "header", "content": "Bottom" },
+    { "type": "checkbox", "id": "show_payment", "label": "Show payment icons", "default": true },
+    { "type": "checkbox", "id": "show_policies", "label": "Show policy links in the bottom bar", "default": true }
+  ],
+  "presets": [{ "name": "Atelier footer" }]
+}
+{% endschema %}

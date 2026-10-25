@@ -1,11 +1,22 @@
 {% comment %}
   Renders a "Design" swatch row linking between sibling products that share
   the same shape/size options but differ by design (e.g. the six Urli
-  products: Ruffle, Lotus, Flower, Scalloped, Padma, Rounded Lotus).
+  products, the four Imber vases).
 
-  These are separate Shopify products, not variants of one product — each
-  swatch navigates to that product's own page. Reuses the same photo-swatch
-  look as the colour selector (.atelier-swatch-dot).
+  These are separate Shopify products, not variants of one product. Each
+  swatch navigates to that product's own page. ALL products in the group are
+  shown (like the size pills); the current one is highlighted and not a link.
+  Reuses the photo-swatch look of the colour selector (.atelier-swatch-dot).
+
+  Note: theme CSS hides `.product-form__radio-group > span:not([style])`
+  (Dawn helper spans), so the current tile carries an inline style to stay visible.
+
+  TWO-ROW MODE (19 Oct 2026, Oria): when a design_name reads "<Colour> · <Size>" and the
+  size part contains "Inch" or "Set of" (e.g. "Silver · 7 Inch", "Gold · Set of 2"),
+  the selector shows a Colour row (photo tiles) and a Size row (pills) instead of one tile per product.
+  Picking a colour keeps the current size when that colour has it, else goes to that colour's first size.
+  The Size row only lists the sizes that exist in the current colour. Names like "Tall · Ocean Blue"
+  (Imber) and plain "12 Inch" (Aurum) do not match, so they keep the single row.
 
   Accepts:
   - product: {Object} the current product object.
@@ -16,8 +27,102 @@
 {%- liquid
   assign design_group = product.metafields.atelier.design_group.value
   assign current_design = product.metafields.atelier.design_name.value | default: product.title
+  assign two_row = false
+  assign cur_colour = ''
+  assign cur_size = ''
+  assign cur_parts = current_design | split: ' · '
+  if cur_parts.size == 2
+    if cur_parts[1] contains 'Inch' or cur_parts[1] contains 'Set of'
+      assign two_row = true
+      assign cur_colour = cur_parts[0]
+      assign cur_size = cur_parts[1]
+    endif
+  endif
 -%}
-{%- if design_group and design_group.size > 1 -%}
+{%- if design_group and design_group.size > 1 and two_row -%}
+  <style>
+    .atelier-size-row{display:flex;flex-wrap:wrap;gap:.8rem}
+    .atelier-size-pill{display:inline-flex;align-items:center;justify-content:center;min-width:6.4rem;height:4.4rem;padding:0 1.6rem;border:1px solid #d9d0c3;border-radius:.6rem;background:#fff;color:#14213d;font-size:1.4rem;font-weight:600;line-height:1;text-decoration:none;box-sizing:border-box}
+    a.atelier-size-pill:hover{border-color:#14213d}
+    .atelier-size-pill.is-current{border-color:#cf4a25;cursor:default}
+  </style>
+
+  {%- comment -%}Row 1: Colour{%- endcomment -%}
+  <fieldset class="js product-form__input product-form__input--pill atelier-design-selector atelier-design-selector--colour">
+    <legend class="form__label">
+      Colour:
+      <span>{{ cur_colour }}</span>
+    </legend>
+    <div class="product-form__radio-group">
+      {%- assign seen = '|' -%}
+      {%- for sibling in design_group -%}
+        {%- assign s_parts = sibling.metafields.atelier.design_name.value | split: ' · ' -%}
+        {%- assign s_colour = s_parts[0] -%}
+        {%- assign token = s_colour | prepend: '|' | append: '|' -%}
+        {%- unless seen contains token -%}
+          {%- assign seen = seen | append: s_colour | append: '|' -%}
+          {%- assign target = sibling -%}
+          {%- for cand in design_group -%}
+            {%- assign c_parts = cand.metafields.atelier.design_name.value | split: ' · ' -%}
+            {%- if c_parts[0] == s_colour and c_parts[1] == cur_size -%}
+              {%- assign target = cand -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if s_colour == cur_colour -%}
+            <span
+              class="atelier-swatch-dot is-current"
+              style="display:flex;cursor:default;"
+              title="{{ s_colour }}"
+              aria-current="true"
+            >
+              <span
+                class="atelier-swatch-dot__circle"
+                aria-hidden="true"
+                style="--dot-image: url('{{ product.featured_image | image_url: width: 120 }}');"
+              ></span>
+              <span class="atelier-swatch-dot__name">{{ s_colour }}</span>
+            </span>
+          {%- else -%}
+            <a
+              href="{{ target.url }}"
+              class="atelier-swatch-dot"
+              title="{{ s_colour }}"
+            >
+              <span
+                class="atelier-swatch-dot__circle"
+                aria-hidden="true"
+                style="--dot-image: url('{{ target.featured_image | image_url: width: 120 }}');"
+              ></span>
+              <span class="atelier-swatch-dot__name">{{ s_colour }}</span>
+            </a>
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </fieldset>
+
+  {%- comment -%}Row 2: Size (only the sizes that exist in the current colour){%- endcomment -%}
+  <fieldset class="js product-form__input atelier-design-selector atelier-design-selector--size">
+    <legend class="form__label">
+      Size:
+      <span>{{ cur_size | replace: ' Inch', '"' }}</span>
+    </legend>
+    <div class="atelier-size-row">
+      {%- for sibling in design_group -%}
+        {%- assign s_parts = sibling.metafields.atelier.design_name.value | split: ' · ' -%}
+        {%- if s_parts[0] == cur_colour -%}
+          {%- assign size_label = s_parts[1] | replace: ' Inch', '"' -%}
+          {%- if sibling.id == product.id -%}
+            <span class="atelier-size-pill is-current" aria-current="true">{{ size_label }}</span>
+          {%- else -%}
+            <a href="{{ sibling.url }}" class="atelier-size-pill" title="{{ size_label | escape }}">{{ size_label }}</a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </fieldset>
+
+{%- elsif design_group and design_group.size > 1 -%}
   <fieldset class="js product-form__input product-form__input--pill atelier-design-selector">
     <legend class="form__label">
       Design:
@@ -35,6 +140,7 @@
         {%- if is_current -%}
           <span
             class="atelier-swatch-dot is-current"
+            style="display:flex;cursor:default;"
             title="{{ design_label }}"
             aria-current="true"
           >

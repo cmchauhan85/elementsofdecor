@@ -11,15 +11,7 @@
   "sections": {
     "milestone": {
       "type": "atelier-milestone-ribbon",
-      "blocks": {
-        "t1": { "type": "tier", "settings": { "threshold": 10000, "label": "Hand-tied muslin wrap", "hint": "On the box, tied with twine." } },
-        "t2": { "type": "tier", "settings": { "threshold": 15000, "label": "A ceramic dish, our gift", "hint": "Cream stoneware, 4″ — a small thank-you." } },
-        "t3": { "type": "tier", "settings": { "threshold": 25000, "label": "White-glove installation", "hint": "In Bombay. We come, we place, we leave." } }
-      },
-      "block_order": ["t1", "t2", "t3"],
-      "settings": {
-        "color_scheme": "scheme-2"
-      }
+      "settings": {}
     },
     "cart-items": {
       "type": "main-cart-items",
@@ -37,41 +29,23 @@
         "padding_bottom": 40
       },
       "blocks": {
-        "gift": {
-          "type": "gift_note",
-          "settings": {}
-        },
-        "dispatch_note": {
-          "type": "dispatch_note",
-          "settings": {
-            "text": "In stock · Ships in 2-4 business days"
-          }
-        },
-        "coupon": {
-          "type": "coupon",
-          "settings": {}
-        },
-        "subtotal": {
-          "type": "subtotal",
-          "settings": {}
-        },
-        "hold": {
-          "type": "hold_timer",
-          "settings": {}
-        },
-        "buttons": {
-          "type": "buttons",
-          "settings": {}
-        }
+        "gift": { "type": "gift_note", "settings": {} },
+        "dispatch_note": { "type": "dispatch_note", "settings": { "text": "In stock · Ships in 2-4 business days" } },
+        "coupon": { "type": "coupon", "settings": {} },
+        "subtotal": { "type": "subtotal", "settings": {} },
+        "buttons": { "type": "buttons", "settings": { "checkout_trust_1": "Secure payment", "checkout_trust_2": "Easy 7-day returns", "checkout_trust_3": "" } }
       },
-      "block_order": [
-        "gift",
-        "dispatch_note",
-        "subtotal",
-        "coupon",
-        "hold",
-        "buttons"
-      ]
+      "block_order": ["subtotal", "buttons", "dispatch_note", "coupon", "gift"]
+    },
+    "btnprice": {
+      "type": "atelier-cart-sync",
+      "settings": {}
+    },
+    "addmore": {
+      "type": "atelier-cart-addmore",
+      "settings": {
+        "count": 4
+      }
     },
     "trust": {
       "type": "atelier-cart-trust",
@@ -79,31 +53,19 @@
         "step1": { "type": "step", "settings": { "label": "Order placed", "detail": "You receive a confirmation with a hand-written note from us." } },
         "step2": { "type": "step", "settings": { "label": "Packed with care", "detail": "Quality-checked and packed in our signature pine box." } },
         "step3": { "type": "step", "settings": { "label": "Shipped carefully", "detail": "Cotton-lined pine box, insured door-to-door." } },
-        "step4": { "type": "step", "settings": { "label": "White-glove option", "detail": "In Bombay — we come, we place, we leave. On orders above ₹25,000." } },
         "badge1": { "type": "badge", "settings": { "icon": "lock", "label": "Secured by Razorpay" } },
         "badge2": { "type": "badge", "settings": { "icon": "check_mark", "label": "Certified handmade" } }
       },
-      "block_order": ["step1", "step2", "step3", "step4", "badge1", "badge2"],
+      "block_order": ["step1", "step2", "step3", "badge1", "badge2"],
       "settings": {
         "color_scheme": "scheme-2",
         "show_next_steps": false,
         "show_material_notice": true,
-        "material_notice": "<p>Handmade from natural materials — wood grain, stone veining, and finish vary slightly, piece to piece.</p>"
-      }
-    },
-    "continue": {
-      "type": "atelier-product-row",
-      "settings": {
-        "title": "Continue collecting.",
-        "color_scheme": "scheme-1"
+        "material_notice": "<p>Handmade from natural materials — wood grain, stone veining, and finish vary slightly, piece to piece.</p>",
+        "promo_code": "",
+        "promo_copy": ""
       }
     }
   },
-  "order": [
-    "milestone",
-    "cart-items",
-    "continue",
-    "cart-footer",
-    "trust"
-  ]
+  "order": ["milestone", "cart-items", "cart-footer", "btnprice", "addmore", "trust"]
 }

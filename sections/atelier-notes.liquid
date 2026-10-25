@@ -1,104 +1,127 @@
-{{ 'section-atelier-notes.css' | asset_url | stylesheet_tag }}
-
 {%- liquid
   assign blog = blogs[section.settings.blog]
-  assign limit = section.settings.posts_to_show
+  assign sid = section.id
 -%}
+{%- style -%}
+  .nt-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 2.8rem; }
+  .nt-title { font-family: var(--font-heading-family); font-weight: 400; font-size: clamp(2.6rem, 3.4vw, 3.6rem); line-height: 1.15; margin: 0; }
+  .nt-title em { font-style: italic; color: var(--a-ochre); }
+  .nt-rule { display: block; width: 4rem; height: 2px; background: var(--a-ochre); margin-top: 1.2rem; }
+  .nt-sub { margin: 1rem 0 0; font-size: 1.4rem; color: var(--a-muted); }
+  .nt-foot { text-align: center; margin-top: 3rem; }
+  .nt-link { font-size: 1.2rem; letter-spacing: .12em; text-transform: uppercase; color: var(--a-ochre); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: .1rem; }
+  .nt-grid { display: grid; gap: 1.6rem; }
+  .nt-card { position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit; min-width: 0; }
+  .nt-media { overflow: hidden; border-radius: var(--a-radius-image); background: var(--a-stone); aspect-ratio: 4 / 3; }
+  .nt-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+  .nt-card:hover .nt-media img { transform: scale(1.04); }
+  .nt-body { padding: 1.2rem 0 0; display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
+  .nt-tag { font-size: 1.1rem; letter-spacing: .14em; text-transform: uppercase; color: var(--a-ochre); }
+  .nt-name { font-family: var(--font-heading-family); font-weight: 400; font-size: 2.1rem; line-height: 1.2; margin: 0; }
+  .nt-sum { margin: 0; font-size: 1.4rem; line-height: 1.55; color: var(--a-muted); }
+  .nt-more { font-size: 1.15rem; letter-spacing: .12em; text-transform: uppercase; color: var(--a-ochre); }
+  .nt-bar { display: none; }
+  .nt-bar__thumb { position: absolute; top: 0; left: 0; height: 100%; background: var(--a-ochre); border-radius: 3px; }
 
-<div class="atelier-notes color-{{ section.settings.color_scheme }} a-section">
+  /* Desktop: featured story left, three compact rows right */
+  @media screen and (min-width: 750px) {
+    .nt-card:nth-child(n+5) { display: none; }
+    .nt-grid { grid-template-columns: 1.3fr 1fr; gap: 2rem 4rem; align-items: center; }
+    .nt-card:first-child { grid-row: 1 / span 3; }
+    .nt-card:first-child .nt-name { font-size: 3.2rem; }
+    .nt-card:not(:first-child) { flex-direction: row; gap: 1.4rem; align-items: center; }
+    .nt-card:not(:first-child) .nt-media { flex: 0 0 12rem; aspect-ratio: 1; }
+    .nt-card:not(:first-child) .nt-body { padding: 0; }
+    .nt-card:not(:first-child) .nt-name { font-size: 1.7rem; }
+    .nt-card:not(:first-child) .nt-sum, .nt-card:not(:first-child) .nt-more { display: none; }
+  }
+
+  /* Mobile: swipe rail of tall story cards with title over image */
+  @media screen and (max-width: 749px) {
+    .nt-grid { display: flex; gap: 1.2rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: -1.5rem; padding-inline: 1.5rem; }
+    .nt-grid::-webkit-scrollbar { display: none; }
+    .nt-card { flex: 0 0 calc((100% - 1.2rem) / 1.35); aspect-ratio: 4 / 5; scroll-snap-align: start; overflow: hidden; border-radius: var(--a-radius-image); color: #fff; }
+    .nt-media { position: absolute; inset: 0; aspect-ratio: auto; border-radius: 0; }
+    .nt-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,16,14,.78) 0%, rgba(18,16,14,.15) 55%, rgba(18,16,14,0) 100%); pointer-events: none; }
+    .nt-body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 2rem; }
+    .nt-tag { color: #fff; opacity: .85; }
+    .nt-sum { display: none; }
+    .nt-more { color: #fff; }
+    .nt-name { font-size: 2rem; }
+    .nt-bar.is-on { display: block; position: relative; width: 12rem; height: 3px; margin: 2rem auto 0; background: var(--a-hairline); border-radius: 3px; }
+  }
+{%- endstyle -%}
+
+<div class="atelier-notes nt-sec color-{{ section.settings.color_scheme }} a-section" id="nt-{{ sid }}">
   <div class="page-width">
-    <div class="atelier-notes__head">
-      {%- if section.settings.eyebrow != blank -%}
-        {% render 'atelier-eyebrow', text: section.settings.eyebrow %}
-      {%- endif -%}
-      <h2 class="atelier-notes__title">{{ section.settings.title }}</h2>
+    <div class="nt-head">
+      <h2 class="nt-title">{{ section.settings.heading_lead }} <em>{{ section.settings.heading_accent }}</em></h2>
+      <span class="nt-rule" aria-hidden="true"></span>
+      {%- if section.settings.subtext != blank -%}<p class="nt-sub">{{ section.settings.subtext }}</p>{%- endif -%}
     </div>
-
-    <div class="atelier-notes__grid">
-      {%- for article in blog.articles limit: limit -%}
+    <div class="nt-grid" id="NtGrid-{{ sid }}">
+      {%- for article in blog.articles limit: 6 -%}
         {%- liquid
           assign tag = article.metafields.atelier.element.value
           if tag == blank
             assign tag = article.tags.first
           endif
         -%}
-        <a href="{{ article.url }}" class="atelier-note a-anim">
-          <div class="atelier-note__media">
+        <a href="{{ article.url }}" class="nt-card">
+          <div class="nt-media">
             {%- if article.image != blank -%}
-              {{
-                article.image
-                | image_url: width: 800
-                | image_tag:
-                  loading: 'lazy',
-                  sizes: '(min-width: 990px) 30vw, 78vw',
-                  widths: '400, 550, 800',
-                  alt: article.title | escape
-              }}
+              {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 33vw, 80vw', widths: '400, 600, 900', alt: article.title | escape }}
             {%- endif -%}
           </div>
-          {%- if tag != blank -%}
-            {% render 'atelier-eyebrow', text: tag, ochre: true, tag: 'span', class: 'atelier-note__tag' %}
-          {%- endif -%}
-          <h3 class="atelier-note__title">{{ article.title }}</h3>
-          <p class="atelier-note__meta">
-            {{ article.published_at | date: format: 'month_day_year' }}
-            {%- if article.author != blank %} · {{ article.author }}{% endif -%}
-          </p>
+          <div class="nt-body">
+            {%- if tag != blank -%}<span class="nt-tag">{{ tag }}</span>{%- endif -%}
+            <h3 class="nt-name">{{ article.title }}</h3>
+            <p class="nt-sum">{{ article.excerpt_or_content | strip_html | truncate: 120 }}</p>
+            <span class="nt-more">Read →</span>
+          </div>
         </a>
       {%- else -%}
         {%- for i in (1..3) -%}
-          <div class="atelier-note">
-            <div class="atelier-note__media"></div>
-            <h3 class="atelier-note__title">{{ 'sections.featured_blog.onboarding_title' | t }}</h3>
-          </div>
+          <div class="nt-card"><div class="nt-media"></div><div class="nt-body"><h3 class="nt-name">{{ 'sections.featured_blog.onboarding_title' | t }}</h3></div></div>
         {%- endfor -%}
       {%- endfor -%}
     </div>
+    <div class="nt-bar" id="NtBar-{{ sid }}" aria-hidden="true"><span class="nt-bar__thumb"></span></div>
+    {%- if blog != blank -%}<div class="nt-foot"><a class="nt-link" href="{{ blog.url }}">{{ section.settings.link_label }}</a></div>{%- endif -%}
   </div>
 </div>
+<script>
+(function(){
+  var grid = document.getElementById('NtGrid-{{ sid }}'), bar = document.getElementById('NtBar-{{ sid }}');
+  if (!grid || !bar) return;
+  var thumb = bar.querySelector('.nt-bar__thumb');
+  function update(){
+    var over = innerWidth < 750 && grid.scrollWidth > grid.clientWidth + 4;
+    bar.classList.toggle('is-on', over);
+    if (over) {
+      var tw = Math.max(grid.clientWidth / grid.scrollWidth * bar.clientWidth, 24), max = grid.scrollWidth - grid.clientWidth;
+      thumb.style.width = tw + 'px';
+      thumb.style.transform = 'translateX(' + ((grid.scrollLeft / max) * (bar.clientWidth - tw)) + 'px)';
+    }
+  }
+  grid.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update(); setTimeout(update, 400);
+})();
+</script>
 
 {% schema %}
 {
   "name": "Atelier notes",
   "tag": "section",
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Stories"
-    },
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Title",
-      "default": "Notes from the Atelier"
-    },
-    {
-      "type": "blog",
-      "id": "blog",
-      "label": "Blog"
-    },
-    {
-      "type": "range",
-      "id": "posts_to_show",
-      "min": 3,
-      "max": 6,
-      "step": 1,
-      "default": 3,
-      "label": "Posts to show"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    }
+    { "type": "text", "id": "heading_lead", "label": "Heading - plain part", "default": "Notes from the" },
+    { "type": "text", "id": "heading_accent", "label": "Heading - accent word", "default": "workshop" },
+    { "type": "text", "id": "subtext", "label": "Sub line", "default": "Stories, styling guides and the craft behind each piece." },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Read all stories →" },
+    { "type": "blog", "id": "blog", "label": "Blog" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
   ],
-  "presets": [
-    {
-      "name": "Atelier notes"
-    }
-  ]
+  "presets": [ { "name": "Atelier notes" } ]
 }
 {% endschema %}

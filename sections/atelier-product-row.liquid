@@ -62,8 +62,7 @@
           {%- for product in active_coll.products limit: 20 -%}
             {%- assign token = ',' | append: product.id | append: ',' -%}
             {%- unless cart_ids contains token -%}
-              {%- assign n = shown | plus: 1 | prepend: '0' | slice: -2, 2 -%}
-              {% render 'atelier-product-card', product: product, number: n %}
+              {% render 'atelier-product-card', product: product %}
               {%- assign shown = shown | plus: 1 -%}
               {%- if shown >= limit -%}{%- break -%}{%- endif -%}
             {%- endunless -%}

@@ -1,5 +1,4 @@
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'atelier-hold-timer.js' | asset_url }}" defer="defer"></script>
 {{ 'section-atelier-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
@@ -104,7 +103,7 @@
                     if cart_total < min_amount
                       assign eligible = false
                       assign remaining = min_amount | minus: cart_total
-                      assign remaining_money = remaining | times: 100 | money
+                      assign remaining_money = remaining | times: 100 | money_without_trailing_zeros
                     endif
                   endif
                 -%}
@@ -130,13 +129,15 @@
               {%- endif -%}
               <script src="{{ 'atelier-coupon.js' | asset_url }}" defer="defer"></script>
             {%- when 'coupon' -%}
+              <details class="atl-fold"{% if cart.cart_level_discount_applications.size > 0 %} open{% endif %}>
+              <summary class="atl-fold__sum">Have a discount code?</summary>
               <div class="atelier-coupon" data-atelier-coupon {{ block.shopify_attributes }}>
                 {%- if cart.cart_level_discount_applications.size > 0 -%}
                   <ul class="atelier-coupon__applied list-unstyled" role="list">
                     {%- for discount in cart.cart_level_discount_applications -%}
                       <li class="atelier-coupon__applied-item">
                         {{- 'icon-discount.svg' | inline_asset_content -}}
-                        <span>{{ discount.title | escape }} applied (-{{ discount.total_allocated_amount | money }})</span>
+                        <span>{{ discount.title | escape }} applied (-{{ discount.total_allocated_amount | money_without_trailing_zeros }})</span>
                         <a href="{{ routes.root_url }}discount/?redirect={{ routes.cart_url | url_encode }}" class="atelier-coupon__remove">
                           {{ block.settings.remove_label }}
                         </a>
@@ -163,6 +164,8 @@
                   <small class="atelier-coupon__error" data-atelier-coupon-error hidden>{{ block.settings.error_label }}</small>
                 {%- endif -%}
               </div>
+              </details>
+              <style>.atl-fold{margin:1rem 0}.atl-fold__sum{cursor:pointer;font-size:1.3rem;text-decoration:underline;text-underline-offset:.3rem;color:#14213d;list-style:none;padding:1rem 0;min-height:4.4rem;display:flex;align-items:center}.atl-fold__sum::-webkit-details-marker{display:none}</style>
               <script src="{{ 'atelier-coupon.js' | asset_url }}" defer="defer"></script>
             {%- when 'dispatch_note' -%}
               <p class="cart-dispatch-note caption-large rte" {{ block.shopify_attributes }}>
@@ -171,64 +174,40 @@
               </p>
             {%- when 'subtotal' -%}
               <div class="js-contents" {{ block.shopify_attributes }}>
-                <div>
-                  {%- if cart.cart_level_discount_applications.size > 0 -%}
-                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                      {%- for discount in cart.cart_level_discount_applications -%}
-                        <li class="discounts__discount discounts__discount--position">
-                          {{- 'icon-discount.svg' | inline_asset_content -}}
-                          {{ discount.title | escape }}
-                          (-{{ discount.total_allocated_amount | money }})
-                        </li>
+                <style>
+                  .atl-sum{margin:0 0 1.4rem;padding:1.4rem 1.6rem;background:#f5f2eb;border:1px solid #d9d0c3;border-radius:.6rem;font-size:1.4rem;color:#14213d}
+                  .atl-sum__eyebrow{font-size:1.1rem;letter-spacing:.14em;text-transform:uppercase;color:#a8371a;font-weight:700;margin:0 0 .6rem}
+                  .atl-sum__row{display:flex;justify-content:space-between;gap:1.2rem;padding:.4rem 0}
+                  .atl-sum__row--disc{color:#2f6b4f;font-weight:700}
+                  .atl-sum__tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:.6rem;padding-top:.9rem;border-top:1px solid #d9d0c3;font-weight:700;font-size:1.9rem}
+                  .atl-sum__tag{display:block;width:fit-content;margin:1rem auto 0;padding:.35rem 1.1rem;background:#e3efe8;color:#2f6b4f;border-radius:10rem;font-weight:600;font-size:1.25rem}
+                  .atl-sum__note{margin:.9rem 0 0;text-align:center;font-size:1.2rem;color:rgba(20,33,61,.7)}
+                </style>
+                <div class="atl-sum" role="group" aria-label="Order summary">
+                  <p class="atl-sum__eyebrow">Order summary</p>
+                  <div class="atl-sum__row"><span>Subtotal ({{ cart.item_count }} piece{% if cart.item_count != 1 %}s{% endif %})</span><span>{{ cart.original_total_price | money_without_trailing_zeros }}</span></div>
+                  {%- if cart.total_discount > 0 -%}
+                    {%- assign line_disc = 0 -%}
+                    {%- assign line_title = '' -%}
+                    {%- for item in cart.items -%}
+                      {%- for alloc in item.line_level_discount_allocations -%}
+                        {%- assign line_disc = line_disc | plus: alloc.amount -%}
+                        {%- if line_title == '' -%}{%- assign line_title = alloc.discount_application.title -%}{%- endif -%}
                       {%- endfor -%}
-                    </ul>
+                    {%- endfor -%}
+                    {%- if line_disc > 0 -%}
+                      {%- assign sum_pct = line_disc | times: 100.0 | divided_by: cart.original_total_price | round -%}
+                      <div class="atl-sum__row atl-sum__row--disc"><span>{% if line_title contains 'Bundle' %}Bundle discount ({{ sum_pct }}% off all pieces){% else %}{{ line_title | escape }}{% endif %}</span><span>&minus; {{ line_disc | money_without_trailing_zeros }}</span></div>
+                    {%- endif -%}
+                    {%- for discount in cart.cart_level_discount_applications -%}
+                      <div class="atl-sum__row atl-sum__row--disc"><span>{{ discount.title | escape }}</span><span>&minus; {{ discount.total_allocated_amount | money_without_trailing_zeros }}</span></div>
+                    {%- endfor -%}
                   {%- endif -%}
+                  <div class="atl-sum__row"><span>Shipping</span><span>Free</span></div>
+                  <div class="atl-sum__tot"><span>Total</span><span>{{ cart.total_price | money_without_trailing_zeros }}</span></div>
+                  {%- if cart.total_discount > 0 -%}<span class="atl-sum__tag">You save {{ cart.total_discount | money_without_trailing_zeros }}</span>{%- endif -%}
+                  <p class="atl-sum__note">{% if cart.taxes_included %}Inclusive of all taxes{% else %}GST calculated at checkout{% endif %}</p>
                 </div>
-
-                <div class="totals">
-                  <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
-                </div>
-
-                <small class="tax-note caption-large rte">
-                  {%- if cart.duties_included and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- endif -%}
-                </small>
               </div>
             {%- else -%}
               <div class="cart__ctas" {{ block.shopify_attributes }}>
@@ -245,6 +224,17 @@
                   {{ 'sections.cart.checkout' | t }}
                 </button>
               </div>
+
+              {%- liquid
+                assign trust_lines = block.settings.checkout_trust_1 | append: '|' | append: block.settings.checkout_trust_2 | append: '|' | append: block.settings.checkout_trust_3 | split: '|'
+              -%}
+              {%- if block.settings.checkout_trust_1 != blank or block.settings.checkout_trust_2 != blank or block.settings.checkout_trust_3 != blank -%}
+                <ul class="cart__checkout-trust list-unstyled" role="list">
+                  {%- for line in trust_lines -%}
+                    {%- if line != blank -%}<li>{{ line }}</li>{%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
 
               {%- if additional_checkout_buttons -%}
                 <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
@@ -456,7 +446,31 @@
     {
       "type": "buttons",
       "name": "t:sections.main-cart-footer.blocks.buttons.name",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Trust signals near checkout"
+        },
+        {
+          "type": "text",
+          "id": "checkout_trust_1",
+          "label": "Trust line 1",
+          "default": "Secure payment"
+        },
+        {
+          "type": "text",
+          "id": "checkout_trust_2",
+          "label": "Trust line 2",
+          "default": "Easy 7-day returns"
+        },
+        {
+          "type": "text",
+          "id": "checkout_trust_3",
+          "label": "Trust line 3",
+          "default": "Ships in 2-4 days"
+        }
+      ]
     },
     {
       "type": "@app"
